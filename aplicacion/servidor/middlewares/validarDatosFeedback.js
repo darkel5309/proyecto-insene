@@ -13,7 +13,7 @@ const validarDatosFeedback = (req, res, next) => {
     }
 
     if (idVivienda < 0 || isNaN(idVivienda)) {
-        return res.status(400).json({ error: "El ID Vivienda debe ser un número positivo" });
+        return res.status(400).json({ error: "El Código del Formulario debe ser un número positivo" });
     }
 
     // si todo es correcto, pasa a la siguiente validacion

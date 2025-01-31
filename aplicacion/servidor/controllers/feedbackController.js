@@ -17,7 +17,7 @@ const registrarFeedback = async (req, res) => {
         // verificamos si la visita existe
         const existeVivienda = await query('SELECT * FROM vivienda WHERE id_vivienda = ?', [idVivienda]);
         if (existeVivienda.length === 0) {
-            return res.status(400).json({ error: "El ID de vivienda no existe en la base de datos" });
+            return res.status(400).json({ error: "El Código del Formulario no existe en la base de datos" });
         }
 
         // creacion de la nueva visita
