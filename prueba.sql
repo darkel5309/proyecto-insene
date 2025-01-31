@@ -126,7 +126,8 @@ INSERT INTO trabajador (nombre, contrasena, telefono, rol) VALUES
     ('Luis Martín', 'asudygyug73', '600555666', 'Comercial'),
     ('Elena Ruiz', '87sd6fyin', '600777888', 'Captador'),
     ('David Pérez', '98sd76fgh', '600999000', 'Captador'),
-    ('María Díaz', '873h3ghjhb', '600222333', 'Comercial');
+    ('María Díaz', '873h3ghjhb', '600222333', 'Comercial'),
+    ('Pepe Sánchez', '83dfghjhb', '600444555', 'Administrador');
 
 SELECT * FROM trabajador;
 

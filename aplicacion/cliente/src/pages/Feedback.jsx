@@ -137,7 +137,7 @@ export default function Feedback() {
 		}
 	};
 
-	// este es el html visivle en la web
+	// este es el html visible en la web
 	return (
 		<div className='feedback'>
 			<h1>Feedback de la visita</h1>
