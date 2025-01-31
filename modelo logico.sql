@@ -14,7 +14,7 @@ RECIBO(id_recibo, importe_luz, importe_gas, id_vivienda)
 	PK(id_recibo)
 	FK(id_vivienda -> VIVIENDA)
 
-TRABAJADOR(id_trabajador, nombre, telefono, tipo_trabajador)
+TRABAJADOR(id_trabajador, nombre, contrasena, telefono, rol)
 	PK(id_trabajador)
 
 VISITA (id_visita, fecha, hora, tipo, resultado, oferta, observaciones_visita, id_vivienda, id_trabajador)

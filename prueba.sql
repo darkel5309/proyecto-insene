@@ -55,8 +55,9 @@ DESCRIBE recibo;
 CREATE TABLE trabajador(
 	id_trabajador INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
+    contrasena VARCHAR(20) NOT NULL,
     telefono CHAR(9) NOT NULL,
-    tipo_trabajador ENUM("Captador", "Comercial")
+    rol ENUM("Administrador", "Captador", "Comercial")
 );
 
 DESCRIBE trabajador;
@@ -119,13 +120,13 @@ INSERT INTO recibo (importe_luz, importe_gas, id_vivienda) VALUES
 
 SELECT * FROM recibo;
 
-INSERT INTO trabajador (nombre, telefono, tipo_trabajador) VALUES
-    ('Pedro Pérez', '600111222', 'Captador'),
-    ('Ana Gómez', '600333444', 'Comercial'),
-    ('Luis Martín', '600555666', 'Comercial'),
-    ('Elena Ruiz', '600777888', 'Captador'),
-    ('David Pérez', '600999000', 'Captador'),
-    ('María Díaz', '600222333', 'Comercial');
+INSERT INTO trabajador (nombre, contrasena, telefono, rol) VALUES
+    ('Pedro Pérez', 'hasdg823bew', '600111222', 'Captador'),
+    ('Ana Gómez', 'ieuhfiwe7', '600333444', 'Comercial'),
+    ('Luis Martín', 'asudygyug73', '600555666', 'Comercial'),
+    ('Elena Ruiz', '87sd6fyin', '600777888', 'Captador'),
+    ('David Pérez', '98sd76fgh', '600999000', 'Captador'),
+    ('María Díaz', '873h3ghjhb', '600222333', 'Comercial');
 
 SELECT * FROM trabajador;
 
