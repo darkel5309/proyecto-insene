@@ -3,8 +3,13 @@ import { useState } from "react";
 import Axios from "axios";
 import { EntradaTexto, EntradaTextoArea, EntradaRadio } from '../components/CamposFormulario';
 import Swal from 'sweetalert2';
+import { useEffect } from 'react';
 
 export default function Formulario() {
+    useEffect(() => {
+        document.title = "Formulario";
+    }, []);
+
     // creamos las constantes para obtener los valores de los campos del formulario
     const datosInicialesFormulario = {
         idTrabajador: 0,

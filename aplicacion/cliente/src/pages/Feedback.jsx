@@ -3,8 +3,13 @@ import { useState } from "react";
 import Axios from "axios";
 import { EntradaTexto, EntradaTextoArea, EntradaSelect } from '../components/CamposFormulario';
 import Swal from 'sweetalert2';
+import { useEffect } from 'react';
 
 export default function Feedback() {
+	useEffect(() => {
+		document.title = "Feedback";
+	}, []);
+
 	// creamos las constantes para obtener los valores de los campos del formulario
 	const datosInicialesFeedback = {
 		idTrabajador: 0,
@@ -139,8 +144,7 @@ export default function Feedback() {
 
 			<div className='contenedorFeedback'>
 				<form onSubmit={addFeedback} className='campos'>
-					{errores.serverError && <div className="errorServidor">
-						{errores.serverError}</div>}
+					{errores.serverError && <div className="errorServidor"> {errores.serverError}</div>}
 
 					<EntradaTexto label="ID Trabajador *" name="idTrabajador" value={datosFeedback.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idTrabajador} />
 
