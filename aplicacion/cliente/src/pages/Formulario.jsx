@@ -202,7 +202,7 @@ export default function Formulario() {
 
                     <EntradaTextoArea label="Observaciones del contacto" name="observacionesContacto" value={datosFormulario.observacionesContacto} onChange={handleChange} type="text" placeholder="Comenta alguna observación" />
 
-                    <button type="submit">Registrar Cliente</button>
+                    <button type="submit">Registrar Datos</button>
                 </form>
             </div>
         </div>
