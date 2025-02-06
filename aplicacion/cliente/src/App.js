@@ -1,10 +1,12 @@
 import React from "react";
 import "./App.css";
+import Logo from "./images/logo.png";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Inicio from "./pages/Inicio";
-import Formulario from "./pages/Formulario";
+import Captador from "./pages/Captador";
+import Contacto from "./pages/Contacto";
+import Visita from "./pages/Visita";
 import Feedback from "./pages/Feedback";
-import Logo from "./images/logo.png";
 
 function App() {
   return (
@@ -17,8 +19,10 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Inicio />} />
-        <Route path="/formulario" element={<Formulario />} />
-        <Route path="/feedback" element={<Feedback />} />
+        <Route path="/captadores" element={<Captador />} />
+        <Route path="/captadores/contacto" element={<Contacto />} />
+        <Route path="/captadores/visita" element={<Visita />} />
+        <Route path="/comerciales/feedback" element={<Feedback />} />
       </Routes>
     </Router>
   );

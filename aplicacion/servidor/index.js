@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const formularioRoutes = require("./routes/formularioRoutes");
+const contactoRoutes = require("./routes/contactoRoutes");
 const feedbackRoutes = require("./routes/feedbackRoutes");
 const sesionRoutes = require("./routes/sesionRoutes");
 
@@ -11,7 +11,7 @@ app.use(cors({ origin: "http://localhost:3000" }));
 // convierte las peticiones en formato .json
 app.use(express.json());
 
-app.use("/api", formularioRoutes);
+app.use("/api", contactoRoutes);
 app.use("/api", feedbackRoutes);
 app.use("/api", sesionRoutes);
 

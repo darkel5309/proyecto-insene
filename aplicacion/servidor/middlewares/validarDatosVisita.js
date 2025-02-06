@@ -1,5 +1,5 @@
 // intermediario para las validaciones de los datos del formulario
-const validarDatosFormulario = (req, res, next) => {
+const validarDatosVisita = (req, res, next) => {
     const { idTrabajador, nombreContacto, direccionContacto, localidadContacto, provinciaContacto, telefonoContacto, correoContacto, fechaVisita, horaVisita, numeroPersonas, numeroDecisores, importeLuz, importeGas } = req.body;
 
     // validaciones de campos obligatorios
@@ -37,4 +37,4 @@ const validarDatosFormulario = (req, res, next) => {
     next();
 };
 
-module.exports = validarDatosFormulario;
+module.exports = validarDatosVisita;
