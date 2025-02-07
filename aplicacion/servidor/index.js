@@ -7,8 +7,8 @@ const feedbackRoutes = require("./routes/feedbackRoutes");
 
 const app = express();
 
-// permite que el frontend en localhost:3000 haga solicitudes al backend
-app.use(cors({ origin: "http://localhost:3000" }));
+// permite que el frontend en localhost:5173 haga solicitudes al backend
+app.use(cors({ origin: "http://localhost:5173" }));
 // convierte las peticiones en formato .json
 app.use(express.json());
 
@@ -18,6 +18,6 @@ app.use("/api", visitaRoutes);
 app.use("/api", feedbackRoutes);
 
 // verificamos que el backend esta funcionando correctamente y escuchando en el puerto 3001
-app.listen(3001, () => {
-    console.log("Servidor funcionando correctamente en el puerto 3001.");
+app.listen(5174, () => {
+    console.log("Servidor funcionando correctamente en el puerto 5174.");
 });

@@ -58,7 +58,7 @@ export default function Visita() {
     useEffect(() => {
         const obtenerCliente = async (idCliente) => {
             try {
-                const response = await Axios.get(`http://localhost:3001/api/obtenerContacto/${idCliente}`);
+                const response = await Axios.get(`http://localhost:5174/api/obtenerContacto/${idCliente}`);
                 const cliente = response.data;
                 if (cliente) {
                     setDatosVisita(prevState => ({
@@ -133,7 +133,7 @@ export default function Visita() {
         e.preventDefault();
         if (validar()) {
             try {
-                const response = await Axios.post("http://localhost:3001/api/registrarVisita", datosVisita);
+                const response = await Axios.post("http://localhost:5174/api/registrarVisita", datosVisita);
                 setErrores({});
 
                 Swal.fire({

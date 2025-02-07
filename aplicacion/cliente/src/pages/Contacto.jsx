@@ -86,7 +86,7 @@ export default function Formulario() {
         e.preventDefault();
         if (validar()) {
             // llamamos al metodo crear y al cuerpo de la solicitud
-            Axios.post("http://localhost:3001/api/registrarCliente", datosContacto)
+            Axios.post("http://localhost:5174/api/registrarCliente", datosContacto)
                 .then((response) => {
                     setErrores({});
 

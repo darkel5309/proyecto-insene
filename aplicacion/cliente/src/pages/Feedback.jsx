@@ -89,7 +89,7 @@ export default function Feedback() {
 		e.preventDefault();
 		if (validar()) {
 			// llamamos al metodo crear y al cuerpo de la solicitud
-			Axios.post("http://localhost:3001/api/registrarFeedback", datosFeedback)
+			Axios.post("http://localhost:5174/api/registrarFeedback", datosFeedback)
 				.then(() => {
 					setErrores({});
 

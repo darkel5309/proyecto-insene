@@ -74,7 +74,7 @@ export default function Inicio() {
     const iniciarSesion = (e) => {
         e.preventDefault();
         if (validar()) {
-            Axios.post("http://localhost:3001/api/iniciarSesion", datosSesion)
+            Axios.post("http://localhost:5174/api/iniciarSesion", datosSesion)
                 .then((response) => {
                     setErrores({});
 
@@ -86,9 +86,9 @@ export default function Inicio() {
 
                     // redirecciones
                     if (tipoTrabajador === 'Captador') {
-                        redirigir('/formulario');
+                        redirigir('/captadores');
                     } else if (tipoTrabajador === 'Comercial') {
-                        redirigir('/feedback');
+                        redirigir('/comerciales');
                     }
                 })
                 .catch((error) => {

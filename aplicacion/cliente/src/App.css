@@ -1,16 +1,16 @@
 .insene{
-    width: 100%;
+  width: 100%;
 }
 
 .logo {
-    display: flex;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 5px 0px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 5px 0px;
 }
 
 .logo img {
-    max-width: 200px;
+  max-width: 200px;
 }
