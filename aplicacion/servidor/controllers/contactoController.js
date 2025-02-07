@@ -54,4 +54,27 @@ const registrarContacto = async (req, res) => {
     }
 };
 
-module.exports = { registrarContacto }
+// creamos la peticion para el formulario
+const obtenerContacto = async (req, res) => {
+    const { idCliente } = req.params;
+
+    try {
+        const sql = `SELECT c.id_cliente, c.nombre, c.telefono, c.correo, c.observaciones_cliente, d.direccion, d.localidad, d.provincia 
+            FROM cliente c
+            LEFT JOIN domicilio d ON c.id_cliente = d.id_cliente
+            WHERE c.id_cliente = ?`;
+
+        const resultado = await query(sql, [idCliente]);
+
+        if (resultado.length === 0) {
+            return res.status(404).json({ error: 'Cliente no encontrado' });
+        }
+
+        res.status(200).json(resultado[0]);
+    } catch (err) {
+        console.error("Error al obtener cliente:", err);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
+module.exports = { registrarContacto, obtenerContacto };

@@ -7,15 +7,6 @@ const validarDatosVisita = (req, res, next) => {
         return res.status(400).json({ error: "Todos los campos marcados con * son obligatorios" });
     }
 
-    // validaciones con expresiones regulares
-    if (!/^\d{9}$/.test(telefonoContacto)) {
-        return res.status(400).json({ error: "El teléfono debe tener 9 dígitos" });
-    }
-
-    if (!/\S+@\S+\.\S+/.test(correoContacto)) {
-        return res.status(400).json({ error: "El correo no es válido" });
-    }
-
     // validaciones de campos que deben ser numeros positivos
     if (numeroPersonas < 0 || isNaN(numeroPersonas)) {
         return res.status(400).json({ error: "El número de personas debe ser un número positivo" });

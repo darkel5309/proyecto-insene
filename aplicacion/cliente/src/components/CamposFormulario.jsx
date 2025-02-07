@@ -1,6 +1,6 @@
 import { React, useRef, useEffect } from "react";
 
-const EntradaTexto = ({ label, name, value, onChange, type, placeholder, error }) => {
+const EntradaTexto = ({ label, name, value, onChange, type, placeholder, disabled, error }) => {
     return (
         <div>
             <label className="nombreCampo">{label}</label>
@@ -11,6 +11,7 @@ const EntradaTexto = ({ label, name, value, onChange, type, placeholder, error }
                 onChange={onChange}
                 type={type}
                 placeholder={placeholder}
+                disabled={disabled}
             />
             {error && <div className="error">{error}</div>}
         </div>

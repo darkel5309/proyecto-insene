@@ -135,7 +135,6 @@ export default function Inicio() {
 
                     <button type="submit">Iniciar Sesión</button>
                 </form>
-
             </div>
         </div>
     );
