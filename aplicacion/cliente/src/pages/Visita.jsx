@@ -5,12 +5,11 @@ import { EntradaTexto, EntradaRadio } from '../components/CamposFormulario';
 import Swal from 'sweetalert2';
 
 export default function Visita() {
-
     useEffect(() => {
         document.title = "Visita";
     }, []);
 
-    const [datosVisita, setDatosVisita] = useState({
+    const datosInicialesVisita = {
         idTrabajador: 0,
         idCliente: 0,
         nombreContacto: "",
@@ -30,7 +29,9 @@ export default function Visita() {
         tienePlacasTermicas: "Sin datos",
         importeLuz: 0,
         importeGas: 0
-    });
+    };
+
+    const [datosVisita, setDatosVisita] = useState(datosInicialesVisita);
 
     const [errores, setErrores] = useState({});
 
@@ -69,22 +70,10 @@ export default function Visita() {
                         telefonoContacto: cliente.telefono || "",
                         correoContacto: cliente.correo || ""
                     }));
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "¡ERROR!",
-                        text: "Cliente no encontrado",
-                        confirmButtonText: "Vale"
-                    });
-                    resetClienteData();
+                    setErrores(prevState => ({ ...prevState, idCliente: null }));
                 }
             } catch {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Hubo un problema al obtener los datos del cliente. Intenta de nuevo.",
-                    confirmButtonText: "Vale"
-                });
+                resetClienteData();
             }
         };
 
@@ -125,13 +114,13 @@ export default function Visita() {
             if (error) acc[campo] = error;
             return acc;
         }, {});
-
         setErrores(nuevoError);
+
         if (Object.keys(nuevoError).length > 0) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "Hay algunos campos con errores en el formulario",
+                text: "Revisa los campos del formulario",
                 confirmButtonText: "Vale"
             });
             return false;
@@ -145,41 +134,43 @@ export default function Visita() {
         if (validar()) {
             try {
                 const response = await Axios.post("http://localhost:3001/api/registrarVisita", datosVisita);
+                setErrores({});
+
                 Swal.fire({
                     icon: "success",
                     title: `El código de visita es: ${response.data.idVivienda}`,
                     text: "Visita registrada correctamente",
                     confirmButtonText: "Vale"
                 });
-                setDatosVisita({
-                    idTrabajador: 0,
-                    idCliente: 0,
-                    nombreContacto: "",
-                    telefonoContacto: "",
-                    correoContacto: "",
-                    observacionesContacto: "",
-                    direccionContacto: "",
-                    localidadContacto: "",
-                    provinciaContacto: "",
-                    fechaVisita: "",
-                    horaVisita: "",
-                    numeroPersonas: 0,
-                    numeroDecisores: 0,
-                    tieneBombona: "Sin datos",
-                    tieneGas: "Sin datos",
-                    tieneTermoElectrico: "Sin datos",
-                    tienePlacasTermicas: "Sin datos",
-                    importeLuz: 0,
-                    importeGas: 0
-                });
+                setDatosVisita(datosInicialesVisita);
+
             } catch (error) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: "Hubo un problema al registrar la visita. Inténtalo de nuevo.",
-                    confirmButtonText: "Vale"
-                });
-            }
+                if (error.response) {
+                    const mensajeError = error.response?.data?.error || "Hubo un problema al registrar la visita. Inténtalo de nuevo.";
+
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: "Revisa los campos del formulario",
+                        confirmButtonText: "Vale"
+                    });
+
+                    setErrores(prevState => ({
+                        ...prevState,
+                        serverError: mensajeError
+                    }));
+                }
+
+                else if (error.message && error.message.includes("Network Error")) {
+                    // mostramos una alerta de conexion
+                    Swal.fire({
+                        icon: "question",
+                        title: "Error de conexión",
+                        text: "Verifica tu conexión a internet e inténtalo de nuevo",
+                        confirmButtonText: "Vale"
+                    });
+                }
+            };
         }
     };
 
@@ -194,15 +185,15 @@ export default function Visita() {
 
                     <EntradaTexto label="Código del contacto *" name="idCliente" value={datosVisita.idCliente} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idCliente} />
 
-                    <EntradaTexto label="Nombre completo del contacto" name="nombreContacto" value={datosVisita.nombreContacto} onChange={handleChange} type="text" error={errores.nombreContacto} disabled={true} />
+                    <EntradaTexto label="Nombre completo del contacto" name="nombreContacto" value={datosVisita.nombreContacto} onChange={handleChange} type="text" disabled={true} />
 
-                    <EntradaTexto label="Dirección del contacto" name="direccionContacto" value={datosVisita.direccionContacto} onChange={handleChange} type="text" error={errores.direccionContacto} disabled={true} />
+                    <EntradaTexto label="Dirección del contacto" name="direccionContacto" value={datosVisita.direccionContacto} onChange={handleChange} type="text" disabled={true} />
 
-                    <EntradaTexto label="Localidad del contacto" name="localidadContacto" value={datosVisita.localidadContacto} onChange={handleChange} type="text" error={errores.localidadContacto} disabled={true} />
+                    <EntradaTexto label="Localidad del contacto" name="localidadContacto" value={datosVisita.localidadContacto} onChange={handleChange} type="text" disabled={true} />
 
-                    <EntradaTexto label="Provincia del contacto" name="provinciaContacto" value={datosVisita.provinciaContacto} onChange={handleChange} type="text" error={errores.provinciaContacto} disabled={true} />
+                    <EntradaTexto label="Provincia del contacto" name="provinciaContacto" value={datosVisita.provinciaContacto} onChange={handleChange} type="text" disabled={true} />
 
-                    <EntradaTexto label="Teléfono de contacto" name="telefonoContacto" value={datosVisita.telefonoContacto} onChange={handleChange} type="tel" error={errores.telefonoContacto} disabled={true} />
+                    <EntradaTexto label="Teléfono de contacto" name="telefonoContacto" value={datosVisita.telefonoContacto} onChange={handleChange} type="tel" disabled={true} />
 
                     <EntradaTexto label="Correo del contacto" name="correoContacto" value={datosVisita.correoContacto} onChange={handleChange} type="email" error={errores.correoContacto} disabled={true} />
 

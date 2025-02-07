@@ -14,7 +14,7 @@ const registrarContacto = async (req, res) => {
         const existeTrabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
 
         if (existeTrabajador.length === 0) {
-            return res.status(400).json({ error: "El ID del trabajador no existe en la base de datos" });
+            return res.status(400).json({ error: "Ese trabajador no existe" });
         }
 
         // consultamos si ya existe un cliente con el telefono o correo introducidos

@@ -1,9 +1,9 @@
 // intermediario para las validaciones de los datos del formulario
 const validarDatosVisita = (req, res, next) => {
-    const { idTrabajador, nombreContacto, direccionContacto, localidadContacto, provinciaContacto, telefonoContacto, correoContacto, fechaVisita, horaVisita, numeroPersonas, numeroDecisores, importeLuz, importeGas } = req.body;
+    const { idTrabajador, idCliente, fechaVisita, horaVisita, numeroPersonas, numeroDecisores, importeLuz, importeGas } = req.body;
 
     // validaciones de campos obligatorios
-    if (!idTrabajador || !nombreContacto || !direccionContacto || !localidadContacto || !provinciaContacto || !telefonoContacto || !correoContacto || !fechaVisita || !horaVisita || !numeroDecisores) {
+    if (!idTrabajador || !idCliente || !fechaVisita || !horaVisita || !numeroDecisores) {
         return res.status(400).json({ error: "Todos los campos marcados con * son obligatorios" });
     }
 

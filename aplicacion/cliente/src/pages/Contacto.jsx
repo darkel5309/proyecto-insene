@@ -108,7 +108,7 @@ export default function Formulario() {
                         // mostramos una alerta de error
                         Swal.fire({
                             icon: "error",
-                            title: "¡ERROR!",
+                            title: "Error",
                             text: "Revisa los datos del formulario",
                             confirmButtonText: "Vale"
                         });
@@ -123,7 +123,7 @@ export default function Formulario() {
                         // mostramos una alerta de conexion
                         Swal.fire({
                             icon: "question",
-                            title: "¡ERROR DE CONEXIÓN!",
+                            title: "Error de conexión",
                             text: "Verifica tu conexión a internet e inténtalo de nuevo",
                             confirmButtonText: "Vale"
                         });
