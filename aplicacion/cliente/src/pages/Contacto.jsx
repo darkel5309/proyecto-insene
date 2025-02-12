@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Axios from "axios";
 import { EntradaTexto, EntradaTextoArea } from '../components/CamposFormulario';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 export default function Formulario() {
     useEffect(() => {
@@ -26,6 +27,9 @@ export default function Formulario() {
 
     // creamos las constantes para los errores
     const [errores, setErrores] = useState({});
+
+    // creamos la constante para navegar entre las paginas
+    const redirigir = useNavigate();
 
     // validaciones de los campos
     const validaciones = {
@@ -96,6 +100,10 @@ export default function Formulario() {
                         title: `El código del cliente es: ${response.data.idCliente}`,
                         text: "Datos registrados correctamente",
                         confirmButtonText: "Vale"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            redirigir(-1);
+                        }
                     });
 
                     // vaciamos los campos del formulario despues de que se inserten

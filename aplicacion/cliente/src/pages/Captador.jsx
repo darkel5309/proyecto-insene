@@ -1,11 +1,18 @@
 import React from 'react';
+import '../styles/Captador.css';
 import { Link } from 'react-router-dom';
 
 export default function Captador() {
     return (
-        <div>
-            <Link to="/captadores/contacto">Registrar a un contacto</Link><br></br>
-            <Link to="/captadores/visita">Registrar una visita</Link><br></br>
+        <div className="captador">
+            <div className="contenedorCaptador">
+                <h1>Panel de Captadores</h1>
+                <div className='enlaces'>
+                    <Link to="/captadores/contacto" className='enlace'>Registrar a un contacto</Link><br></br>
+                    <Link to="/captadores/visita" className='enlace'>Registrar una visita</Link><br></br>
+                </div>
+            </div>
         </div>
+
     )
 }

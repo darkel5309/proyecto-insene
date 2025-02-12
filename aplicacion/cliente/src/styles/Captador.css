@@ -1,0 +1,75 @@
+/* pagina */
+.captador {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+/* titulo */
+.captador .contenedorCaptador h1 {
+    color: #0a2b54;
+    margin-bottom: 20px;
+    font-size: 24px;
+    text-align: center;
+}
+
+/* contenedor del captador */
+.captador .contenedorCaptador {
+    width: 100%;
+    max-width: 600px;
+}
+
+/* contenedor de los enlaces */
+.captador .contenedorCaptador .enlaces {
+    display: flex;
+    margin: 15px 0px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* cada uno de los enlaces */
+.captador .contenedorCaptador .enlaces .enlace {
+    text-decoration: none;
+    margin: 5px 15px;
+    padding: 20px 10px;
+    background-color: #203c56;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.3s;
+    text-align: center;
+}
+
+.captador .contenedorCaptador .enlaces .enlace:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+.captador .contenedorCaptador .enlaces .enlace:active {
+    background-color: #203c56;
+}
+
+/* DISEÑO MOVIL */
+@media (max-width: 768px) {
+
+    /* pagina */
+    .captador {
+        padding: 10px 0px;
+    }
+
+    /* contenedor del captador */
+    .captador .contenedorCaptador {
+        width: 100%;
+        margin: 0px;
+    }
+
+    /* cada uno de los enlaces */
+    .captador .contenedorCaptador .enlaces .enlace {
+        padding: 10px 10px;
+    }
+}

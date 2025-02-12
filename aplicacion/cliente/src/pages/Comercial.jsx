@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from 'react';
+import '../styles/Comercial.css';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
@@ -21,15 +22,17 @@ export default function Comercial() {
     }, []);
 
     return (
-        <div>
-            <Link to="/comerciales/contacto">Registrar a un contacto</Link><br></br>
-            <Link to="/comerciales/feedback">Registrar un feedback</Link><br></br>
+        <div className="comercial">
+            <div className="contenedorComercial">
+                <h1>Panel de Comerciales</h1>
+                <div className="enlaces">
+                    <Link to="/comerciales/contacto" className='enlace'>Registrar un contacto</Link><br></br>
+                    <Link to="/comerciales/feedback" className='enlace'>Registrar un feedback</Link><br></br>
+                </div>
 
-            <p>
-                Lista de clientes:
-            </p>
-            <div style={{ height: 450, width: '100%' }}>
-                <DataGrid rows={filas} columns={columnas} pageSize={5} getRowId={(row) => row.id_cliente} />
+                <div className="tabla">
+                    <DataGrid rows={filas} columns={columnas} pageSize={5} getRowId={(row) => row.id_cliente} />
+                </div>
             </div>
         </div>
     )
