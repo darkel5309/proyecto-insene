@@ -6,6 +6,7 @@ import Inicio from "./pages/Inicio";
 import Captador from "./pages/Captador";
 import Contacto from "./pages/Contacto";
 import Visita from "./pages/Visita";
+import Comercial from "./pages/Comercial";
 import Feedback from "./pages/Feedback";
 
 function App() {
@@ -22,11 +23,12 @@ function App() {
         <Route path="/captadores" element={<Captador />} />
         <Route path="/captadores/contacto" element={<Contacto />} />
         <Route path="/captadores/visita" element={<Visita />} />
+        <Route path="/comerciales" element={<Comercial />} />
+        <Route path="/comerciales/contacto" element={<Contacto />} />
         <Route path="/comerciales/feedback" element={<Feedback />} />
       </Routes>
     </Router>
   );
-
 }
 
 export default App;
