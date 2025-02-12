@@ -77,4 +77,21 @@ const obtenerContacto = async (req, res) => {
     }
 };
 
-module.exports = { registrarContacto, obtenerContacto };
+const obtenerContactosSimplificado = async (req, res) => {
+    try {
+        const sql = `SELECT id_cliente, nombre, telefono FROM cliente`;
+
+        const resultado = await query(sql);
+
+        if (resultado.length === 0) {
+            return res.status(404).json({ error: 'No hay clientes registrados' });
+        }
+
+        res.status(200).json(resultado);
+    } catch (err) {
+        console.error("Error al obtener clientes:", err);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
+module.exports = { registrarContacto, obtenerContacto, obtenerContactosSimplificado };
