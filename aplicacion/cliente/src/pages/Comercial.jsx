@@ -2,6 +2,7 @@ import { React, useState, useEffect } from 'react';
 import '../styles/Comercial.css';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
+import { esES } from '@mui/x-data-grid/locales';
 import axios from 'axios';
 
 export default function Comercial() {
@@ -9,7 +10,7 @@ export default function Comercial() {
 
     const columnas = [
         { field: 'id_cliente', headerName: 'Id', width: 90 },
-        { field: 'nombre', headerName: 'Nombre', width: 160 },
+        { field: 'nombre', headerName: 'Nombre', width: 150 },
         { field: 'telefono', headerName: 'Teléfono', width: 130 },
     ];
 
@@ -31,7 +32,7 @@ export default function Comercial() {
                 </div>
 
                 <div className="tabla">
-                    <DataGrid rows={filas} columns={columnas} pageSize={5} getRowId={(row) => row.id_cliente} />
+                    <DataGrid localeText={esES.components.MuiDataGrid.defaultProps.localeText} rows={filas} columns={columnas} pageSize={5} getRowId={(row) => row.id_cliente} />
                 </div>
             </div>
         </div>
