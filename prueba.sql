@@ -55,8 +55,8 @@ DESCRIBE recibo;
 CREATE TABLE trabajador(
 	id_trabajador INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
-    contrasena VARCHAR(20) NOT NULL,
-    telefono CHAR(9) NOT NULL,
+    contrasena VARCHAR(255) NOT NULL,
+    telefono CHAR(9) NOT NULL UNIQUE,
     rol ENUM("Administrador", "Captador", "Comercial")
 );
 

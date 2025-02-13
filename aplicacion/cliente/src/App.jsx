@@ -8,6 +8,7 @@ import Contacto from "./pages/Contacto";
 import Visita from "./pages/Visita";
 import Comercial from "./pages/Comercial";
 import Feedback from "./pages/Feedback";
+import Trabajador from "./pages/Trabajador";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Inicio />} />
+        <Route path="/trabajador" element={<Trabajador />} />
         <Route path="/captadores" element={<Captador />} />
         <Route path="/captadores/contacto" element={<Contacto />} />
         <Route path="/captadores/visita" element={<Visita />} />

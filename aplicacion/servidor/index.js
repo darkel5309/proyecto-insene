@@ -4,6 +4,7 @@ const sesionRoutes = require("./routes/sesionRoutes");
 const contactoRoutes = require("./routes/contactoRoutes");
 const visitaRoutes = require("./routes/visitaRoutes")
 const feedbackRoutes = require("./routes/feedbackRoutes");
+const trabajadorRoutes = require("./routes/trabajadorRoutes");
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use("/api", sesionRoutes);
 app.use("/api", contactoRoutes);
 app.use("/api", visitaRoutes);
 app.use("/api", feedbackRoutes);
+app.use("/api", trabajadorRoutes);
 
 // verificamos que el backend esta funcionando correctamente y escuchando en el puerto 3001
 app.listen(5174, () => {
