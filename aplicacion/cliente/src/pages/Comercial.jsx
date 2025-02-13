@@ -26,8 +26,8 @@ export default function Comercial() {
             <div className="contenedorComercial">
                 <h1>Panel de Comerciales</h1>
                 <div className="enlaces">
-                    <Link to="/comerciales/contacto" className='enlace'>Registrar un contacto</Link><br></br>
-                    <Link to="/comerciales/feedback" className='enlace'>Registrar un feedback</Link><br></br>
+                    <Link to="/comerciales/contacto" className='enlace'>Nuevo contacto</Link><br></br>
+                    <Link to="/comerciales/feedback" className='enlace'>Nuevo feedback</Link><br></br>
                 </div>
 
                 <div className="tabla">

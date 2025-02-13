@@ -43,6 +43,7 @@
     border-radius: 5px;
     transition: background-color 0.3s, transform 0.3s;
     text-align: center;
+    width: 130px;
 }
 
 .comercial .contenedorComercial .enlaces .enlace:hover {
@@ -79,6 +80,6 @@
     /* cada uno de los enlaces */
     .comercial .contenedorComercial .enlaces .enlace {
         padding: 10px 10px;
+        width: 110px;
     }
-
 }
