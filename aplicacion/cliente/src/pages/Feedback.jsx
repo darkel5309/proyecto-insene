@@ -1,16 +1,14 @@
 import '../styles/Feedback.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Axios from "axios";
 import { EntradaTexto, EntradaTextoArea, EntradaSelect } from '../components/CamposFormulario';
 import Swal from 'sweetalert2';
-import { useEffect } from 'react';
 
 export default function Feedback() {
 	useEffect(() => {
 		document.title = "Feedback";
 	}, []);
 
-	// creamos las constantes para obtener los valores de los campos del formulario
 	const datosInicialesFeedback = {
 		idTrabajador: 0,
 		idVivienda: 0,
@@ -23,13 +21,9 @@ export default function Feedback() {
 		observacionesVisita: ""
 	};
 
-	// creamos las constantes para obtener los valores de los campos del feedback
 	const [datosFeedback, setDatosFeedback] = useState(datosInicialesFeedback);
-
-	// creamos las constantes para los errores
 	const [errores, setErrores] = useState({});
 
-	// validaciones de los campos
 	const validaciones = {
 		idTrabajador: (valor) => (!valor || isNaN(valor) || valor <= 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
 		idVivienda: (valor) => (!valor || isNaN(valor) || valor <= 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
@@ -60,7 +54,7 @@ export default function Feedback() {
 		validarCampo(name, value);
 	};
 
-	// validamos los campos
+	// comprobamos las validaciones
 	const validar = () => {
 		const nuevoError = {};
 		Object.keys(validaciones).forEach(campo => {
@@ -70,7 +64,6 @@ export default function Feedback() {
 		setErrores(nuevoError);
 
 		if (Object.keys(nuevoError).length > 0) {
-			// mostramos una alerta de error
 			Swal.fire({
 				icon: "error",
 				title: "Error",
@@ -78,37 +71,34 @@ export default function Feedback() {
 				confirmButtonText: "Vale"
 			});
 		}
-
-		// si no hay errores devolvemos true
 		return Object.keys(nuevoError).length === 0;
 	};
 
 
-	// metodo para crear clientes
+	// crear feedback
 	const addFeedback = (e) => {
 		e.preventDefault();
 		if (validar()) {
-			// llamamos al metodo crear y al cuerpo de la solicitud
 			Axios.post("http://localhost:5174/api/registrarFeedback", datosFeedback)
 				.then(() => {
 					setErrores({});
 
-					// mostramos una alerta de todo correcto
 					Swal.fire({
 						icon: "success",
 						title: "Perfecto",
 						text: "Feedback registrado correctamente",
 						confirmButtonText: "Vale"
+					}).then((result) => {
+						if (result.isConfirmed) {
+							redirigir(-1);
+						}
 					});
-
-					// vaciamos los campos del feedback despues de que se inserten
 					setDatosFeedback(datosInicialesFeedback);
 				})
 				.catch((error) => {
 					if (error.response) {
 						const mensajeError = error.response?.data?.error || "Hubo un problema con la solicitud. Inténtalo de nuevo";
 
-						// mostramos una alerta de error
 						Swal.fire({
 							icon: "error",
 							title: "Error",
@@ -121,10 +111,8 @@ export default function Feedback() {
 							serverError: mensajeError
 						}));
 						console.error("Error en la solicitud");
-					}
 
-					else if (error.message && error.message.includes("Network Error")) {
-						// mostramos una alerta de conexion
+					} else if (error.message && error.message.includes("Network Error")) {
 						Swal.fire({
 							icon: "question",
 							title: "Error de Conexión",
@@ -137,11 +125,9 @@ export default function Feedback() {
 		}
 	};
 
-	// este es el html visible en la web
 	return (
 		<div className='feedback'>
 			<h1>Feedback de la visita</h1>
-
 			<div className='contenedorFeedback'>
 				<form onSubmit={addFeedback} className='campos'>
 					{errores.serverError && <div className="errorServidor"> {errores.serverError}</div>}

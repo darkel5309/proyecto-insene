@@ -10,7 +10,8 @@ export default function Trabajador() {
         document.title = "Trabajador";
     }, []);
 
-    // creamos las constantes para obtener los valores de los campos del formulario
+    const redirigir = useNavigate();
+
     const datosInicialesTrabajador = {
         nombreTrabajador: "",
         contrasenaTrabajador: "",
@@ -18,16 +19,9 @@ export default function Trabajador() {
         rolTrabajador: ""
     };
 
-    // creamos las constantes para obtener los valores de los campos del formulario
     const [datosTrabajador, setDatosTrabajador] = useState(datosInicialesTrabajador);
-
-    // creamos las constantes para los errores
     const [errores, setErrores] = useState({});
 
-    // creamos la constante para navegar entre las paginas
-    const redirigir = useNavigate();
-
-    // validaciones de los campos
     const validaciones = {
         nombreTrabajador: (valor) => !valor ? "Este campo es obligatorio" : null,
         contrasenaTrabajador: (valor) => !valor ? "Este campo es obligatorio" : null,
@@ -64,7 +58,6 @@ export default function Trabajador() {
         setErrores(nuevoError);
 
         if (Object.keys(nuevoError).length > 0) {
-            // mostramos una alerta de error
             Swal.fire({
                 icon: "error",
                 title: "¡ERROR!",
@@ -72,21 +65,17 @@ export default function Trabajador() {
                 confirmButtonText: "Vale"
             });
         }
-
-        // si no hay errores devolvemos true
         return Object.keys(nuevoError).length === 0;
     };
 
-    // metodo para crear clientes
+    // crear trabajadores
     const addTrabajador = (e) => {
         e.preventDefault();
         if (validar()) {
-            // llamamos al metodo crear y al cuerpo de la solicitud
             Axios.post("http://localhost:5174/api/registrarTrabajador", datosTrabajador)
                 .then((response) => {
                     setErrores({});
 
-                    // mostramos una alerta de todo correcto
                     Swal.fire({
                         icon: "success",
                         title: `El código del trabajador es:  ${response.data.idTrabajador}`,
@@ -94,33 +83,29 @@ export default function Trabajador() {
                         confirmButtonText: "Vale"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            redirigir(0);
+                            redirigir(-1);
                         }
                     });
-
-                    // vaciamos los campos del formulario despues de que se inserten
                     setDatosTrabajador(datosInicialesTrabajador);
                 })
                 .catch((error) => {
                     if (error.response) {
                         const mensajeError = error.response?.data?.error || "Hubo un problema con la solicitud. Inténtalo de nuevo";
 
-                        // mostramos una alerta de error
+                        setErrores(prevState => ({
+                            ...prevState,
+                            serverError: mensajeError
+                        }));
+
                         Swal.fire({
                             icon: "error",
                             title: "Error",
                             text: "Revisa los datos del formulario",
                             confirmButtonText: "Vale"
                         });
-
-                        setErrores(prevState => ({
-                            ...prevState,
-                            serverError: mensajeError
-                        }));
                     }
 
                     else if (error.message && error.message.includes("Network Error")) {
-                        // mostramos una alerta de conexion
                         Swal.fire({
                             icon: "question",
                             title: "Error de conexión",
@@ -132,7 +117,6 @@ export default function Trabajador() {
         }
     };
 
-    // este es el html visible en la web
     return (
         <div className="trabajador">
             <h1>Registrar un Trabajador</h1>

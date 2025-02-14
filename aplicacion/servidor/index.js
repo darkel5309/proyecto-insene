@@ -1,17 +1,23 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require('cookie-parser');
+const dotenv = require('dotenv');
+
 const sesionRoutes = require("./routes/sesionRoutes");
 const contactoRoutes = require("./routes/contactoRoutes");
 const visitaRoutes = require("./routes/visitaRoutes")
 const feedbackRoutes = require("./routes/feedbackRoutes");
 const trabajadorRoutes = require("./routes/trabajadorRoutes");
 
+dotenv.config();
+
 const app = express();
 
 // permite que el frontend en localhost:5173 haga solicitudes al backend
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 // convierte las peticiones en formato .json
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api", sesionRoutes);
 app.use("/api", contactoRoutes);
