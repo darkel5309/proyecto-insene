@@ -40,4 +40,19 @@ const registrarTrabajador = async (req, res) => {
     }
 };
 
-module.exports = { registrarTrabajador };
+const obtenerTrabajadoresSimplificado = async (req, res) => {
+    try{
+        const sql = 'SELECT id_trabajador, nombre, telefono, rol FROM trabajador';
+
+        const resultado = await query(sql);
+
+        if (resultado.length === 0) {
+            return res.status(404).json({ error: 'No hay trabajadores registrados' });
+        }
+        res.status(200).json(resultado);
+    } catch (err) {
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+};
+
+module.exports = { registrarTrabajador, obtenerTrabajadoresSimplificado };

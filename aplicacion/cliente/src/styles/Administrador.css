@@ -73,5 +73,6 @@
     .administrador .contenedorAdministrador .enlaces .enlace {
         padding: 10px 10px;
         width: 90px;
+        margin: 5px 5px;
     }
 }
