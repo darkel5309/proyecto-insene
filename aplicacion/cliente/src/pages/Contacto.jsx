@@ -1,7 +1,7 @@
 import '../styles/Contacto.css';
 import { useState, useEffect } from "react";
 import Axios from "axios";
-import { EntradaTexto, EntradaTextoArea } from '../components/CamposFormulario';
+import { EntradaTexto, EntradaTextoArea, EntradaSelect } from '../components/CamposFormulario';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,33 +10,28 @@ export default function Formulario() {
         document.title = "Contacto";
     }, []);
 
-    // creamos las constantes para obtener los valores de los campos del formulario
     const datosInicialesContacto = {
         idTrabajador: 0,
         nombreContacto: "",
         telefonoContacto: "",
         correoContacto: "",
+        modoCaptacion: "",
         observacionesContacto: "",
         direccionContacto: "",
         localidadContacto: "",
         provinciaContacto: "",
     };
 
-    // creamos las constantes para obtener los valores de los campos del formulario
     const [datosContacto, setDatosContacto] = useState(datosInicialesContacto);
-
-    // creamos las constantes para los errores
     const [errores, setErrores] = useState({});
-
-    // creamos la constante para navegar entre las paginas
     const redirigir = useNavigate();
 
-    // validaciones de los campos
     const validaciones = {
         idTrabajador: (valor) => (!valor || isNaN(valor) || valor <= 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
         nombreContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
         telefonoContacto: (valor) => (!valor || !/^\d{9}$/.test(valor)) ? "Este campo es obligatorio y debe tener 9 digitos" : null,
         correoContacto: (valor) => (!valor || !/\S+@\S+\.\S+/.test(valor)) ? "El correo no es válido" : null,
+        modoCaptacion: (valor) => !valor ? "Este campo es obligatorio" : null,
         direccionContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
         localidadContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
         provinciaContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
@@ -62,7 +57,7 @@ export default function Formulario() {
         validarCampo(name, value);
     };
 
-    // validamos los campos
+	// comprobamos las validaciones
     const validar = () => {
         const nuevoError = {};
         Object.keys(validaciones).forEach(campo => {
@@ -72,32 +67,27 @@ export default function Formulario() {
         setErrores(nuevoError);
 
         if (Object.keys(nuevoError).length > 0) {
-            // mostramos una alerta de error
             Swal.fire({
                 icon: "error",
-                title: "¡ERROR!",
+                title: "Error",
                 text: "Revisa los campos del formulario",
                 confirmButtonText: "Vale"
             });
         }
-
-        // si no hay errores devolvemos true
         return Object.keys(nuevoError).length === 0;
     };
 
-    // metodo para crear clientes
+    // crear clientes
     const addContacto = (e) => {
         e.preventDefault();
         if (validar()) {
-            // llamamos al metodo crear y al cuerpo de la solicitud
             Axios.post("http://localhost:5174/api/registrarCliente", datosContacto)
                 .then((response) => {
                     setErrores({});
 
-                    // mostramos una alerta de todo correcto
                     Swal.fire({
                         icon: "success",
-                        title: `El código del cliente es: ${response.data.idCliente}`,
+                        title: `El código del contacto es: ${response.data.idCliente}`,
                         text: "Datos registrados correctamente",
                         confirmButtonText: "Vale"
                     }).then((result) => {
@@ -105,15 +95,12 @@ export default function Formulario() {
                             redirigir(-1);
                         }
                     });
-
-                    // vaciamos los campos del formulario despues de que se inserten
                     setDatosContacto(datosInicialesContacto);
                 })
                 .catch((error) => {
                     if (error.response) {
                         const mensajeError = error.response?.data?.error || "Hubo un problema con la solicitud. Inténtalo de nuevo";
 
-                        // mostramos una alerta de error
                         Swal.fire({
                             icon: "error",
                             title: "Error",
@@ -125,10 +112,8 @@ export default function Formulario() {
                             ...prevState,
                             serverError: mensajeError
                         }));
-                    }
 
-                    else if (error.message && error.message.includes("Network Error")) {
-                        // mostramos una alerta de conexion
+                    } else if (error.message && error.message.includes("Network Error")) {
                         Swal.fire({
                             icon: "question",
                             title: "Error de conexión",
@@ -140,11 +125,9 @@ export default function Formulario() {
         }
     };
 
-    // este es el html visible en la web
     return (
         <div className="contacto">
             <h1>Formulario de Contactos</h1>
-
             <div className="contenedorContacto">
                 <form onSubmit={addContacto} className='campos'>
                     {errores.serverError && <div className="errorServidor">{errores.serverError}</div>}
@@ -162,6 +145,13 @@ export default function Formulario() {
                     <EntradaTexto label="Teléfono de contacto *" name="telefonoContacto" value={datosContacto.telefonoContacto} onChange={handleChange} type="tel" placeholder="Ej: 666555444" error={errores.telefonoContacto} />
 
                     <EntradaTexto label="Correo del contacto *" name="correoContacto" value={datosContacto.correoContacto} onChange={handleChange} type="email" placeholder="Ej: ejemplo@gmail.com" error={errores.correoContacto} />
+
+					<EntradaSelect label="Modo de captación *" name="modoCaptacion" value={datosContacto.modoCaptacion} onChange={handleChange} error={errores.modoCaptacion} options={[
+						{ value: "Captador", label: "Captador" },
+						{ value: "Telemarketing", label: "Telemarketing" },
+						{ value: "Referido", label: "Referido" },
+						{ value: "Propia", label: "Captación propia" }
+					]} />
 
                     <EntradaTextoArea label="Observaciones del contacto" name="observacionesContacto" value={datosContacto.observacionesContacto} onChange={handleChange} type="text" placeholder="Comenta alguna observación" />
 

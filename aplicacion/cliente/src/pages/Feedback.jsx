@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Axios from "axios";
 import { EntradaTexto, EntradaTextoArea, EntradaSelect } from '../components/CamposFormulario';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 export default function Feedback() {
 	useEffect(() => {
@@ -14,7 +15,6 @@ export default function Feedback() {
 		idVivienda: 0,
 		fechaVisita: "",
 		horaVisita: "",
-		modoCaptacion: "",
 		resultadoVisita: "",
 		tipoVisita: "",
 		oferta: "",
@@ -23,13 +23,13 @@ export default function Feedback() {
 
 	const [datosFeedback, setDatosFeedback] = useState(datosInicialesFeedback);
 	const [errores, setErrores] = useState({});
+	const redirigir = useNavigate();
 
 	const validaciones = {
 		idTrabajador: (valor) => (!valor || isNaN(valor) || valor <= 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
 		idVivienda: (valor) => (!valor || isNaN(valor) || valor <= 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
 		fechaVisita: (valor) => !valor ? "Este campo es obligatorio" : null,
 		horaVisita: (valor) => !valor ? "Este campo es obligatorio" : null,
-		modoCaptacion: (valor) => !valor ? "Este campo es obligatorio" : null,
 		resultadoVisita: (valor) => !valor ? "Este campo es obligatorio" : null,
 		tipoVisita: (valor) => !valor ? "Este campo es obligatorio	" : null
 	};
@@ -67,7 +67,7 @@ export default function Feedback() {
 			Swal.fire({
 				icon: "error",
 				title: "Error",
-				text: "Hay algunos campos con errores en el formulario",
+				text: "Revisa los campos del formulario",
 				confirmButtonText: "Vale"
 			});
 		}
@@ -75,7 +75,7 @@ export default function Feedback() {
 	};
 
 
-	// crear feedback
+	// crear feedbacks
 	const addFeedback = (e) => {
 		e.preventDefault();
 		if (validar()) {
@@ -102,7 +102,7 @@ export default function Feedback() {
 						Swal.fire({
 							icon: "error",
 							title: "Error",
-							text: "Hay algunos campos con errores en el formulario",
+							text: "Revisa los datos del formulario",
 							confirmButtonText: "Vale"
 						});
 
@@ -110,16 +110,14 @@ export default function Feedback() {
 							...prevState,
 							serverError: mensajeError
 						}));
-						console.error("Error en la solicitud");
 
 					} else if (error.message && error.message.includes("Network Error")) {
 						Swal.fire({
 							icon: "question",
 							title: "Error de Conexión",
-							text: "Verifica tu conexión a internet o inténtalo de nuevo",
+							text: "Verifica tu conexión a internet e inténtalo de nuevo",
 							confirmButtonText: "Vale"
 						});
-						console.error("Error de conexión");
 					}
 				});
 		}
@@ -134,18 +132,11 @@ export default function Feedback() {
 
 					<EntradaTexto label="ID Trabajador *" name="idTrabajador" value={datosFeedback.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idTrabajador} />
 
-					<EntradaTexto label="Código del Formulario *" name="idVivienda" value={datosFeedback.idVivienda} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idVivienda} />
+					<EntradaTexto label="Código de la vivienda *" name="idVivienda" value={datosFeedback.idVivienda} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idVivienda} />
 
 					<EntradaTexto label="Fecha de la visita *" name="fechaVisita" value={datosFeedback.fechaVisita} onChange={handleChange} type="date" error={errores.fechaVisita} />
 
 					<EntradaTexto label="Hora de la visita *" name="horaVisita" value={datosFeedback.horaVisita} onChange={handleChange} type="time" error={errores.horaVisita} />
-
-					<EntradaSelect label="Modo de captación *" name="modoCaptacion" value={datosFeedback.modoCaptacion} onChange={handleChange} error={errores.modoCaptacion} options={[
-						{ value: "Captador", label: "Captador" },
-						{ value: "Telemarketing", label: "Telemarketing" },
-						{ value: "Referido", label: "Referido" },
-						{ value: "Propia", label: "Captación propia" }
-					]} />
 
 					<EntradaSelect label="Resultado de la visita *" name="resultadoVisita" value={datosFeedback.resultadoVisita} onChange={handleChange} error={errores.resultadoVisita} options={[
 						{ value: "Visitado_pdte_contestación", label: "Visitado pendiente de contestación" },

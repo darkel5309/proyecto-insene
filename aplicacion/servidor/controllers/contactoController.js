@@ -1,23 +1,17 @@
 const { query } = require("../models/db");
 
-// creamos la peticion para el formulario
 const registrarContacto = async (req, res) => {
-
-    // extraemos los datos recibidos del body
-    const { idTrabajador, nombreContacto, direccionContacto, localidadContacto, provinciaContacto, telefonoContacto, correoContacto, observacionesContacto } = req.body;
+    const { idTrabajador, nombreContacto, direccionContacto, localidadContacto, provinciaContacto, telefonoContacto, correoContacto, modoCaptacion, observacionesContacto } = req.body;
 
     // iniciamos la transaccion
     await query('START TRANSACTION');
 
     try {
-        // consultamos si el trabajador existe
         const existeTrabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
-
         if (existeTrabajador.length === 0) {
-            return res.status(400).json({ error: "Ese trabajador no existe" });
+            return res.status(400).json({ error: "El trabajador no existe" });
         }
 
-        // consultamos si ya existe un cliente con el telefono o correo introducidos
         const existeCliente = await query('SELECT * FROM cliente WHERE telefono = ? OR correo = ?', [telefonoContacto, correoContacto]);
 
         if (existeCliente.length > 0) {
@@ -31,15 +25,15 @@ const registrarContacto = async (req, res) => {
         }
 
         // insertamos el cliente
-        const sqlCliente = 'INSERT INTO cliente (nombre, telefono, correo, observaciones_cliente) VALUES (?,?,?,?)';
-        const resultadoCliente = await query(sqlCliente, [nombreContacto, telefonoContacto, correoContacto, observacionesContacto]);
+        const sqlCliente = 'INSERT INTO cliente (nombre, telefono, correo, modo_captacion, observaciones_cliente) VALUES (?,?,?,?,?)';
+        const resultadoCliente = await query(sqlCliente, [nombreContacto, telefonoContacto, correoContacto, modoCaptacion, observacionesContacto]);
         const idCliente = resultadoCliente.insertId;
 
         // insertamos el domicilio del cliente
         const sqlDomicilio = 'INSERT INTO domicilio (direccion, localidad, provincia, id_cliente) VALUES (?, ?, ?, ?)';
         await query(sqlDomicilio, [direccionContacto, localidadContacto, provinciaContacto, idCliente]);
 
-        // confirmamos la transaccion
+        // confirmamos
         await query('COMMIT');
 
         res.status(200).json({
@@ -47,14 +41,12 @@ const registrarContacto = async (req, res) => {
         });
 
     } catch (err) {
-        // en caso de error revertimos la transaccion
+        // deshacemos cambios
         await query('ROLLBACK');
-        console.error("Error durante la transacción:", err);
         res.status(500).json({ error: "Error al procesar la solicitud" });
     }
 };
 
-// creamos la peticion para el formulario
 const obtenerContacto = async (req, res) => {
     const { idCliente } = req.params;
 
