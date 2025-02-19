@@ -8,10 +8,10 @@ export default function Captador() {
             <div className="contenedorCaptador">
                 <h1>Panel de Captadores</h1>
                 <div className='enlaces'>
-                    <Link to="/captadores/contacto" className='enlace'>Nuevo contacto</Link><br></br>
-                    <Link to="/captadores/visita" className='enlace'>Nueva visita</Link><br></br>
+                    <Link to="/captadores/contacto" className='enlace'>Nuevo contacto</Link>
+                    <Link to="/captadores/visita" className='enlace'>Nueva visita</Link>
                 </div>
             </div>
         </div>
-    )
+    );
 }

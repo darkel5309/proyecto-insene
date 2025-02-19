@@ -1,13 +1,16 @@
-import { React, useRef, useEffect } from "react";
+import { React, useRef, useEffect, useCallback } from "react";
+import PropTypes from "prop-types";
 
+// componente para entradas de texto
 const EntradaTexto = ({ label, name, value, onChange, type, placeholder, disabled, error }) => {
+    const valorInput = (type === "number" && value === 0) ? "" : value;
     return (
         <div>
             <label className="nombreCampo">{label}</label>
             <input
                 className="campoTexto"
                 name={name}
-                value={value}
+                value={valorInput}
                 onChange={onChange}
                 type={type}
                 placeholder={placeholder}
@@ -18,10 +21,28 @@ const EntradaTexto = ({ label, name, value, onChange, type, placeholder, disable
     );
 };
 
+EntradaTexto.propTypes = {
+    label: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    onChange: PropTypes.func.isRequired,
+    type: PropTypes.string,
+    placeholder: PropTypes.string,
+    disabled: PropTypes.bool,
+    error: PropTypes.string,
+};
+
+EntradaTexto.defaultProps = {
+    type: "text",
+    placeholder: "",
+    disabled: false,
+    error: "",
+};
+
+// componente para entradas de texto de varias lineas
 const EntradaTextoArea = ({ label, name, value, onChange, placeholder, error }) => {
     const entradaTextoInicial = useRef(null);
 
-    // ajustamos la altura dinamicamente
     useEffect(() => {
         if (entradaTextoInicial.current) {
             entradaTextoInicial.current.style.height = 'auto';
@@ -29,7 +50,9 @@ const EntradaTextoArea = ({ label, name, value, onChange, placeholder, error }) 
         }
     }, [value]);
 
-    const handleChange = (e) => { onChange(e); };
+    const handleChange = useCallback((e) => {
+        onChange(e);
+    }, [onChange]);
 
     return (
         <div>
@@ -49,6 +72,21 @@ const EntradaTextoArea = ({ label, name, value, onChange, placeholder, error }) 
     );
 };
 
+EntradaTextoArea.propTypes = {
+    label: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    placeholder: PropTypes.string,
+    error: PropTypes.string,
+};
+
+EntradaTextoArea.defaultProps = {
+    placeholder: "",
+    error: "",
+};
+
+// componente para entradas de radio
 const EntradaRadio = ({ label, name, options, value, onChange, error }) => {
     return (
         <div>
@@ -73,6 +111,21 @@ const EntradaRadio = ({ label, name, options, value, onChange, error }) => {
     );
 };
 
+EntradaRadio.propTypes = {
+    label: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    options: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: PropTypes.string.isRequired,
+            label: PropTypes.string.isRequired,
+        })
+    ).isRequired,
+    value: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    error: PropTypes.string,
+};
+
+// componente para entradas de select
 const EntradaSelect = ({ label, name, value, onChange, error, options }) => {
     return (
         <div>
@@ -88,6 +141,20 @@ const EntradaSelect = ({ label, name, value, onChange, error, options }) => {
             {error && <div className="error">{error}</div>}
         </div>
     );
+};
+
+EntradaSelect.propTypes = {
+    label: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    error: PropTypes.string,
+    options: PropTypes.arrayOf(
+        PropTypes.shape({
+            value: PropTypes.string.isRequired,
+            label: PropTypes.string.isRequired,
+        })
+    ).isRequired,
 };
 
 export { EntradaTexto, EntradaTextoArea, EntradaRadio, EntradaSelect };

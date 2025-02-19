@@ -220,9 +220,9 @@ export default function Feedback() {
 
 					<EntradaRadio label="¿Tiene placas térmicas?" name="tienePlacasTermicas" options={opcionesRadio} value={datosFeedback.tienePlacasTermicas} onChange={handleChange} error={errores.tienePlacasTermicas} />
 
-					<EntradaTexto label="Importe de recibo de luz" name="importeLuz" value={datosFeedback.importeLuz} onChange={handleChange} type="number" step="0.01" placeholder="Ej: 45,50" error={errores.importeLuz} />
+					<EntradaTexto label="Importe de recibo de luz (€)" name="importeLuz" value={datosFeedback.importeLuz} onChange={handleChange} type="number" placeholder="Ej: 45,50" error={errores.importeLuz} />
 
-					<EntradaTexto label="Importe de recibo de gas" name="importeGas" value={datosFeedback.importeGas} onChange={handleChange} type="number" step="0.01" placeholder="Ej: 30,00" error={errores.importeGas} />
+					<EntradaTexto label="Importe de recibo de gas (€)" name="importeGas" value={datosFeedback.importeGas} onChange={handleChange} type="number" placeholder="Ej: 30,00" error={errores.importeGas} />
 
 					<EntradaSelect label="Resultado de la visita *" name="resultadoVisita" value={datosFeedback.resultadoVisita} onChange={handleChange} error={errores.resultadoVisita} options={[
 						{ value: "Visitado_pdte_contestación", label: "Visitado pendiente de contestación" },

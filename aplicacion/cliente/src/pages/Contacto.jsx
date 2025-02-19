@@ -1,6 +1,6 @@
 import '../styles/Contacto.css';
 import { useState, useEffect } from "react";
-import Axios from "axios";
+import Axios from "../axiosConfig";
 import { EntradaTexto, EntradaTextoArea, EntradaSelect } from '../components/CamposFormulario';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
@@ -77,11 +77,11 @@ export default function Formulario() {
         return Object.keys(nuevoError).length === 0;
     };
 
-    // crear clientes
+    // crear contactos
     const addContacto = (e) => {
         e.preventDefault();
         if (validar()) {
-            Axios.post("http://localhost:5174/api/registrarCliente", datosContacto)
+            Axios.post("/registrarCliente", datosContacto)
                 .then((response) => {
                     setErrores({});
 
@@ -132,7 +132,7 @@ export default function Formulario() {
                 <form onSubmit={addContacto} className='campos'>
                     {errores.serverError && <div className="errorServidor">{errores.serverError}</div>}
 
-                    <EntradaTexto label="Código de Trabajador *" name="idTrabajador" value={datosContacto.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idTrabajador} />
+                    <EntradaTexto label="ID de Trabajador *" name="idTrabajador" value={datosContacto.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idTrabajador} />
 
                     <EntradaTexto label="Nombre completo del contacto *" name="nombreContacto" value={datosContacto.nombreContacto} onChange={handleChange} type="text" placeholder="Ej: Gabriel Martín Ruiz" error={errores.nombreContacto} />
 

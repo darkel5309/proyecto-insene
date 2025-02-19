@@ -118,7 +118,7 @@ export default function Inicio() {
                 <form onSubmit={iniciarSesion} className='campos'>
                     {errores.serverError && <div className="errorServidor"> {errores.serverError}</div>}
 
-                    <EntradaTexto label="Código de Trabajador" name="idTrabajador" value={datosSesion.idTrabajador} onChange={handleChange} type="text" error={errores.idTrabajador} />
+                    <EntradaTexto label="ID de Trabajador" name="idTrabajador" value={datosSesion.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 4" error={errores.idTrabajador} />
 
                     <EntradaTexto label="Contraseña" name="contrasena" value={datosSesion.contrasena} onChange={handleChange} type="password" placeholder="Introduce tu contraseña" error={errores.contrasena} />
 

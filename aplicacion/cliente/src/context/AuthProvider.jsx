@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useMemo } from "react";
 import Axios from "../axiosConfig";
 
 const AuthContext = createContext();
@@ -8,44 +8,51 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // comprobamos si ya hay un JWT almacenado
   useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      Axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+
     const verificarSesion = async () => {
       try {
         const response = await Axios.get("/verificarSesion");
         setAuthData(response.data);
       } catch (error) {
         setAuthData(null);
-        setError("Error verificando la sesión. Inténtalo de nuevo.");
+        setError("No se pudo verificar la sesión");
       } finally {
         setLoading(false);
       }
     };
+
     verificarSesion();
   }, []);
 
   const iniciarSesion = (data) => {
+    sessionStorage.setItem("token", data.token);
+    Axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
     setAuthData(data);
   };
 
   const cerrarSesion = async () => {
     try {
       await Axios.post("/cerrarSesion");
+      sessionStorage.removeItem("token");
+      delete Axios.defaults.headers.common["Authorization"];
       setAuthData(null);
     } catch (error) {
-      setError("Error cerrando la sesión. Inténtalo de nuevo.");
+      setError("Error al cerrar sesión.");
     }
   };
 
-  // encapsulamos el estado y las funciones relacionadas con la autenticacion
-  const contextValue = { authData, iniciarSesion, cerrarSesion, loading, error };
-
-  // devolvemos el provider
-  return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+  const contextValue = useMemo(() => ({
+    authData, iniciarSesion, cerrarSesion, loading, error
+  }),
+    [authData, loading, error]
   );
+
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }
 
 export { AuthContext };
