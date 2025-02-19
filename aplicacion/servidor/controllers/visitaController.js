@@ -1,30 +1,22 @@
 const { query } = require("../models/db");
 
-// creamos la peticion para el formulario
 const registrarVisita = async (req, res) => {
-
-    // extraemos los datos recibidos del body
     const { idTrabajador, idCliente, fechaVisita, horaVisita, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermoElectrico, tienePlacasTermicas, importeLuz, importeGas } = req.body;
 
-    // iniciamos la transaccion
+    // iniciamos
     await query('START TRANSACTION');
 
     try {
-        // consultamos si el trabajador existe
         const existeTrabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
-
         if (existeTrabajador.length === 0) {
             return res.status(400).json({ error: "El trabajador no existe" });
         }
 
-        // consultamos si el trabajador existe
         const existeContacto = await query('SELECT * FROM cliente WHERE id_cliente = ?', [idCliente]);
-
         if (existeContacto.length === 0) {
             return res.status(400).json({ error: "El contacto no existe" });
         }
 
-        // obtenemos el domicilio del cliente
         const sqlDomicilio = 'SELECT * FROM domicilio WHERE id_cliente = ?';
         const resultadoDomicilio = await query(sqlDomicilio, [idCliente]);
 
@@ -47,17 +39,15 @@ const registrarVisita = async (req, res) => {
         const sqlVisita = 'INSERT INTO visita (fecha, hora, id_vivienda, id_trabajador) VALUES (?, ?, ?, ?)';
         await query(sqlVisita, [fechaVisita, horaVisita, idVivienda, idTrabajador]);
 
-        // confirmamos la transacción
+        // confirmamos
         await query('COMMIT');
-
         res.status(200).json({
             message: "Visita registrada correctamente", idVivienda: idVivienda
         });
 
     } catch (err) {
-        // en caso de error revertimos la transaccion
+        // deshacemos cambios
         await query('ROLLBACK');
-        console.error("Error durante la transacción:", err);
         res.status(500).json({ error: "Error al procesar la solicitud" });
     }
 };

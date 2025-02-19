@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
 import '../styles/Visita.css';
+import { useState, useEffect } from 'react';
 import Axios from "axios";
 import { EntradaTexto, EntradaRadio } from '../components/CamposFormulario';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 export default function Visita() {
     useEffect(() => {
@@ -32,8 +33,8 @@ export default function Visita() {
     };
 
     const [datosVisita, setDatosVisita] = useState(datosInicialesVisita);
-
     const [errores, setErrores] = useState({});
+    const redirigir = useNavigate();
 
     const opcionesRadio = [
         { value: "Si", label: "Sí" },
@@ -107,7 +108,7 @@ export default function Visita() {
         setErrores(prevState => ({ ...prevState, [campo]: error }));
     };
 
-    // validamos todos los campos antes de enviar el formulario
+    // comprobamos las validaciones
     const validar = () => {
         const nuevoError = Object.keys(validaciones).reduce((acc, campo) => {
             const error = validaciones[campo](datosVisita[campo]);
@@ -141,6 +142,10 @@ export default function Visita() {
                     title: `El código de visita es: ${response.data.idVivienda}`,
                     text: "Visita registrada correctamente",
                     confirmButtonText: "Vale"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        redirigir(-1);
+                    }
                 });
                 setDatosVisita(datosInicialesVisita);
 
@@ -181,9 +186,9 @@ export default function Visita() {
                 <form onSubmit={addVisita} className="campos">
                     {errores.serverError && <div className="errorServidor">{errores.serverError}</div>}
 
-                    <EntradaTexto label="Código de Trabajador *" name="idTrabajador" value={datosVisita.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idTrabajador} />
+                    <EntradaTexto label="ID de Trabajador *" name="idTrabajador" value={datosVisita.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idTrabajador} />
 
-                    <EntradaTexto label="Código del contacto *" name="idCliente" value={datosVisita.idCliente} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idCliente} />
+                    <EntradaTexto label="ID del Contacto *" name="idCliente" value={datosVisita.idCliente} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idCliente} />
 
                     <EntradaTexto label="Nombre completo del contacto" name="nombreContacto" value={datosVisita.nombreContacto} onChange={handleChange} type="text" disabled={true} />
 

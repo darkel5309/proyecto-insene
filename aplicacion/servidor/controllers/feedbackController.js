@@ -1,9 +1,9 @@
 const { query } = require("../models/db");
 
 const registrarFeedback = async (req, res) => {
-    const { idTrabajador, idVivienda, fechaVisita, horaVisita, tipoVisita, resultadoVisita, oferta, observacionesVisita } = req.body;
+    const { idTrabajador, idCliente, fechaVisita, horaVisita, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermoElectrico, tienePlacasTermicas, importeLuz, importeGas, resultadoVisita, oferta, observacionesVisita } = req.body;
 
-    // iniciamos
+    // iniciamos la transacción
     await query('START TRANSACTION');
 
     try {
@@ -12,14 +12,32 @@ const registrarFeedback = async (req, res) => {
             return res.status(400).json({ error: "El trabajador no existe" });
         }
 
-        const existeVivienda = await query('SELECT * FROM vivienda WHERE id_vivienda = ?', [idVivienda]);
-        if (existeVivienda.length === 0) {
-            return res.status(400).json({ error: "El Código del Formulario no existe en la base de datos" });
+        const existeCliente = await query('SELECT * FROM cliente WHERE id_cliente = ?', [idCliente]);
+        if (existeCliente.length === 0) {
+            return res.status(400).json({ error: "El cliente no existe" });
         }
 
-        // insertamos el feedback
-        const sqlVisita = 'INSERT INTO visita (fecha, hora, tipo, resultado, oferta, observaciones_visita, id_vivienda, id_trabajador) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        await query(sqlVisita, [fechaVisita, horaVisita, tipoVisita, resultadoVisita, oferta, observacionesVisita, idVivienda, idTrabajador]);
+        const sqlDomicilio = 'SELECT * FROM domicilio WHERE id_cliente = ?';
+        const resultadoDomicilio = await query(sqlDomicilio, [idCliente]);
+
+        if (resultadoDomicilio.length === 0) {
+            return res.status(400).json({ error: "El cliente no tiene un domicilio registrado." });
+        }
+
+        const idDomicilio = resultadoDomicilio[0].id_domicilio;
+
+        // insertamos la vivienda asociada al domicilio del cliente
+        const sqlVivienda = 'INSERT INTO vivienda (n_personas, n_decisores, tiene_bombona, tiene_gas, tiene_termo_electrico, tiene_placas_termicas, id_domicilio) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const resultadoVivienda = await query(sqlVivienda, [numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermoElectrico, tienePlacasTermicas, idDomicilio]);
+        idVivienda = resultadoVivienda.insertId;
+
+        // insertamos los recibos de luz y gas asociados a la vivienda
+        const sqlRecibo = 'INSERT INTO recibo (importe_luz, importe_gas, id_vivienda) VALUES (?, ?, ?)';
+        await query(sqlRecibo, [importeLuz, importeGas, idVivienda]);
+
+        // insertamos la visita
+        const sqlVisita = 'INSERT INTO visita (fecha, hora, resultado, oferta, observaciones_visita, id_vivienda, id_trabajador) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        await query(sqlVisita, [fechaVisita, horaVisita, resultadoVisita, oferta, observacionesVisita, idVivienda, idTrabajador]);
 
         // confirmamos
         await query('COMMIT');
