@@ -12,20 +12,27 @@ const trabajadorRoutes = require("./routes/trabajadorRoutes");
 dotenv.config();
 
 const app = express();
+// cors
+const allowedOrigins = [process.env.CLIENT_URL || "http://localhost:5173"];
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 
-// permite que el frontend en localhost:5173 haga solicitudes al backend
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
-// convierte las peticiones en formato .json
+// middlewares
 app.use(express.json());
 app.use(cookieParser());
 
+// rutas
 app.use("/api", sesionRoutes);
 app.use("/api", contactoRoutes);
 app.use("/api", visitaRoutes);
 app.use("/api", feedbackRoutes);
 app.use("/api", trabajadorRoutes);
 
-// verificamos que el backend esta funcionando correctamente y escuchando en el puerto 3001
-app.listen(5174, () => {
-    console.log("Servidor funcionando correctamente en el puerto 5174.");
+app.use((err, req, res, next) => {
+    res.status(500).send('Algo salió mal');
+});
+
+// puerto
+const PORT = process.env.PORT || 5174;
+app.listen(PORT, () => {
+    console.log(`Servidor funcionando correctamente en el puerto ${PORT}.`);
 });

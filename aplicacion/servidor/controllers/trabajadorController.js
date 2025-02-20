@@ -11,7 +11,7 @@ const registrarTrabajador = async (req, res) => {
     await query('START TRANSACTION');
 
     try {
-        const comprobarTelefono = 'SELECT * FROM trabajador WHERE telefono = ?';
+        const comprobarTelefono = 'SELECT 1 FROM trabajador WHERE telefono = ?';
         const result = await query(comprobarTelefono, [telefonoTrabajador]);
 
         if (result.length > 0) {

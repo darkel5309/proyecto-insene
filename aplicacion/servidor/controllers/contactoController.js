@@ -7,12 +7,12 @@ const registrarContacto = async (req, res) => {
     await query('START TRANSACTION');
 
     try {
-        const existeTrabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
+        const existeTrabajador = await query('SELECT 1 FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
         if (existeTrabajador.length === 0) {
             return res.status(400).json({ error: "El trabajador no existe" });
         }
 
-        const existeCliente = await query('SELECT * FROM cliente WHERE telefono = ? OR correo = ?', [telefonoContacto, correoContacto]);
+        const existeCliente = await query('SELECT 1 FROM cliente WHERE telefono = ? OR correo = ?', [telefonoContacto, correoContacto]);
 
         if (existeCliente.length > 0) {
             const existe = existeCliente[0];
@@ -64,7 +64,6 @@ const obtenerContacto = async (req, res) => {
 
         res.status(200).json(resultado[0]);
     } catch (err) {
-        console.error("Error al obtener cliente:", err);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
@@ -72,7 +71,6 @@ const obtenerContacto = async (req, res) => {
 const obtenerContactosSimplificado = async (req, res) => {
     try {
         const sql = `SELECT id_cliente, nombre, telefono FROM cliente`;
-
         const resultado = await query(sql);
 
         if (resultado.length === 0) {
@@ -81,7 +79,6 @@ const obtenerContactosSimplificado = async (req, res) => {
 
         res.status(200).json(resultado);
     } catch (err) {
-        console.error("Error al obtener clientes:", err);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };

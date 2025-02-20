@@ -7,12 +7,12 @@ const registrarFeedback = async (req, res) => {
     await query('START TRANSACTION');
 
     try {
-        const existeTrabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
+        const existeTrabajador = await query('SELECT 1 FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
         if (existeTrabajador.length === 0) {
             return res.status(400).json({ error: "El trabajador no existe" });
         }
 
-        const existeCliente = await query('SELECT * FROM cliente WHERE id_cliente = ?', [idCliente]);
+        const existeCliente = await query('SELECT 1 FROM cliente WHERE id_cliente = ?', [idCliente]);
         if (existeCliente.length === 0) {
             return res.status(400).json({ error: "El cliente no existe" });
         }
@@ -29,7 +29,7 @@ const registrarFeedback = async (req, res) => {
         // insertamos la vivienda asociada al domicilio del cliente
         const sqlVivienda = 'INSERT INTO vivienda (n_personas, n_decisores, tiene_bombona, tiene_gas, tiene_termo_electrico, tiene_placas_termicas, id_domicilio) VALUES (?, ?, ?, ?, ?, ?, ?)';
         const resultadoVivienda = await query(sqlVivienda, [numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermoElectrico, tienePlacasTermicas, idDomicilio]);
-        idVivienda = resultadoVivienda.insertId;
+        let idVivienda = resultadoVivienda.insertId;
 
         // insertamos los recibos de luz y gas asociados a la vivienda
         const sqlRecibo = 'INSERT INTO recibo (importe_luz, importe_gas, id_vivienda) VALUES (?, ?, ?)';

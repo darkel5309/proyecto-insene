@@ -7,12 +7,12 @@ const registrarVisita = async (req, res) => {
     await query('START TRANSACTION');
 
     try {
-        const existeTrabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
+        const existeTrabajador = await query('SELECT 1 FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
         if (existeTrabajador.length === 0) {
             return res.status(400).json({ error: "El trabajador no existe" });
         }
 
-        const existeContacto = await query('SELECT * FROM cliente WHERE id_cliente = ?', [idCliente]);
+        const existeContacto = await query('SELECT 1 FROM cliente WHERE id_cliente = ?', [idCliente]);
         if (existeContacto.length === 0) {
             return res.status(400).json({ error: "El contacto no existe" });
         }

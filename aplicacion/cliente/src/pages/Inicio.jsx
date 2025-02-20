@@ -1,22 +1,23 @@
 import "../styles/Inicio.css";
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import Axios from "../axiosConfig";
 import { EntradaTexto } from '../components/CamposFormulario';
 import Swal from 'sweetalert2';
 import { AuthContext } from "../context/AuthProvider";
 import { useNavigate } from 'react-router-dom';
 
+const datosInicialesSesion = {
+    idTrabajador: 0,
+    contrasena: ""
+}
+
 export default function Inicio() {
     const redirigir = useNavigate();
     const { iniciarSesion: iniciarSesionContext } = useContext(AuthContext);
 
-    const datosInicialesSesion = {
-        idTrabajador: 0,
-        contrasena: ""
-    }
-
     const [datosSesion, setDatosSesion] = useState(datosInicialesSesion);
     const [errores, setErrores] = useState({});
+    const [cargando, setCargando] = useState(false);
 
     const validaciones = {
         idTrabajador: (valor) => (!valor || isNaN(valor) || valor <= 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
@@ -64,50 +65,53 @@ export default function Inicio() {
     };
 
     // iniciar sesion
-    const iniciarSesion = (e) => {
+    const iniciarSesion = async (e) => {
         e.preventDefault();
-        if (validar()) {
-            Axios.post("/iniciarSesion", datosSesion, { withCredentials: true })
-                .then((response) => {
-                    setErrores({});
-                    setDatosSesion(datosInicialesSesion);
-                    iniciarSesionContext(response.data);
+        if (!validar() || cargando) return;
 
-                    const tipoTrabajador = response.data.tipoTrabajador;
+        setCargando(true);
+        try {
+            const response = await Axios.post("/iniciarSesion", datosSesion, { withCredentials: true })
 
-                    if (tipoTrabajador === 'Captador') {
-                        redirigir('/captadores');
-                    } if (tipoTrabajador === 'Comercial') {
-                        redirigir('/comerciales');
-                    } else {
-                        redirigir('/administradores');
-                    }
-                })
-                .catch((error) => {
-                    if (error.response) {
-                        const mensajeError = error.response?.data?.error || "Hubo un problema con la solicitud. Inténtalo de nuevo";
-                        
-                        setErrores(prevState => ({
-                            ...prevState,
-                            serverError: mensajeError
-                        }));
+            setErrores({});
+            setDatosSesion(datosInicialesSesion);
+            iniciarSesionContext(response.data);
 
-                        Swal.fire({
-                            icon: "warning",
-                            title: "Error",
-                            text: "Este usuario no tiene acceso",
-                            confirmButtonText: "Vale"
-                        });
+            const tipoTrabajador = response.data.tipoTrabajador;
 
-                    } else if (error.message && error.message.includes("Network Error")) {
-                        Swal.fire({
-                            icon: "question",
-                            title: "Error de Conexión",
-                            text: "Verifica tu conexión a internet o inténtalo de nuevo",
-                            confirmButtonText: "Vale"
-                        });
-                    }
+            if (tipoTrabajador === 'Captador') {
+                redirigir('/captadores');
+            } else if (tipoTrabajador === 'Comercial') {
+                redirigir('/comerciales');
+            } else if (tipoTrabajador === 'Administrador') {
+                redirigir('/administradores');
+            }
+        } catch (error) {
+            if (error.response) {
+                const mensajeError = error.response?.data?.error || "Hubo un problema con la solicitud. Inténtalo de nuevo";
+
+                setErrores(prevState => ({
+                    ...prevState,
+                    serverError: mensajeError
+                }));
+
+                Swal.fire({
+                    icon: "warning",
+                    title: "Error",
+                    text: "Este usuario no tiene acceso",
+                    confirmButtonText: "Vale"
                 });
+
+            } else if (error.message && error.message.includes("Network Error")) {
+                Swal.fire({
+                    icon: "question",
+                    title: "Error de Conexión",
+                    text: "Verifica tu conexión a internet o inténtalo de nuevo",
+                    confirmButtonText: "Vale"
+                });
+            }
+        } finally {
+            setCargando(false);
         }
     }
 

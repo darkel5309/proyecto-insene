@@ -5,37 +5,37 @@ import { EntradaTexto, EntradaTextoArea, EntradaSelect } from '../components/Cam
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-export default function Formulario() {
+const datosInicialesContacto = {
+    idTrabajador: 0,
+    nombreContacto: "",
+    telefonoContacto: "",
+    correoContacto: "",
+    modoCaptacion: "",
+    observacionesContacto: "",
+    direccionContacto: "",
+    localidadContacto: "",
+    provinciaContacto: "",
+};
+
+const validaciones = {
+    idTrabajador: (valor) => (!valor || isNaN(valor) || valor <= 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
+    nombreContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
+    telefonoContacto: (valor) => (!valor || !/^\d{9}$/.test(valor)) ? "Este campo es obligatorio y debe tener 9 digitos" : null,
+    correoContacto: (valor) => (!valor || !/\S+@\S+\.\S+/.test(valor)) ? "El correo no es válido" : null,
+    modoCaptacion: (valor) => !valor ? "Este campo es obligatorio" : null,
+    direccionContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
+    localidadContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
+    provinciaContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
+};
+
+export default function Contacto() {
     useEffect(() => {
         document.title = "Contacto";
     }, []);
 
-    const datosInicialesContacto = {
-        idTrabajador: 0,
-        nombreContacto: "",
-        telefonoContacto: "",
-        correoContacto: "",
-        modoCaptacion: "",
-        observacionesContacto: "",
-        direccionContacto: "",
-        localidadContacto: "",
-        provinciaContacto: "",
-    };
-
     const [datosContacto, setDatosContacto] = useState(datosInicialesContacto);
     const [errores, setErrores] = useState({});
     const redirigir = useNavigate();
-
-    const validaciones = {
-        idTrabajador: (valor) => (!valor || isNaN(valor) || valor <= 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
-        nombreContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
-        telefonoContacto: (valor) => (!valor || !/^\d{9}$/.test(valor)) ? "Este campo es obligatorio y debe tener 9 digitos" : null,
-        correoContacto: (valor) => (!valor || !/\S+@\S+\.\S+/.test(valor)) ? "El correo no es válido" : null,
-        modoCaptacion: (valor) => !valor ? "Este campo es obligatorio" : null,
-        direccionContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
-        localidadContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
-        provinciaContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
-    };
 
     // validamos los campos individualmente
     const validarCampo = (campo, valor) => {
@@ -57,7 +57,7 @@ export default function Formulario() {
         validarCampo(name, value);
     };
 
-	// comprobamos las validaciones
+    // comprobamos las validaciones
     const validar = () => {
         const nuevoError = {};
         Object.keys(validaciones).forEach(campo => {
@@ -146,12 +146,12 @@ export default function Formulario() {
 
                     <EntradaTexto label="Correo del contacto *" name="correoContacto" value={datosContacto.correoContacto} onChange={handleChange} type="email" placeholder="Ej: ejemplo@gmail.com" error={errores.correoContacto} />
 
-					<EntradaSelect label="Modo de captación *" name="modoCaptacion" value={datosContacto.modoCaptacion} onChange={handleChange} error={errores.modoCaptacion} options={[
-						{ value: "Captador", label: "Captador" },
-						{ value: "Telemarketing", label: "Telemarketing" },
-						{ value: "Referido", label: "Referido" },
-						{ value: "Propia", label: "Captación propia" }
-					]} />
+                    <EntradaSelect label="Modo de captación *" name="modoCaptacion" value={datosContacto.modoCaptacion} onChange={handleChange} error={errores.modoCaptacion} options={[
+                        { value: "Captador", label: "Captador" },
+                        { value: "Telemarketing", label: "Telemarketing" },
+                        { value: "Referido", label: "Referido" },
+                        { value: "Propia", label: "Captación propia" }
+                    ]} />
 
                     <EntradaTextoArea label="Observaciones del contacto" name="observacionesContacto" value={datosContacto.observacionesContacto} onChange={handleChange} type="text" placeholder="Comenta alguna observación" />
 

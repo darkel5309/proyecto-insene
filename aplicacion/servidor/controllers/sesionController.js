@@ -10,7 +10,7 @@ const iniciarSesion = async (req, res) => {
         const trabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
 
         if (trabajador.length === 0) {
-            return res.status(400).json({ error: "El código de trabajador no existe" });
+            return res.status(400).json({ error: "El ID de trabajador no existe" });
         }
 
         // Obtenemos la información del trabajador

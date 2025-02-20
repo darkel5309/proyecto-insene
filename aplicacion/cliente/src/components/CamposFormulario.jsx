@@ -1,9 +1,9 @@
-import { React, useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 
 // componente para entradas de texto
 const EntradaTexto = ({ label, name, value, onChange, type, placeholder, disabled, error }) => {
-    const valorInput = (type === "number" && value === 0) ? "" : value;
+    const valorInput = type === "number" ? (value === 0 ? "" : value) : value;
     return (
         <div>
             <label className="nombreCampo">{label}</label>
@@ -50,10 +50,6 @@ const EntradaTextoArea = ({ label, name, value, onChange, placeholder, error }) 
         }
     }, [value]);
 
-    const handleChange = useCallback((e) => {
-        onChange(e);
-    }, [onChange]);
-
     return (
         <div>
             <label className="nombreCampo">{label}</label>
@@ -62,10 +58,10 @@ const EntradaTextoArea = ({ label, name, value, onChange, placeholder, error }) 
                 className="campoTexto"
                 name={name}
                 value={value}
-                onChange={handleChange}
+                onChange={onChange}
                 placeholder={placeholder}
                 rows="3"
-                style={{ resize: "none", overflowY: "hidden", width: "100%" }}
+                style={{ resize: "vertical", overflowY: "hidden", width: "100%" }}
             />
             {error && <div className="error">{error}</div>}
         </div>

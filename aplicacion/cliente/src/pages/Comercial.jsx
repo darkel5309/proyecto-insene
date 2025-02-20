@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import '../styles/Comercial.css';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
@@ -6,6 +6,10 @@ import { esES } from '@mui/x-data-grid/locales';
 import Axios from '../axiosConfig';
 
 export default function Comercial() {
+    useEffect(() => {
+        document.title = "Comercial";
+    }, []);
+
     const [filas, setFilas] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -18,8 +22,8 @@ export default function Comercial() {
     useEffect(() => {
         const obtenerClientes = async () => {
             try {
-                const response = await Axios.get('/obtenerContactosSimplificado');
-                setFilas(response.data.reverse());
+                const { data } = await Axios.get('/obtenerContactosSimplificado');
+                setFilas(data.reverse());
             } finally {
                 setLoading(false);
             }
@@ -36,8 +40,8 @@ export default function Comercial() {
             <div className="contenedorComercial">
                 <h1>Panel de Comerciales</h1>
                 <div className="enlaces">
-                    <Link to="/comerciales/contacto" className='enlace'>Nuevo contacto</Link>
-                    <Link to="/comerciales/feedback" className='enlace'>Nuevo feedback</Link>
+                    <Link to="/comerciales/contacto" className='enlace' aria-label="Crear un nuevo contacto">Nuevo contacto</Link>
+                    <Link to="/comerciales/feedback" className='enlace' aria-label="Crear un nuevo feedback">Nuevo feedback</Link>
                 </div>
 
                 <div className="tabla">

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useMemo } from "react";
+import { createContext, useState, useEffect } from "react";
 import Axios from "../axiosConfig";
 
 const AuthContext = createContext();
@@ -20,12 +20,11 @@ export function AuthProvider({ children }) {
         setAuthData(response.data);
       } catch (error) {
         setAuthData(null);
-        setError("No se pudo verificar la sesión");
+        setError("No se ha podido verificar la sesión.");
       } finally {
         setLoading(false);
       }
     };
-
     verificarSesion();
   }, []);
 
@@ -46,13 +45,11 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const contextValue = useMemo(() => ({
-    authData, iniciarSesion, cerrarSesion, loading, error
-  }),
-    [authData, loading, error]
+  return (
+    <AuthContext.Provider value={{ authData, iniciarSesion, cerrarSesion, loading, error }}>
+      {children}
+    </AuthContext.Provider>
   );
-
-  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 }
 
 export { AuthContext };

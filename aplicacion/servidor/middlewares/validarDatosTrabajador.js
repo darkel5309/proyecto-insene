@@ -12,9 +12,8 @@ const validarDatosTrabajador = async (req, res, next) => {
         return res.status(400).json({ error: "El teléfono debe tener 9 dígitos" });
     }
 
-
-        // Si todo es correcto, pasamos al siguiente middleware o controlador
-        next();
+    // Si todo es correcto, pasamos al siguiente middleware o controlador
+    next();
 };
 
 module.exports = validarDatosTrabajador;

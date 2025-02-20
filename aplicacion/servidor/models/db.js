@@ -1,13 +1,12 @@
 const db = require("../config/dbConfig");
 
-// consulta a la base de datos con async/await
-const query = (sql, params) => {
-    return new Promise((resolve, reject) => {
-        db.query(sql, params, (err, result) => {
-            if (err) reject(err);
-            else resolve(result);
-        });
-    });
+const query = async (sql, params) => {
+    try {
+        const [results] = await db.query(sql, params);
+        return results;
+    } catch (err) {
+        throw err;
+    }
 };
 
-module.exports = { query }
+module.exports = { query };

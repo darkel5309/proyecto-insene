@@ -1,39 +1,51 @@
 import '../styles/Feedback.css';
-import { useState, useEffect } from "react";
-import Axios from "axios";
+import { useState, useEffect, useCallback } from "react";
+import Axios from "../axiosConfig";
 import { EntradaTexto, EntradaTextoArea, EntradaSelect, EntradaRadio } from '../components/CamposFormulario';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+
+const datosInicialesFeedback = {
+	idTrabajador: 0,
+	idCliente: 0,
+	nombreContacto: "",
+	telefonoContacto: "",
+	correoContacto: "",
+	observacionesContacto: "",
+	direccionContacto: "",
+	localidadContacto: "",
+	provinciaContacto: "",
+	fechaVisita: "",
+	horaVisita: "",
+	numeroPersonas: 0,
+	numeroDecisores: 0,
+	tieneBombona: "Sin datos",
+	tieneGas: "Sin datos",
+	tieneTermoElectrico: "Sin datos",
+	tienePlacasTermicas: "Sin datos",
+	importeLuz: 0,
+	importeGas: 0,
+	resultadoVisita: "",
+	oferta: "",
+	observacionesVisita: "",
+};
+
+const validaciones = {
+	idTrabajador: (valor) => (Number(valor) <= 0 ? "Este campo es obligatorio y debe ser mayor a 0" : null),
+	idCliente: (valor) => (Number(valor) <= 0 ? "Este campo es obligatorio y debe ser mayor a 0" : null),
+	fechaVisita: (valor) => (!valor ? "Este campo es obligatorio" : null),
+	horaVisita: (valor) => (!valor ? "Este campo es obligatorio" : null),
+	numeroPersonas: (valor) => (Number(valor) < 0 ? "El número de personas debe ser un número positivo" : null),
+	numeroDecisores: (valor) => (Number(valor) <= 0 ? "Este campo es obligatorio y debe ser mayor a 0" : null),
+	importeLuz: (valor) => (Number(valor) < 0 ? "El importe debe ser un número positivo" : null),
+	importeGas: (valor) => (Number(valor) < 0 ? "El importe debe ser un número positivo" : null),
+	resultadoVisita: (valor) => (!valor ? "Este campo es obligatorio" : null),
+};
 
 export default function Feedback() {
 	useEffect(() => {
 		document.title = "Feedback";
 	}, []);
-
-	const datosInicialesFeedback = {
-		idTrabajador: 0,
-		idCliente: 0,
-		nombreContacto: "",
-		telefonoContacto: "",
-		correoContacto: "",
-		observacionesContacto: "",
-		direccionContacto: "",
-		localidadContacto: "",
-		provinciaContacto: "",
-		fechaVisita: "",
-		horaVisita: "",
-		numeroPersonas: 0,
-		numeroDecisores: 0,
-		tieneBombona: "Sin datos",
-		tieneGas: "Sin datos",
-		tieneTermoElectrico: "Sin datos",
-		tienePlacasTermicas: "Sin datos",
-		importeLuz: 0,
-		importeGas: 0,
-		resultadoVisita: "",
-		oferta: "",
-		observacionesVisita: "",
-	};
 
 	const [datosFeedback, setDatosFeedback] = useState(datosInicialesFeedback);
 	const [errores, setErrores] = useState({});
@@ -45,7 +57,6 @@ export default function Feedback() {
 		{ value: "Sin datos", label: "Sin datos" }
 	];
 
-	// resetear los datos del cliente en caso de error
 	const resetClienteData = () => {
 		setDatosFeedback(prevState => ({
 			...prevState,
@@ -58,61 +69,42 @@ export default function Feedback() {
 		}));
 	};
 
-	// obtenemos los datos del cliente de forma asincronica
-	useEffect(() => {
-		const obtenerCliente = async (idCliente) => {
-			try {
-				const response = await Axios.get(`http://localhost:5174/api/obtenerContacto/${idCliente}`);
-				const cliente = response.data;
-				if (cliente) {
-					setDatosFeedback(prevState => ({
-						...prevState,
-						nombreContacto: cliente.nombre || "",
-						direccionContacto: cliente.direccion || "",
-						localidadContacto: cliente.localidad || "",
-						provinciaContacto: cliente.provincia || "",
-						telefonoContacto: cliente.telefono || "",
-						correoContacto: cliente.correo || ""
-					}));
-					setErrores(prevState => ({ ...prevState, idCliente: null }));
-				}
-			} catch {
-				resetClienteData();
+	const obtenerCliente = useCallback(async (idCliente) => {
+		if (!idCliente) return;
+		try {
+			const { data } = await Axios.get(`/obtenerContacto/${idCliente}`);
+			if (data) {
+				setDatosFeedback(prevState => ({
+					...prevState,
+					nombreContacto: data.nombre || "",
+					direccionContacto: data.direccion || "",
+					localidadContacto: data.localidad || "",
+					provinciaContacto: data.provincia || "",
+					telefonoContacto: data.telefono || "",
+					correoContacto: data.correo || ""
+				}));
+				setErrores(prevState => ({ ...prevState, idCliente: null }));
 			}
-		};
-
-		if (datosFeedback.idCliente) {
-			obtenerCliente(datosFeedback.idCliente);
+		} catch {
+			resetClienteData();
 		}
-	}, [datosFeedback.idCliente]);
+	}, []);
 
-	// validaciones de los campos
-	const validaciones = {
-		idTrabajador: (valor) => (!valor || isNaN(valor) || valor <= 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
-		idCliente: (valor) => (!valor || isNaN(valor) || valor <= 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
-		fechaVisita: (valor) => !valor ? "Este campo es obligatorio" : null,
-		horaVisita: (valor) => !valor ? "Este campo es obligatorio" : null,
-		numeroPersonas: (valor) => (isNaN(valor) || valor < 0) ? "El número de personas debe ser un número positivo" : null,
-		numeroDecisores: (valor) => (!valor || isNaN(valor) || valor < 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
-		importeLuz: (valor) => (isNaN(valor) || valor < 0) ? "El importe debe ser un número positivo" : null,
-		importeGas: (valor) => (isNaN(valor) || valor < 0) ? "El importe debe ser un número positivo" : null,
-		resultadoVisita: (valor) => !valor ? "Este campo es obligatorio" : null,
-	};
+	useEffect(() => {
+		obtenerCliente(datosFeedback.idCliente);
+	}, [datosFeedback.idCliente, obtenerCliente]);
 
-	// manejamos los cambios en los campos del formulario
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setDatosFeedback(prevState => ({ ...prevState, [name]: value }));
 		validarCampo(name, value);
 	};
 
-	// validamos los campos individualmente
 	const validarCampo = (campo, valor) => {
 		const error = validaciones[campo]?.(valor);
 		setErrores(prevState => ({ ...prevState, [campo]: error }));
 	};
 
-	// comprobamos las validaciones
 	const validar = () => {
 		const nuevoError = Object.keys(validaciones).reduce((acc, campo) => {
 			const error = validaciones[campo](datosFeedback[campo]);
@@ -133,51 +125,45 @@ export default function Feedback() {
 		return true;
 	};
 
-	// crear feedbacks
-	const addFeedback = (e) => {
+	const addFeedback = async (e) => {
 		e.preventDefault();
-		if (validar()) {
-			Axios.post("http://localhost:5174/api/registrarFeedback", datosFeedback)
-				.then(() => {
-					setErrores({});
+		if (!validar()) return;
 
-					Swal.fire({
-						icon: "success",
-						title: "Perfecto",
-						text: "Feedback registrado correctamente",
-						confirmButtonText: "Vale"
-					}).then((result) => {
-						if (result.isConfirmed) {
-							redirigir(-1);
-						}
-					});
-					setDatosFeedback(datosInicialesFeedback);
-				})
-				.catch((error) => {
-					if (error.response) {
-						const mensajeError = error.response?.data?.error || "Hubo un problema con la solicitud. Inténtalo de nuevo";
+		try {
+			await Axios.post("/registrarFeedback", datosFeedback);
+			setErrores({});
+			Swal.fire({
+				icon: "success",
+				title: "Perfecto",
+				text: "Feedback registrado correctamente",
+				confirmButtonText: "Vale"
+			}).then((result) => {
+				if (result.isConfirmed) {
+					redirigir(-1);
+				}
+			});
+			setDatosFeedback(datosInicialesFeedback);
+		}
+		catch (error) {
+			let mensajeError = "Hubo un problema con la solicitud. Inténtalo de nuevo";
 
-						Swal.fire({
-							icon: "error",
-							title: "Error",
-							text: "Revisa los datos del formulario",
-							confirmButtonText: "Vale"
-						});
+			if (error.response) {
+				mensajeError = error.response?.data?.error || mensajeError;
+			} else if (error.message && error.message.includes("Network Error")) {
+				mensajeError = "Verifica tu conexión a internet e inténtalo de nuevo";
+			}
 
-						setErrores(prevState => ({
-							...prevState,
-							serverError: mensajeError
-						}));
+			Swal.fire({
+				icon: "error",
+				title: "Error",
+				text: mensajeError,
+				confirmButtonText: "Vale"
+			});
 
-					} else if (error.message && error.message.includes("Network Error")) {
-						Swal.fire({
-							icon: "question",
-							title: "Error de Conexión",
-							text: "Verifica tu conexión a internet e inténtalo de nuevo",
-							confirmButtonText: "Vale"
-						});
-					}
-				});
+			setErrores(prevState => ({
+				...prevState,
+				serverError: mensajeError
+			}));
 		}
 	};
 
