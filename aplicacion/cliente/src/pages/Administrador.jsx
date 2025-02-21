@@ -48,7 +48,7 @@ export default function Administrador() {
             <div className="contenedorAdministrador">
                 <h1>Panel de Administradores</h1>
                 <div className='enlaces'>
-                    <Link to="/administradores/trabajador" className='enlace' aria-label="Crear un nuevo trabajador">Crear Trabajador</Link>
+                    <Link to="/administradores/registroTrabajador" className='enlace' aria-label="Crear un nuevo trabajador">Crear Trabajador</Link>
                     <Link to="/captadores" className='enlace' aria-label="Ir al panel de captadores">Panel de Captadores</Link>
                     <Link to="/comerciales" className='enlace' aria-label="Ir al panel de comerciales">Panel de Comerciales</Link>
                 </div>

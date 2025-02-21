@@ -6,5 +6,4 @@ const validarDatosTrabajador = require("../middlewares/validarDatosTrabajador");
 router.post("/registrarTrabajador", validarDatosTrabajador, registrarTrabajador);
 router.get("/obtenerTrabajadoresSimplificado", obtenerTrabajadoresSimplificado);
 
-
 module.exports = router;

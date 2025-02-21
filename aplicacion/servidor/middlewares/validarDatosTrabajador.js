@@ -1,14 +1,14 @@
 // intermediario para las validaciones de los datos del formulario
 const validarDatosTrabajador = async (req, res, next) => {
-    const { nombreTrabajador, contrasenaTrabajador, telefonoTrabajador, rolTrabajador } = req.body;
+    const { nombre, contrasena, telefono, rol, equipo, subequipo } = req.body;
 
     // validaciones de campos obligatorios
-    if (!nombreTrabajador || !contrasenaTrabajador || !telefonoTrabajador || !rolTrabajador) {
+    if (!nombre || !contrasena || !telefono || !rol || !equipo || !subequipo) {
         return res.status(400).json({ error: "Todos los campos son obligatorios" });
     }
 
     // validacion para el telefono
-    if (!/^\d{9}$/.test(telefonoTrabajador)) {
+    if (!/^\d{9}$/.test(telefono)) {
         return res.status(400).json({ error: "El teléfono debe tener 9 dígitos" });
     }
 

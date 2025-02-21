@@ -3,7 +3,7 @@ import Contacto from "./pages/Contacto";
 import Visita from "./pages/Visita";
 import Comercial from "./pages/Comercial";
 import Feedback from "./pages/Feedback";
-import Trabajador from "./pages/Trabajador";
+import RegistroTrabajador from "./pages/RegistroTrabajador";
 import Administrador from "./pages/Administrador";
 
 const routes = [
@@ -13,8 +13,8 @@ const routes = [
         roles: ["Administrador"],
     },
     {
-        path: "/administradores/trabajador",
-        element: <Trabajador />,
+        path: "/administradores/RegistroTrabajador",
+        element: <RegistroTrabajador />,
         roles: ["Administrador"],
     },
     {
