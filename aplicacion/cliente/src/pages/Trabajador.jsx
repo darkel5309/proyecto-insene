@@ -127,7 +127,7 @@ export default function Trabajador() {
 
                     <EntradaTexto label="Nombre completo del trabajador *" name="nombreTrabajador" value={datosTrabajador.nombreTrabajador} onChange={handleChange} type="text" placeholder="Ej: Carlos Martínez Gómez" error={errores.nombreTrabajador} />
 
-                    <EntradaTexto label="Contraseña del trabajador *" name="contrasenaTrabajador" value={datosTrabajador.contrasenaTrabajador} onChange={handleChange} type="text" placeholder="Ej: 3jjh48721&nsk" error={errores.contrasenaTrabajador} />
+                    <EntradaTexto label="Contraseña para el trabajador *" name="contrasenaTrabajador" value={datosTrabajador.contrasenaTrabajador} onChange={handleChange} type="text" placeholder="Ej: 3jjh48721&nsk" error={errores.contrasenaTrabajador} />
 
                     <EntradaTexto label="Teléfono del trabajador *" name="telefonoTrabajador" value={datosTrabajador.telefonoTrabajador} onChange={handleChange} type="tel" placeholder="Ej: 666555444" error={errores.telefonoTrabajador} />
 
