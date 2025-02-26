@@ -1,9 +1,8 @@
 const { query } = require("../models/db");
 
 const registrarVisita = async (req, res) => {
-    const { idTrabajador, idCliente, fechaVisita, horaVisita, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermoElectrico, tienePlacasTermicas, importeLuz, importeGas } = req.body;
+    const { idTrabajador, idContacto, fecha, hora, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, importeLuz, importeGas } = req.body;
 
-    // iniciamos
     await query('START TRANSACTION');
 
     try {
@@ -12,43 +11,50 @@ const registrarVisita = async (req, res) => {
             return res.status(400).json({ error: "El trabajador no existe" });
         }
 
-        const existeContacto = await query('SELECT 1 FROM cliente WHERE id_cliente = ?', [idCliente]);
+        const existeContacto = await query('SELECT 1 FROM cliente WHERE id_cliente = ?', [idContacto]);
         if (existeContacto.length === 0) {
             return res.status(400).json({ error: "El contacto no existe" });
         }
 
-        const sqlDomicilio = 'SELECT * FROM domicilio WHERE id_cliente = ?';
-        const resultadoDomicilio = await query(sqlDomicilio, [idCliente]);
+        // consultas
+        const obtenerVivienda = 'SELECT id_vivienda FROM vivienda WHERE id_domicilio = ?';
+        const resultadoVivienda = await query(obtenerVivienda, [idContacto]);
 
-        if (resultadoDomicilio.length === 0) {
-            return res.status(400).json({ error: "El cliente no tiene un domicilio registrado." });
+        let idVivienda;
+
+        if (resultadoVivienda.length === 0) {
+            const obtenerDomicilio = 'SELECT * FROM domicilio WHERE id_cliente = ?';
+            const resultadoDomicilio = await query(obtenerDomicilio, [idContacto]);
+
+            if (resultadoDomicilio.length === 0) {
+                return res.status(400).json({ error: "El contacto no tiene un domicilio registrado." });
+            }
+
+            const idDomicilio = resultadoDomicilio[0].id_domicilio;
+
+            const insertarVivienda = 'INSERT INTO vivienda (n_personas, n_decisores, tiene_bombona, tiene_gas, tiene_termo_electrico, tiene_placas_termicas, id_domicilio) VALUES (?, ?, ?, ?, ?, ?, ?)';
+            const resultadoVivienda = await query(insertarVivienda, [numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, idDomicilio]);
+            idVivienda = resultadoVivienda.insertId;
+
+        } else {
+            idVivienda = resultadoVivienda[0].id_vivienda;
         }
 
-        const idDomicilio = resultadoDomicilio[0].id_domicilio;
+        const insertarRecibo = 'INSERT INTO recibo (importe_luz, importe_gas, id_vivienda) VALUES (?, ?, ?)';
+        await query(insertarRecibo, [importeLuz, importeGas, idVivienda]);
 
-        // insertamos la vivienda asociada al domicilio del cliente
-        const sqlVivienda = 'INSERT INTO vivienda (n_personas, n_decisores, tiene_bombona, tiene_gas, tiene_termo_electrico, tiene_placas_termicas, id_domicilio) VALUES (?, ?, ?, ?, ?, ?, ?)';
-        const resultadoVivienda = await query(sqlVivienda, [numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermoElectrico, tienePlacasTermicas, idDomicilio]);
-        const idVivienda = resultadoVivienda.insertId;
-
-        // insertamos los recibos de luz y gas asociados a la vivienda
-        const sqlRecibo = 'INSERT INTO recibo (importe_luz, importe_gas, id_vivienda) VALUES (?, ?, ?)';
-        await query(sqlRecibo, [importeLuz, importeGas, idVivienda]);
-
-        // insertamos la fecha y hora de la visita
-        const sqlVisita = 'INSERT INTO visita (fecha, hora, id_vivienda, id_trabajador) VALUES (?, ?, ?, ?)';
-        await query(sqlVisita, [fechaVisita, horaVisita, idVivienda, idTrabajador]);
-
-        // confirmamos
+        const insertarVisita = 'INSERT INTO visita (fecha, hora, id_vivienda, id_trabajador) VALUES (?, ?, ?, ?)';
+        const resultadoVisita = await query(insertarVisita, [fecha, hora, idVivienda, idTrabajador]);
+        const idVisita = resultadoVisita.insertId;
+  
         await query('COMMIT');
         res.status(200).json({
-            message: "Visita registrada correctamente", idVivienda: idVivienda
+            message: "Visita registrada correctamente", idVisita: idVisita
         });
 
     } catch (err) {
-        // deshacemos cambios
         await query('ROLLBACK');
-        res.status(500).json({ error: "Error al procesar la solicitud" });
+        res.status(500).json({ error: "Error al registrar la visita"});
     }
 };
 

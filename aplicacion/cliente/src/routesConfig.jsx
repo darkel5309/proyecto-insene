@@ -1,50 +1,50 @@
-import Captador from "./pages/Captador";
-import Contacto from "./pages/Contacto";
-import Visita from "./pages/Visita";
-import Comercial from "./pages/Comercial";
-import Feedback from "./pages/Feedback";
-import RegistroTrabajador from "./pages/RegistroTrabajador";
-import Administrador from "./pages/Administrador";
+import PanelAdministrador from "./pages/PanelAdministrador";
+import PanelCaptador from "./pages/PanelCaptador";
+import PanelComercial from "./pages/PanelComercial";
+import FormularioTrabajador from "./pages/FormularioTrabajador";
+import FormularioContacto from "./pages/FormularioContacto";
+import FormularioVisita from "./pages/FormularioVisita";
+import FormularioFeedback from "./pages/FormularioFeedback";
 
 const routes = [
     {
         path: "/administradores",
-        element: <Administrador />,
+        element: <PanelAdministrador />,
         roles: ["Administrador"],
     },
     {
         path: "/administradores/RegistroTrabajador",
-        element: <RegistroTrabajador />,
+        element: <FormularioTrabajador />,
         roles: ["Administrador"],
     },
     {
         path: "/captadores",
-        element: <Captador />,
+        element: <PanelCaptador />,
         roles: ["Captador", "Administrador"],
     },
     {
         path: "/captadores/contacto",
-        element: <Contacto />,
+        element: <FormularioContacto />,
         roles: ["Captador", "Administrador"],
     },
     {
         path: "/captadores/visita",
-        element: <Visita />,
+        element: <FormularioVisita />,
         roles: ["Captador", "Administrador"],
     },
     {
         path: "/comerciales",
-        element: <Comercial />,
+        element: <PanelComercial />,
         roles: ["Comercial", "Administrador"],
     },
     {
         path: "/comerciales/contacto",
-        element: <Contacto />,
+        element: <FormularioContacto />,
         roles: ["Comercial", "Administrador"],
     },
     {
         path: "/comerciales/feedback",
-        element: <Feedback />,
+        element: <FormularioFeedback />,
         roles: ["Comercial", "Administrador"],
     },
 ];

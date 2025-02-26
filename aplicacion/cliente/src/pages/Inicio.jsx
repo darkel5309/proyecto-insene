@@ -11,6 +11,11 @@ const datosInicialesSesion = {
     contrasena: ""
 }
 
+const validaciones = {
+    idTrabajador: (valor) => (!valor || isNaN(valor)) ? "Este campo es obligatorio" : null,
+    contrasena: (valor) => !valor ? "Este campo es obligatorio" : null,
+}
+
 export default function Inicio() {
     const redirigir = useNavigate();
     const { iniciarSesion: iniciarSesionContext } = useContext(AuthContext);
@@ -19,12 +24,7 @@ export default function Inicio() {
     const [errores, setErrores] = useState({});
     const [cargando, setCargando] = useState(false);
 
-    const validaciones = {
-        idTrabajador: (valor) => (!valor || isNaN(valor) || valor <= 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
-        contrasena: (valor) => !valor ? "Este campo es obligatorio" : null,
-    }
-
-    // validamos los campos individualmente
+    // validamos los campos
     const validarCampo = (campo, valor) => {
         const error = validaciones[campo]?.(valor);
         setErrores(prevState => ({
@@ -33,10 +33,9 @@ export default function Inicio() {
         }));
     };
 
-    // manejamos los cambios en los campos del formulario
+    // manejamos los cambios
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // actualizamos solo las propiedades que han cambiado
         setDatosSesion(prevState => ({
             ...prevState,
             [name]: value
@@ -57,7 +56,7 @@ export default function Inicio() {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "Error al iniciar sesión",
+                text: "Revisa los campos del formulario",
                 confirmButtonText: "Vale"
             });
         }
@@ -86,14 +85,10 @@ export default function Inicio() {
             } else if (tipoTrabajador === 'Administrador') {
                 redirigir('/administradores');
             }
+
         } catch (error) {
             if (error.response) {
                 const mensajeError = error.response?.data?.error || "Hubo un problema con la solicitud. Inténtalo de nuevo";
-
-                setErrores(prevState => ({
-                    ...prevState,
-                    serverError: mensajeError
-                }));
 
                 Swal.fire({
                     icon: "warning",
@@ -101,6 +96,12 @@ export default function Inicio() {
                     text: "Este usuario no tiene acceso",
                     confirmButtonText: "Vale"
                 });
+
+                setErrores(prevState => ({
+                    ...prevState,
+                    serverError: mensajeError
+                }));
+
 
             } else if (error.message && error.message.includes("Network Error")) {
                 Swal.fire({
@@ -123,7 +124,6 @@ export default function Inicio() {
                     {errores.serverError && <div className="errorServidor"> {errores.serverError}</div>}
 
                     <EntradaTexto label="ID de Trabajador" name="idTrabajador" value={datosSesion.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 4" error={errores.idTrabajador} />
-
                     <EntradaTexto label="Contraseña" name="contrasena" value={datosSesion.contrasena} onChange={handleChange} type="password" placeholder="Introduce tu contraseña" error={errores.contrasena} />
 
                     <button type="submit">Iniciar Sesión</button>

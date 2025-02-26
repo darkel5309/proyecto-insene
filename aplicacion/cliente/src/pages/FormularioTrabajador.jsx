@@ -51,7 +51,7 @@ export default function RegistroTrabajador() {
         validarCampo(name, value);
     };
 
-    // comprobamos validaciones
+    // comprobamos las validaciones
     const validar = () => {
         const nuevoError = {};
         Object.keys(validaciones).forEach(campo => {
@@ -95,17 +95,17 @@ export default function RegistroTrabajador() {
                     if (error.response) {
                         const mensajeError = error.response?.data?.error || "Hubo un problema con la solicitud. Inténtalo de nuevo";
 
-                        setErrores(prevState => ({
-                            ...prevState,
-                            serverError: mensajeError
-                        }));
-
                         Swal.fire({
                             icon: "error",
                             title: "Error",
                             text: "Revisa los datos del formulario",
                             confirmButtonText: "Vale"
                         });
+
+                        setErrores(prevState => ({
+                            ...prevState,
+                            serverError: mensajeError
+                        }));
 
                     } else if (error.message && error.message.includes("Network Error")) {
                         Swal.fire({
@@ -124,7 +124,7 @@ export default function RegistroTrabajador() {
             <h1>Registrar un Trabajador</h1>
 
             <div className="contenedorTrabajador">
-                <form onSubmit={registrarTrabajador} className='campos'>
+                <form onSubmit={registrarTrabajador} className="campos">
                     {errores.serverError && <div className="errorServidor">{errores.serverError}</div>}
 
                     <EntradaTexto label="Nombre completo del trabajador *" name="nombre" value={datosTrabajador.nombre} onChange={handleChange} type="text" placeholder="Ej: Carlos Martínez Gómez" error={errores.nombre} />

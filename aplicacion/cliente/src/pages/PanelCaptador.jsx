@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 export default function Captador() {
     useEffect(() => {
-        document.title = "Captador";
+        document.title = "Panel de captador";
     }, []);
 
     return (

@@ -29,7 +29,7 @@ const registrarTrabajador = async (req, res) => {
 
     } catch (err) {
         await query('ROLLBACK');
-        res.status(500).json({ error: "Error al procesar la solicitud" });
+        res.status(500).json({ error: "Error al registrar el trabajador" });
     }
 };
 

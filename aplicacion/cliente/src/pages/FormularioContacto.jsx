@@ -7,37 +7,37 @@ import { useNavigate } from 'react-router-dom';
 
 const datosInicialesContacto = {
     idTrabajador: 0,
-    nombreContacto: "",
-    telefonoContacto: "",
-    correoContacto: "",
+    nombre: "",
+    telefono: "",
+    correo: "",
     modoCaptacion: "",
-    observacionesContacto: "",
-    direccionContacto: "",
-    localidadContacto: "",
-    provinciaContacto: "",
+    observaciones: "",
+    direccion: "",
+    localidad: "",
+    provincia: "",
 };
 
 const validaciones = {
-    idTrabajador: (valor) => (!valor || isNaN(valor) || valor <= 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
-    nombreContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
-    telefonoContacto: (valor) => (!valor || !/^\d{9}$/.test(valor)) ? "Este campo es obligatorio y debe tener 9 digitos" : null,
-    correoContacto: (valor) => (!valor || !/\S+@\S+\.\S+/.test(valor)) ? "El correo no es válido" : null,
+    idTrabajador: (valor) => (!valor || isNaN(valor)) ? "Este campo es obligatorio" : null,
+    nombre: (valor) => !valor ? "Este campo es obligatorio" : null,
+    telefono: (valor) => (!valor || !/^\d{9}$/.test(valor)) ? "Este campo es obligatorio y debe tener 9 digitos" : null,
+    correo: (valor) => (!valor || !/\S+@\S+\.\S+/.test(valor)) ? "El correo no es válido" : null,
     modoCaptacion: (valor) => !valor ? "Este campo es obligatorio" : null,
-    direccionContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
-    localidadContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
-    provinciaContacto: (valor) => !valor ? "Este campo es obligatorio" : null,
+    direccion: (valor) => !valor ? "Este campo es obligatorio" : null,
+    localidad: (valor) => !valor ? "Este campo es obligatorio" : null,
+    provincia: (valor) => !valor ? "Este campo es obligatorio" : null,
 };
 
 export default function Contacto() {
     useEffect(() => {
-        document.title = "Contacto";
+        document.title = "Formulario de contactos";
     }, []);
 
     const [datosContacto, setDatosContacto] = useState(datosInicialesContacto);
     const [errores, setErrores] = useState({});
     const redirigir = useNavigate();
 
-    // validamos los campos individualmente
+    // validamos los campos
     const validarCampo = (campo, valor) => {
         const error = validaciones[campo]?.(valor);
         setErrores(prevState => ({
@@ -46,10 +46,9 @@ export default function Contacto() {
         }));
     };
 
-    // manejamos los cambios en los campos del formulario
+    // manejamos los cambios
     const handleChange = (e) => {
         const { name, value } = e.target;
-        // actualizamos solo las propiedades que han cambiado
         setDatosContacto(prevState => ({
             ...prevState,
             [name]: value
@@ -57,7 +56,7 @@ export default function Contacto() {
         validarCampo(name, value);
     };
 
-    // comprobamos las validaciones
+    // comprobamos validaciones
     const validar = () => {
         const nuevoError = {};
         Object.keys(validaciones).forEach(campo => {
@@ -77,17 +76,17 @@ export default function Contacto() {
         return Object.keys(nuevoError).length === 0;
     };
 
-    // crear contactos
-    const addContacto = (e) => {
+    // registrar contactos
+    const registrarContacto = (e) => {
         e.preventDefault();
         if (validar()) {
-            Axios.post("/registrarCliente", datosContacto)
+            Axios.post("/registrarContacto", datosContacto)
                 .then((response) => {
                     setErrores({});
 
                     Swal.fire({
                         icon: "success",
-                        title: `El código del contacto es: ${response.data.idCliente}`,
+                        title: `El código del contacto es: ${response.data.idContacto}`,
                         text: "Datos registrados correctamente",
                         confirmButtonText: "Vale"
                     }).then((result) => {
@@ -128,32 +127,25 @@ export default function Contacto() {
     return (
         <div className="contacto">
             <h1>Formulario de Contactos</h1>
+
             <div className="contenedorContacto">
-                <form onSubmit={addContacto} className='campos'>
+                <form onSubmit={registrarContacto} className='campos'>
                     {errores.serverError && <div className="errorServidor">{errores.serverError}</div>}
 
                     <EntradaTexto label="ID de Trabajador *" name="idTrabajador" value={datosContacto.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idTrabajador} />
-
-                    <EntradaTexto label="Nombre completo del contacto *" name="nombreContacto" value={datosContacto.nombreContacto} onChange={handleChange} type="text" placeholder="Ej: Gabriel Martín Ruiz" error={errores.nombreContacto} />
-
-                    <EntradaTexto label="Dirección del contacto *" name="direccionContacto" value={datosContacto.direccionContacto} onChange={handleChange} type="text" placeholder="Ej: Calle del Sol, 42" error={errores.direccionContacto} />
-
-                    <EntradaTexto label="Localidad del contacto *" name="localidadContacto" value={datosContacto.localidadContacto} onChange={handleChange} type="text" placeholder="Ej: Mairena de Alcor" error={errores.localidadContacto} />
-
-                    <EntradaTexto label="Provincia del contacto *" name="provinciaContacto" value={datosContacto.provinciaContacto} onChange={handleChange} type="text" placeholder="Ej: Sevilla" error={errores.provinciaContacto} />
-
-                    <EntradaTexto label="Teléfono de contacto *" name="telefonoContacto" value={datosContacto.telefonoContacto} onChange={handleChange} type="tel" placeholder="Ej: 666555444" error={errores.telefonoContacto} />
-
-                    <EntradaTexto label="Correo del contacto *" name="correoContacto" value={datosContacto.correoContacto} onChange={handleChange} type="email" placeholder="Ej: ejemplo@gmail.com" error={errores.correoContacto} />
-
+                    <EntradaTexto label="Nombre completo del contacto *" name="nombre" value={datosContacto.nombre} onChange={handleChange} type="text" placeholder="Ej: Gabriel Martín Ruiz" error={errores.nombre} />
+                    <EntradaTexto label="Dirección del contacto *" name="direccion" value={datosContacto.direccion} onChange={handleChange} type="text" placeholder="Ej: Calle del Sol, 42" error={errores.direccion} />
+                    <EntradaTexto label="Localidad del contacto *" name="localidad" value={datosContacto.localidad} onChange={handleChange} type="text" placeholder="Ej: Mairena de Alcor" error={errores.localidad} />
+                    <EntradaTexto label="Provincia del contacto *" name="provincia" value={datosContacto.provincia} onChange={handleChange} type="text" placeholder="Ej: Sevilla" error={errores.provincia} />
+                    <EntradaTexto label="Teléfono de contacto *" name="telefono" value={datosContacto.telefono} onChange={handleChange} type="tel" placeholder="Ej: 666555444" error={errores.telefono} />
+                    <EntradaTexto label="Correo del contacto *" name="correo" value={datosContacto.correo} onChange={handleChange} type="email" placeholder="Ej: ejemplo@gmail.com" error={errores.correo} />
                     <EntradaSelect label="Modo de captación *" name="modoCaptacion" value={datosContacto.modoCaptacion} onChange={handleChange} error={errores.modoCaptacion} options={[
                         { value: "Captador", label: "Captador" },
                         { value: "Telemarketing", label: "Telemarketing" },
                         { value: "Referido", label: "Referido" },
                         { value: "Propia", label: "Captación propia" }
                     ]} />
-
-                    <EntradaTextoArea label="Observaciones del contacto" name="observacionesContacto" value={datosContacto.observacionesContacto} onChange={handleChange} type="text" placeholder="Comenta alguna observación" />
+                    <EntradaTextoArea label="Observaciones del contacto" name="observaciones" value={datosContacto.observaciones} onChange={handleChange} type="text" placeholder="Comenta alguna observación" />
 
                     <button type="submit">Registrar Datos</button>
                 </form>

@@ -1,30 +1,28 @@
-// intermediario para las validaciones de los datos del formulario
-const validarDatosVisita = (req, res, next) => {
-    const { idTrabajador, idCliente, fechaVisita, horaVisita, numeroPersonas, numeroDecisores, importeLuz, importeGas } = req.body;
+const validarDatosVisita = async (req, res, next) => {
+    const { idTrabajador, idContacto, fecha, hora, numeroPersonas, numeroDecisores, importeLuz, importeGas } = req.body;
 
-    // validaciones de campos obligatorios
-    if (!idTrabajador || !idCliente || !fechaVisita || !horaVisita || !numeroDecisores) {
+    // obligatorios
+    if (!idTrabajador || !idContacto || !fecha || !hora || !numeroDecisores) {
         return res.status(400).json({ error: "Todos los campos marcados con * son obligatorios" });
     }
 
-    // validaciones de campos que deben ser numeros positivos
+    // numeros positivos
     if (numeroPersonas < 0 || isNaN(numeroPersonas)) {
-        return res.status(400).json({ error: "El número de personas debe ser un número positivo" });
+        return res.status(400).json({ error: "El número de personas debe ser mayor a 0" });
     }
 
     if (numeroDecisores < 0 || isNaN(numeroDecisores)) {
-        return res.status(400).json({ error: "El número de decisores debe ser un número positivo" });
+        return res.status(400).json({ error: "El número de decisores debe ser mayor a 0" });
     }
 
     if (importeLuz < 0 || isNaN(importeLuz)) {
-        return res.status(400).json({ error: "El importe de luz debe ser un número positivo" });
+        return res.status(400).json({ error: "El importe de luz debe ser mayor a 0" });
     }
 
     if (importeGas < 0 || isNaN(importeGas)) {
-        return res.status(400).json({ error: "El importe de gas debe ser un número positivo" });
+        return res.status(400).json({ error: "El importe de gas debe ser mayor a 0" });
     }
 
-    // si todo es correcto, pasa a la siguiente validacion
     next();
 };
 

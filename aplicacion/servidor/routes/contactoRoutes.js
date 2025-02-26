@@ -3,8 +3,8 @@ const router = express.Router();
 const { registrarContacto, obtenerContacto, obtenerContactosSimplificado } = require("../controllers/contactoController");
 const validarDatosContacto = require("../middlewares/validarDatosContacto");
 
-router.post("/registrarCliente", validarDatosContacto, registrarContacto);
-router.get('/obtenerContacto/:idCliente', obtenerContacto);
-router.get('/obtenerContactosSimplificado', obtenerContactosSimplificado);
+router.post("/registrarContacto", validarDatosContacto, registrarContacto);
+router.get("/obtenerContacto/:idContacto", obtenerContacto);
+router.get("/obtenerContactosSimplificado", obtenerContactosSimplificado);
 
 module.exports = router;

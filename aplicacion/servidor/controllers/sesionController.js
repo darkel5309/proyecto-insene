@@ -6,60 +6,53 @@ const iniciarSesion = async (req, res) => {
     const { idTrabajador, contrasena } = req.body;
 
     try {
-        // Consultamos si el trabajador existe
-        const trabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
-
-        if (trabajador.length === 0) {
-            return res.status(400).json({ error: "El ID de trabajador no existe" });
+        const comprobarTrabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
+        if (comprobarTrabajador.length === 0) {
+            return res.status(400).json({ error: "El trabajador no existe" });
         }
+        const informacionTrabajador = comprobarTrabajador[0];
 
-        // Obtenemos la información del trabajador
-        const trabajadorInfo = trabajador[0];
-
-        // Comprobamos si la contraseña es válida
-        const esValida = await bcrypt.compare(contrasena, trabajadorInfo.contrasena); // Usamos bcrypt para comparar la contraseña cifrada
-        if (!esValida) {
+        const comprobarContrasena = await bcrypt.compare(contrasena, informacionTrabajador.contrasena);
+        if (!comprobarContrasena) {
             return res.status(400).json({ error: "Contraseña incorrecta" });
         }
 
-        // Generamos el JWT
+        // generamos el JWT
         const token = jwt.sign(
-            { id: trabajadorInfo.id_trabajador, rol: trabajadorInfo.rol },
+            { id: informacionTrabajador.id_trabajador, rol: informacionTrabajador.rol },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' } // Expiración de 1 hora
+            { expiresIn: "1h" }
         );
 
-        // Enviamos el token como cookie
-        res.cookie('token', token, {
-            httpOnly: true,  // No accesible desde JavaScript
-            secure: process.env.NODE_ENV === 'production', // Solo se envía a través de HTTPS en producción
-            sameSite: 'Strict', // Protección contra CSRF
-            expires: new Date(Date.now() + 3600000), // Expira en 1 hora
+        // enviamos el token como cookie
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "Strict",
+            expires: new Date(Date.now() + 3600000),
         });
 
-        // Respondemos con el tipo de trabajador
         res.json({
             success: true,
-            tipoTrabajador: trabajadorInfo.rol,
+            tipoTrabajador: informacionTrabajador.rol,
         });
 
     } catch (err) {
-        console.error("Error al iniciar sesión:", err);
-        res.status(500).json({ error: "Error al procesar la solicitud" });
+        res.status(500).json({ error: "Error al iniciar sesión" });
     }
 };
 
 const verificarSesion = (req, res) => {
     const token = req.cookies.token;
     if (!token) {
-        return res.status(401).json({ error: 'No hay sesión activa' });
+        return res.status(401).json({ error: "No hay ninguna sesión activa" });
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         res.json({ id: decoded.id, rol: decoded.rol });
     } catch (err) {
-        res.status(401).json({ error: 'Sesión no válida' });
+        res.status(401).json({ error: "La sesión no es válida" });
     }
 };
 

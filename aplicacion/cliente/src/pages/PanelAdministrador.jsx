@@ -15,7 +15,7 @@ const columnas = [
 
 export default function Administrador() {
     useEffect(() => {
-        document.title = "Administrador";
+        document.title = "Panel de administrador";
     }, []);
 
     const [filas, setFilas] = useState([]);
