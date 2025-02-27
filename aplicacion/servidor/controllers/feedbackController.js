@@ -49,7 +49,7 @@ const registrarFeedback = async (req, res) => {
 
         await query('COMMIT');
         res.status(200).json({ 
-            message: "Feedback creado correctamente", idVisita: idVisita 
+            message: "Feedback registrado correctamente", idVisita: idVisita 
         });
 
     } catch (err) {

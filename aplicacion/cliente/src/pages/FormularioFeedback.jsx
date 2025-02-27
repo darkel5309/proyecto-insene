@@ -134,7 +134,7 @@ export default function Feedback() {
 		if (!validar()) return;
 
 		try {
-			await Axios.post("/registrarFeedback", datosFeedback);
+			const response = await Axios.post("/registrarFeedback", datosFeedback);
 			setErrores({});
 			Swal.fire({
 				icon: "success",

@@ -139,7 +139,7 @@ export default function Visita() {
 
                 Swal.fire({
                     icon: "success",
-                    title: `El código de la visita es: ${response.data.idVisita}`,
+                    title: `Visita nº ${response.data.idVisita} registrada`,
                     text: "Visita registrada correctamente",
                     confirmButtonText: "Vale"
                 }).then((result) => {

@@ -60,7 +60,7 @@ const obtenerContacto = async (req, res) => {
         res.status(200).json(resultadoDatosContacto[0]);
 
     } catch (err) {
-        res.status(500).json({ error: "Error interno del servidor" });
+        res.status(500).json({ error: "Error al obtener el contacto" });
     }
 };
 

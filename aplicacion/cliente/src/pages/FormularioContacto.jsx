@@ -86,7 +86,7 @@ export default function Contacto() {
 
                     Swal.fire({
                         icon: "success",
-                        title: `El código del contacto es: ${response.data.idContacto}`,
+                        title: `Contacto nº ${response.data.idContacto} registrado`,
                         text: "Datos registrados correctamente",
                         confirmButtonText: "Vale"
                     }).then((result) => {
