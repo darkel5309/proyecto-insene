@@ -28,7 +28,7 @@ const validaciones = {
     provincia: (valor) => !valor ? "Este campo es obligatorio" : null,
 };
 
-export default function Contacto() {
+export default function FormularioContacto() {
     useEffect(() => {
         document.title = "Formulario de contactos";
     }, []);

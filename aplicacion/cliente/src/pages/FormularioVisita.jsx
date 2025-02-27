@@ -43,7 +43,7 @@ const validaciones = {
     importeGas: (valor) => (isNaN(valor) || valor < 0) ? "El importe debe ser mayor a 0" : null,
 };
 
-export default function Visita() {
+export default function FormularioVisita() {
     useEffect(() => {
         document.title = "Formulario de visita";
     }, []);

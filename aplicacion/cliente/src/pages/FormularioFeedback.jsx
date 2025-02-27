@@ -47,7 +47,7 @@ const validaciones = {
 	resultado: (valor) => (!valor ? "Este campo es obligatorio" : null),
 };
 
-export default function Feedback() {
+export default function FormularioFeedback() {
 	useEffect(() => {
 		document.title = "Formulario de feedback";
 	}, []);

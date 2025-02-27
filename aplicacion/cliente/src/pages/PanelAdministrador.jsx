@@ -13,7 +13,7 @@ const columnas = [
     { field: 'telefono', headerName: 'Teléfono', width: 130 },
 ];
 
-export default function Administrador() {
+export default function PanelAdministrador() {
     useEffect(() => {
         document.title = "Panel de administrador";
     }, []);

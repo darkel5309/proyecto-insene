@@ -2,7 +2,7 @@ import '../styles/Captador.css';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 
-export default function Captador() {
+export default function PanelCaptador() {
     useEffect(() => {
         document.title = "Panel de captador";
     }, []);

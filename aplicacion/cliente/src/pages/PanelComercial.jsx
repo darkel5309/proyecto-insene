@@ -5,7 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { esES } from '@mui/x-data-grid/locales';
 import Axios from '../axiosConfig';
 
-export default function Comercial() {
+export default function PanelComercial() {
     useEffect(() => {
         document.title = "Comercial";
     }, []);

@@ -23,9 +23,9 @@ const validaciones = {
     subequipo: (valor) => !valor ? "Este campo es obligatorio" : null,
 };
 
-export default function RegistroTrabajador() {
+export default function FormularioTrabajador() {
     useEffect(() => {
-        document.title = "Registro de trabajador";
+        document.title = "Formulario de trabajador";
     }, []);
 
     const [datosTrabajador, setDatosTrabajador] = useState(datosInicialesTrabajador);
