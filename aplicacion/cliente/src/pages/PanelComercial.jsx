@@ -7,7 +7,7 @@ import Axios from '../axiosConfig';
 
 export default function PanelComercial() {
     useEffect(() => {
-        document.title = "Comercial";
+        document.title = "Panel de comercial";
     }, []);
 
     const [filas, setFilas] = useState([]);
