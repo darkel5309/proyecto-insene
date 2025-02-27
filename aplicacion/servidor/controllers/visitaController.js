@@ -33,8 +33,8 @@ const registrarVisita = async (req, res) => {
             const idDomicilio = resultadoDomicilio[0].id_domicilio;
 
             const insertarVivienda = 'INSERT INTO vivienda (n_personas, n_decisores, tiene_bombona, tiene_gas, tiene_termo_electrico, tiene_placas_termicas, id_domicilio) VALUES (?, ?, ?, ?, ?, ?, ?)';
-            const resultadoVivienda = await query(insertarVivienda, [numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, idDomicilio]);
-            idVivienda = resultadoVivienda.insertId;
+            const resultadoInserccionVivienda = await query(insertarVivienda, [numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, idDomicilio]);
+            idVivienda = resultadoInserccionVivienda.insertId;
 
         } else {
             idVivienda = resultadoVivienda[0].id_vivienda;
