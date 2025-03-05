@@ -1,30 +1,21 @@
-const { query } = require("../models/db");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const { verificarTrabajador, comprobarContrasena, generarToken, verificarToken } = require("../services/sesionService");
 
 const iniciarSesion = async (req, res) => {
     const { idTrabajador, contrasena } = req.body;
 
     try {
-        const comprobarTrabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
-        if (comprobarTrabajador.length === 0) {
+        const trabajador = await verificarTrabajador(idTrabajador);
+        if (!trabajador) {
             return res.status(400).json({ error: "El trabajador no existe" });
         }
-        const informacionTrabajador = comprobarTrabajador[0];
 
-        const comprobarContrasena = await bcrypt.compare(contrasena, informacionTrabajador.contrasena);
-        if (!comprobarContrasena) {
+        const esContrasenaValida = await comprobarContrasena(contrasena, trabajador.contrasena);
+        if (!esContrasenaValida) {
             return res.status(400).json({ error: "Contraseña incorrecta" });
         }
 
-        // generamos el JWT
-        const token = jwt.sign(
-            { id: informacionTrabajador.id_trabajador, rol: informacionTrabajador.rol },
-            process.env.JWT_SECRET,
-            { expiresIn: "1h" }
-        );
+        const token = generarToken(trabajador.id_trabajador, trabajador.rol);
 
-        // enviamos el token como cookie
         res.cookie("token", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
@@ -34,7 +25,7 @@ const iniciarSesion = async (req, res) => {
 
         res.json({
             success: true,
-            tipoTrabajador: informacionTrabajador.rol,
+            tipoTrabajador: trabajador.rol,
         });
 
     } catch (err) {
@@ -48,12 +39,12 @@ const verificarSesion = (req, res) => {
         return res.status(401).json({ error: "No hay ninguna sesión activa" });
     }
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        res.json({ id: decoded.id, rol: decoded.rol });
-    } catch (err) {
-        res.status(401).json({ error: "La sesión no es válida" });
+    const decoded = verificarToken(token);
+    if (!decoded) {
+        return res.status(401).json({ error: "La sesión no es válida" });
     }
+
+    res.json({ id: decoded.id, rol: decoded.rol });
 };
 
 module.exports = { iniciarSesion, verificarSesion };
