@@ -149,7 +149,7 @@ export default function FormularioFeedback() {
 			setDatosFeedback(datosInicialesFeedback);
 
 		} catch (error) {
-			const mensajeError = "Hubo un problema con la solicitud. Inténtalo de nuevo";
+			let mensajeError = "Hubo un problema con la solicitud. Inténtalo de nuevo";
 
 			if (error.response) {
 				mensajeError = error.response?.data?.error || mensajeError;
