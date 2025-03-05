@@ -51,6 +51,7 @@ export default function PanelAdministrador() {
                     <Link to="/administradores/registroTrabajador" className='enlace' aria-label="Crear un nuevo trabajador">Crear Trabajador</Link>
                     <Link to="/captadores" className='enlace' aria-label="Ir al panel de captadores">Panel de Captadores</Link>
                     <Link to="/comerciales" className='enlace' aria-label="Ir al panel de comerciales">Panel de Comerciales</Link>
+                    <Link to="/administradores/InformacionClientes" className='enlace' aria-label="Ver información de los clientes">Listado de Clientes</Link>
                 </div>
 
                 <div className="tabla">
