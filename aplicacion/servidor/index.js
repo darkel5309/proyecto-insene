@@ -8,10 +8,12 @@ const contactoRoutes = require("./routes/contactoRoutes");
 const visitaRoutes = require("./routes/visitaRoutes")
 const feedbackRoutes = require("./routes/feedbackRoutes");
 const trabajadorRoutes = require("./routes/trabajadorRoutes");
+const clienteRoutes = require("./routes/clienteRoutes");
 
 dotenv.config();
 
 const app = express();
+
 // cors
 const allowedOrigins = [process.env.CLIENT_URL || "http://localhost:5173"];
 app.use(cors({ origin: allowedOrigins, credentials: true }));
@@ -26,9 +28,10 @@ app.use("/api", contactoRoutes);
 app.use("/api", visitaRoutes);
 app.use("/api", feedbackRoutes);
 app.use("/api", trabajadorRoutes);
+app.use("/api", clienteRoutes);
 
-app.use((err, req, res, next) => {
-    res.status(500).send('Algo salió mal');
+app.use((__err, __req, res, __next) => {
+    res.status(500).send("Algo salió mal");
 });
 
 // puerto
