@@ -4,10 +4,14 @@ import PropTypes from "prop-types";
 // componente para entradas de texto
 const EntradaTexto = ({ label, name, value, onChange, type, placeholder, disabled, error }) => {
     const valorInput = type === "number" ? (value === 0 ? "" : value) : value;
+    const inputId = `${name}-input`;
     return (
         <div>
-            <label className="nombreCampo">{label}</label>
+            <label className="nombreCampo" htmlFor={inputId}>
+                {label}
+            </label>
             <input
+                id={inputId}
                 className="campoTexto"
                 name={name}
                 value={valorInput}
@@ -42,6 +46,7 @@ EntradaTexto.defaultProps = {
 // componente para entradas de texto de varias lineas
 const EntradaTextoArea = ({ label, name, value, onChange, placeholder, error }) => {
     const entradaTextoInicial = useRef(null);
+    const textAreaId = `${name}-textarea`;
 
     useEffect(() => {
         if (entradaTextoInicial.current) {
@@ -52,8 +57,11 @@ const EntradaTextoArea = ({ label, name, value, onChange, placeholder, error }) 
 
     return (
         <div>
-            <label className="nombreCampo">{label}</label>
+            <label className="nombreCampo" htmlFor={textAreaId}>
+                {label}
+            </label>
             <textarea
+                id={textAreaId}
                 ref={entradaTextoInicial}
                 className="campoTexto"
                 name={name}
@@ -67,6 +75,7 @@ const EntradaTextoArea = ({ label, name, value, onChange, placeholder, error }) 
         </div>
     );
 };
+
 
 EntradaTextoArea.propTypes = {
     label: PropTypes.string.isRequired,
@@ -123,10 +132,14 @@ EntradaRadio.propTypes = {
 
 // componente para entradas de select
 const EntradaSelect = ({ label, name, value, onChange, error, options }) => {
+    const selectId = `${name}-select`; 
+
     return (
         <div>
-            <label className="nombreCampo">{label}</label>
-            <select name={name} onChange={onChange} value={value}>
+            <label className="nombreCampo" htmlFor={selectId}>
+                {label}
+            </label>
+            <select id={selectId} name={name} onChange={onChange} value={value}>
                 <option value="">Selecciona una opción</option>
                 {options.map(option => (
                     <option key={option.value} value={option.value}>
@@ -138,6 +151,7 @@ const EntradaSelect = ({ label, name, value, onChange, error, options }) => {
         </div>
     );
 };
+
 
 EntradaSelect.propTypes = {
     label: PropTypes.string.isRequired,
