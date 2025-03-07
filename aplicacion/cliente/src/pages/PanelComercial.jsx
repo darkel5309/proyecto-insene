@@ -22,7 +22,7 @@ export default function PanelComercial() {
     useEffect(() => {
         const obtenerClientes = async () => {
             try {
-                const { data } = await Axios.get('/obtenerContactosSimplificado');
+                const { data } = await Axios.get('/obtenerClientesSimplificado');
                 setFilas(data.reverse());
             } finally {
                 setLoading(false);

@@ -4,38 +4,42 @@ import Axios from '../axiosConfig';
 import { DataGrid } from '@mui/x-data-grid';
 import { esES } from '@mui/x-data-grid/locales';
 
+const columnas = [
+    { field: 'id_cliente', headerName: 'ID', width: 90 },
+    { field: 'nombre', headerName: 'Nombre', width: 150 },
+    { field: 'telefono', headerName: 'Teléfono', width: 130 },
+    { field: 'dni', headerName: 'DNI', width: 130 },
+    { field: 'iban', headerName: 'IBAN', width: 250 },
+    { field: 'correo', headerName: 'Correo', width: 200 },
+    { field: 'modo_captacion', headerName: 'Modo de Captación', width: 150 },
+    { field: 'observaciones_cliente', headerName: 'Observaciones', width: 250 },
+];
+
 export default function InformacionClientes() {
+    useEffect(() => {
+        document.title = "Información de clientes";
+    }, []);
+
     const [filas, setFilas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [idCliente, setIdCliente] = useState('');
     const [datosCliente, setDatosCliente] = useState(null);
 
-    const columnas = [
-        { field: 'id_cliente', headerName: 'ID', width: 90 },
-        { field: 'nombre', headerName: 'Nombre', width: 150 },
-        { field: 'telefono', headerName: 'Teléfono', width: 130 },
-        { field: 'dni', headerName: 'DNI', width: 130 },
-        { field: 'iban', headerName: 'IBAN', width: 250 },
-        { field: 'correo', headerName: 'Correo', width: 200 },
-        { field: 'modo_captacion', headerName: 'Modo de Captación', width: 150 },
-        { field: 'observaciones_cliente', headerName: 'Observaciones', width: 250 },
-    ];
-
     useEffect(() => {
-        const obtenerClientes = async () => {
+        const obtenerTodosClientes = async () => {
             try {
-                const response = await Axios.get('/obtenerClientes');
+                const response = await Axios.get('/obtenerTodosClientes');
                 setFilas(response.data.reverse());
             } finally {
                 setLoading(false);
             }
         };
-        obtenerClientes();
+        obtenerTodosClientes();
     }, []);
 
     const handleBuscarCliente = async () => {
         try {
-            const response = await Axios.get(`/obtenerCliente/${idCliente}`);
+            const response = await Axios.get(`/obtenerInformacionCliente/${idCliente}`);
             setDatosCliente(response.data);
         } catch (error) {
             console.error('Error al obtener datos del cliente:', error);

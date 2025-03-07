@@ -1,8 +1,35 @@
-const { obtenerClientesService, obtenerClienteService } = require('../services/clienteService');
+const clienteService = require('../services/clienteService');
 
-const obtenerClientes = async (__req, res) => {
+const registrarCliente = async (req, res) => {
     try {
-        const resultado = await obtenerClientesService();
+        const resultado = await clienteService.registrarCliente(req.body);
+        res.status(200).json(resultado);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
+const recuperarCliente = async (req, res) => {
+    try {
+        const cliente = await clienteService.recuperarCliente(req.params.idCliente);
+        res.status(200).json(cliente);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+};
+
+const obtenerClientesSimplificado = async (_req, res) => {
+    try {
+        const clientes = await clienteService.obtenerClientesSimplificado();
+        res.status(200).json(clientes);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+};
+
+const obtenerTodosClientes = async (__req, res) => {
+    try {
+        const resultado = await clienteService.obtenerTodosClientes();
 
         if (resultado.length === 0) {
             return res.status(404).json({ error: "No hay clientes registrados" });
@@ -15,10 +42,10 @@ const obtenerClientes = async (__req, res) => {
     }
 };
 
-const obtenerCliente = async (req, res) => {
+const obtenerInformacionCliente = async (req, res) => {
     const { idCliente } = req.params;
     try {
-        const clienteResultado = await obtenerClienteService(idCliente);
+        const clienteResultado = await clienteService.obtenerInformacionCliente(idCliente);
 
         if (clienteResultado.length === 0) {
             return res.status(404).json({ error: "Cliente no encontrado" });
@@ -31,4 +58,5 @@ const obtenerCliente = async (req, res) => {
     }
 };
 
-module.exports = { obtenerClientes, obtenerCliente };
+
+module.exports = { registrarCliente, recuperarCliente, obtenerClientesSimplificado, obtenerTodosClientes, obtenerInformacionCliente };

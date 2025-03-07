@@ -1,4 +1,4 @@
-const validarDatosContacto = async (req, res, next) => {
+const validarDatosCliente = async (req, res, next) => {
     const { idTrabajador, nombre, direccion, localidad, provincia, telefono, correo} = req.body;
 
     // obligatorios
@@ -18,4 +18,4 @@ const validarDatosContacto = async (req, res, next) => {
     next();
 };
 
-module.exports = validarDatosContacto;
+module.exports = validarDatosCliente;

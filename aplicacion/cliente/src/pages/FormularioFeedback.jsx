@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const datosInicialesFeedback = {
 	idTrabajador: 0,
-	idContacto: 0,
+	idCliente: 0,
 	nombre: "",
 	telefono: "",
 	correo: "",
@@ -37,7 +37,7 @@ const opcionesRadio = [
 
 const validaciones = {
 	idTrabajador: (valor) => (!valor || isNaN(valor)) ? "Este campo es obligatorio" : null,
-	idContacto: (valor) => (!valor || isNaN(valor)) ? "Este campo es obligatorio" : null,
+	idCliente: (valor) => (!valor || isNaN(valor)) ? "Este campo es obligatorio" : null,
 	fecha: (valor) => (!valor ? "Este campo es obligatorio" : null),
 	hora: (valor) => (!valor ? "Este campo es obligatorio" : null),
 	numeroPersonas: (valor) => (Number(valor) < 0 ? "El número de personas debe ser mayor a 0" : null),
@@ -56,7 +56,7 @@ export default function FormularioFeedback() {
 	const [errores, setErrores] = useState({});
 	const redirigir = useNavigate();
 
-	const resetearDatosContacto = () => {
+	const resetearDatosCliente = () => {
 		setDatosFeedback(prevState => ({
 			...prevState,
 			nombre: "",
@@ -68,11 +68,11 @@ export default function FormularioFeedback() {
 		}));
 	};
 
-	// obtener datos del contacto
-	const obtenerContacto = useCallback(async (idContacto) => {
-		if (!idContacto) return;
+	// obtener datos del cliente
+	const obtenerCliente = useCallback(async (idCliente) => {
+		if (!idCliente) return;
 		try {
-			const { data } = await Axios.get(`/obtenerContacto/${idContacto}`);
+			const { data } = await Axios.get(`/recuperarCliente/${idCliente}`);
 			if (data) {
 				setDatosFeedback(prevState => ({
 					...prevState,
@@ -83,16 +83,16 @@ export default function FormularioFeedback() {
 					telefono: data.telefono || "",
 					correo: data.correo || ""
 				}));
-				setErrores(prevState => ({ ...prevState, idContacto: null }));
+				setErrores(prevState => ({ ...prevState, idCliente: null }));
 			}
 		} catch {
-			resetearDatosContacto();
+			resetearDatosCliente();
 		}
 	}, []);
 
 	useEffect(() => {
-		obtenerContacto(datosFeedback.idContacto);
-	}, [datosFeedback.idContacto, obtenerContacto]);
+		obtenerCliente(datosFeedback.idCliente);
+	}, [datosFeedback.idCliente, obtenerCliente]);
 
 	// validamos los campos
 	const validarCampo = (campo, valor) => {
@@ -180,13 +180,13 @@ export default function FormularioFeedback() {
 					{errores.serverError && <div className="errorServidor"> {errores.serverError}</div>}
 
 					<EntradaTexto label="ID de Trabajador *" name="idTrabajador" value={datosFeedback.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idTrabajador} />
-					<EntradaTexto label="ID del Cliente *" name="idContacto" value={datosFeedback.idContacto} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idContacto} />
-					<EntradaTexto label="Nombre completo del contacto" name="nombre" value={datosFeedback.nombre} onChange={handleChange} type="text" disabled={true} />
-					<EntradaTexto label="Dirección del contacto" name="direccion" value={datosFeedback.direccion} onChange={handleChange} type="text" disabled={true} />
-					<EntradaTexto label="Localidad del contacto" name="localidad" value={datosFeedback.localidad} onChange={handleChange} type="text" disabled={true} />
-					<EntradaTexto label="Provincia del contacto" name="provincia" value={datosFeedback.provincia} onChange={handleChange} type="text" disabled={true} />
-					<EntradaTexto label="Teléfono de contacto" name="telefono" value={datosFeedback.telefono} onChange={handleChange} type="tel" disabled={true} />
-					<EntradaTexto label="Correo del contacto" name="correo" value={datosFeedback.correo} onChange={handleChange} type="email" error={errores.correo} disabled={true} />
+					<EntradaTexto label="ID del Cliente *" name="idCliente" value={datosFeedback.idCliente} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idCliente} />
+					<EntradaTexto label="Nombre completo del cliente" name="nombre" value={datosFeedback.nombre} onChange={handleChange} type="text" disabled={true} />
+					<EntradaTexto label="Dirección del cliente" name="direccion" value={datosFeedback.direccion} onChange={handleChange} type="text" disabled={true} />
+					<EntradaTexto label="Localidad del cliente" name="localidad" value={datosFeedback.localidad} onChange={handleChange} type="text" disabled={true} />
+					<EntradaTexto label="Provincia del cliente" name="provincia" value={datosFeedback.provincia} onChange={handleChange} type="text" disabled={true} />
+					<EntradaTexto label="Teléfono de cliente" name="telefono" value={datosFeedback.telefono} onChange={handleChange} type="tel" disabled={true} />
+					<EntradaTexto label="Correo del cliente" name="correo" value={datosFeedback.correo} onChange={handleChange} type="email" error={errores.correo} disabled={true} />
 					<EntradaTexto label="Fecha de la visita *" name="fecha" value={datosFeedback.fecha} onChange={handleChange} type="date" error={errores.fecha} />
 					<EntradaTexto label="Hora de la visita *" name="hora" value={datosFeedback.hora} onChange={handleChange} type="time" error={errores.hora} />
 					<EntradaTexto label="Número de personas en la vivienda" name="numeroPersonas" value={datosFeedback.numeroPersonas} onChange={handleChange} type="number" placeholder="Ej: 4" error={errores.numeroPersonas} />

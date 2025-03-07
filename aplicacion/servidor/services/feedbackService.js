@@ -1,7 +1,7 @@
 const { query } = require("../models/db");
 
 const registrarFeedback = async (datosFeedback) => {
-    const { idTrabajador, idContacto, fecha, hora, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, importeLuz, importeGas, resultado, oferta, observaciones } = datosFeedback;
+    const { idTrabajador, idCliente, fecha, hora, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, importeLuz, importeGas, resultado, oferta, observaciones } = datosFeedback;
 
     await query('START TRANSACTION');
 
@@ -9,15 +9,15 @@ const registrarFeedback = async (datosFeedback) => {
         const [existeTrabajador] = await query('SELECT 1 FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
         if (!existeTrabajador) throw new Error("El trabajador no existe");
 
-        const [existeContacto] = await query('SELECT 1 FROM cliente WHERE id_cliente = ?', [idContacto]);
-        if (!existeContacto) throw new Error("El contacto no existe");
+        const [existeContacto] = await query('SELECT 1 FROM cliente WHERE id_cliente = ?', [idCliente]);
+        if (!existeContacto) throw new Error("El cliente no existe");
 
         let idVivienda;
-        const [resultadoVivienda] = await query('SELECT id_vivienda FROM vivienda WHERE id_domicilio = ?', [idContacto]);
+        const [resultadoVivienda] = await query('SELECT id_vivienda FROM vivienda WHERE id_domicilio = ?', [idCliente]);
 
         if (!resultadoVivienda) {
-            const [resultadoDomicilio] = await query('SELECT id_domicilio FROM domicilio WHERE id_cliente = ?', [idContacto]);
-            if (!resultadoDomicilio) throw new Error("El contacto no tiene un domicilio registrado.");
+            const [resultadoDomicilio] = await query('SELECT id_domicilio FROM domicilio WHERE id_cliente = ?', [idCliente]);
+            if (!resultadoDomicilio) throw new Error("El cliente no tiene un domicilio registrado.");
 
             const idDomicilio = resultadoDomicilio.id_domicilio;
             const resultadoInserccionVivienda = await query('INSERT INTO vivienda (n_personas, n_decisores, tiene_bombona, tiene_gas, tiene_termo_electrico, tiene_placas_termicas, id_domicilio) VALUES (?, ?, ?, ?, ?, ?, ?)', [numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, idDomicilio]);

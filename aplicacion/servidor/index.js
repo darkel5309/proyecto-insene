@@ -4,11 +4,10 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 
 const sesionRoutes = require("./routes/sesionRoutes");
-const contactoRoutes = require("./routes/contactoRoutes");
+const clienteRoutes = require("./routes/clienteRoutes");
 const visitaRoutes = require("./routes/visitaRoutes")
 const feedbackRoutes = require("./routes/feedbackRoutes");
 const trabajadorRoutes = require("./routes/trabajadorRoutes");
-const clienteRoutes = require("./routes/clienteRoutes");
 
 dotenv.config();
 
@@ -24,11 +23,10 @@ app.use(cookieParser());
 
 // rutas
 app.use("/api", sesionRoutes);
-app.use("/api", contactoRoutes);
+app.use("/api", clienteRoutes);
 app.use("/api", visitaRoutes);
 app.use("/api", feedbackRoutes);
 app.use("/api", trabajadorRoutes);
-app.use("/api", clienteRoutes);
 
 app.use((__err, __req, res, __next) => {
     res.status(500).send("Algo salió mal");

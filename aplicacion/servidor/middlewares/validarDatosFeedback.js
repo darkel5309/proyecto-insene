@@ -1,8 +1,8 @@
 const validarDatosFeedback = (req, res, next) => {
-    const { idTrabajador, idContacto, fecha, hora, numeroPersonas, numeroDecisores, importeLuz, importeGas, resultado } = req.body;
+    const { idTrabajador, idCliente, fecha, hora, numeroPersonas, numeroDecisores, importeLuz, importeGas, resultado } = req.body;
 
     // obligatorios
-    if (!idTrabajador || !idContacto || !fecha || !hora || !resultado || !numeroDecisores) {
+    if (!idTrabajador || !idCliente || !fecha || !hora || !resultado || !numeroDecisores) {
         return res.status(400).json({ error: "Todos los campos marcados con * son obligatorios" });
     }
 

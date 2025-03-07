@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const datosInicialesVisita = {
     idTrabajador: 0,
-    idContacto: 0,
+    idCliente: 0,
     nombre: "",
     telefono: "",
     correo: "",
@@ -34,7 +34,7 @@ const opcionesRadio = [
 
 const validaciones = {
     idTrabajador: (valor) => (!valor || isNaN(valor)) ? "Este campo es obligatorio" : null,
-    idContacto: (valor) => (!valor || isNaN(valor)) ? "Este campo es obligatorio" : null,
+    idCliente: (valor) => (!valor || isNaN(valor)) ? "Este campo es obligatorio" : null,
     fecha: (valor) => !valor ? "Este campo es obligatorio" : null,
     hora: (valor) => !valor ? "Este campo es obligatorio" : null,
     numeroPersonas: (valor) => (isNaN(valor) || valor < 0) ? "El número de personas debe ser mayor a 0" : null,
@@ -52,7 +52,7 @@ export default function FormularioVisita() {
     const [errores, setErrores] = useState({});
     const redirigir = useNavigate();
 
-    const resetearDatosContacto = () => {
+    const resetearDatosCliente = () => {
         setDatosVisita(prevState => ({
             ...prevState,
             nombre: "",
@@ -64,11 +64,11 @@ export default function FormularioVisita() {
         }));
     };
 
-    // obtener datos del contacto
+    // obtener datos del cliente
     useEffect(() => {
-        const obtenerCliente = async (idContacto) => {
+        const obtenerCliente = async (idCliente) => {
             try {
-                const response = await Axios.get(`obtenerContacto/${idContacto}`);
+                const response = await Axios.get(`recuperarCliente/${idCliente}`);
                 const cliente = response.data;
                 if (cliente) {
                     setDatosVisita(prevState => ({
@@ -80,17 +80,17 @@ export default function FormularioVisita() {
                         telefono: cliente.telefono || "",
                         correo: cliente.correo || ""
                     }));
-                    setErrores(prevState => ({ ...prevState, idContacto: null }));
+                    setErrores(prevState => ({ ...prevState, idCliente: null }));
                 }
             } catch {
-                resetearDatosContacto();
+                resetearDatosCliente();
             }
         };
 
-        if (datosVisita.idContacto) {
-            obtenerCliente(datosVisita.idContacto);
+        if (datosVisita.idCliente) {
+            obtenerCliente(datosVisita.idCliente);
         }
-    }, [datosVisita.idContacto]);
+    }, [datosVisita.idCliente]);
 
     // validamos los campos
     const validarCampo = (campo, valor) => {
@@ -186,13 +186,13 @@ export default function FormularioVisita() {
                     {errores.serverError && <div className="errorServidor">{errores.serverError}</div>}
 
                     <EntradaTexto label="ID de Trabajador *" name="idTrabajador" value={datosVisita.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idTrabajador} />
-                    <EntradaTexto label="ID del Contacto *" name="idContacto" value={datosVisita.idCliente} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idContacto} />
-                    <EntradaTexto label="Nombre completo del contacto" name="nombre" value={datosVisita.nombre} onChange={handleChange} type="text" disabled={true} />
-                    <EntradaTexto label="Dirección del contacto" name="direccion" value={datosVisita.direccion} onChange={handleChange} type="text" disabled={true} />
-                    <EntradaTexto label="Localidad del contacto" name="localidad" value={datosVisita.localidad} onChange={handleChange} type="text" disabled={true} />
-                    <EntradaTexto label="Provincia del contacto" name="provincia" value={datosVisita.provincia} onChange={handleChange} type="text" disabled={true} />
-                    <EntradaTexto label="Teléfono del contacto" name="telefono" value={datosVisita.telefono} onChange={handleChange} type="tel" disabled={true} />
-                    <EntradaTexto label="Correo del contacto" name="correo" value={datosVisita.correo} onChange={handleChange} type="email" error={errores.correo} disabled={true} />
+                    <EntradaTexto label="ID del Cliente *" name="idCliente" value={datosVisita.idCliente} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idCliente} />
+                    <EntradaTexto label="Nombre completo del cliente" name="nombre" value={datosVisita.nombre} onChange={handleChange} type="text" disabled={true} />
+                    <EntradaTexto label="Dirección del cliente" name="direccion" value={datosVisita.direccion} onChange={handleChange} type="text" disabled={true} />
+                    <EntradaTexto label="Localidad del cliente" name="localidad" value={datosVisita.localidad} onChange={handleChange} type="text" disabled={true} />
+                    <EntradaTexto label="Provincia del cliente" name="provincia" value={datosVisita.provincia} onChange={handleChange} type="text" disabled={true} />
+                    <EntradaTexto label="Teléfono del cliente" name="telefono" value={datosVisita.telefono} onChange={handleChange} type="tel" disabled={true} />
+                    <EntradaTexto label="Correo del cliente" name="correo" value={datosVisita.correo} onChange={handleChange} type="email" error={errores.correo} disabled={true} />
                     <EntradaTexto label="Fecha de la visita *" name="fecha" value={datosVisita.fecha} onChange={handleChange} type="date" placeholder="Ej: 17/01/2025" error={errores.fecha} />
                     <EntradaTexto label="Hora de la visita *" name="hora" value={datosVisita.hora} onChange={handleChange} type="time" placeholder="Ej: 10:22" error={errores.hora} />
                     <EntradaTexto label="Número de personas en la vivienda" name="numeroPersonas" value={datosVisita.numeroPersonas} onChange={handleChange} type="number" placeholder="Ej: 4" error={errores.numeroPersonas} />
