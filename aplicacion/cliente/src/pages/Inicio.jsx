@@ -1,134 +1,108 @@
-import "../styles/Inicio.css";
-import { useState, useContext } from 'react';
-import Axios from "../axiosConfig";
-import { EntradaTexto } from '../components/CamposFormulario';
+import { useEffect } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import Swal from 'sweetalert2';
-import { AuthContext } from "../context/AuthProvider";
 import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Form as BootstrapForm, Button } from 'react-bootstrap';
+import { useContext } from 'react';
+import { AuthContext } from "../context/AuthProvider";
+import Axios from "../axiosConfig";
 
-const datosInicialesSesion = {
-    idTrabajador: 0,
-    contrasena: ""
-}
+const initialValues = {
+    idTrabajador: '',
+    contrasena: ''
+};
 
-const validaciones = {
-    idTrabajador: (valor) => (!valor || isNaN(valor)) ? "Este campo es obligatorio" : null,
-    contrasena: (valor) => !valor ? "Este campo es obligatorio" : null,
-}
+const validationSchema = Yup.object({
+    idTrabajador: Yup.number().required("Este campo es obligatorio"),
+    contrasena: Yup.string().required("Este campo es obligatorio"),
+});
 
 export default function Inicio() {
-    const redirigir = useNavigate();
+    const navigate = useNavigate();
     const { iniciarSesion: iniciarSesionContext } = useContext(AuthContext);
 
-    const [datosSesion, setDatosSesion] = useState(datosInicialesSesion);
-    const [errores, setErrores] = useState({});
-    const [cargando, setCargando] = useState(false);
+    useEffect(() => {
+        document.title = "Inicio de Sesión";
+    }, []);
 
-    // validamos los campos
-    const validarCampo = (campo, valor) => {
-        const error = validaciones[campo]?.(valor);
-        setErrores(prevState => ({
-            ...prevState,
-            [campo]: error
-        }));
-    };
-
-    // manejamos los cambios
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setDatosSesion(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-        validarCampo(name, value);
-    };
-
-    // comprobamos las validaciones
-    const validar = () => {
-        const nuevoError = {};
-        Object.keys(validaciones).forEach(campo => {
-            const error = validaciones[campo](datosSesion[campo]);
-            if (error) nuevoError[campo] = error;
-        });
-        setErrores(nuevoError);
-
-        if (Object.keys(nuevoError).length > 0) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Revisa los campos del formulario",
-                confirmButtonText: "Vale"
-            });
-        }
-        return Object.keys(nuevoError).length === 0;
-    };
-
-    // iniciar sesion
-    const iniciarSesion = async (e) => {
-        e.preventDefault();
-        if (!validar() || cargando) return;
-
-        setCargando(true);
+    const onSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
-            const response = await Axios.post("/iniciarSesion", datosSesion, { withCredentials: true })
+            const response = await Axios.post("/iniciarSesion", values, { withCredentials: true });
 
-            setErrores({});
-            setDatosSesion(datosInicialesSesion);
             iniciarSesionContext(response.data);
+            resetForm();
 
             const tipoTrabajador = response.data.tipoTrabajador;
 
             if (tipoTrabajador === 'Captador') {
-                redirigir('/captadores');
+                navigate('/captadores');
             } else if (tipoTrabajador === 'Comercial') {
-                redirigir('/comerciales');
+                navigate('/comerciales');
             } else if (tipoTrabajador === 'Administrador') {
-                redirigir('/administradores');
+                navigate('/administradores');
             }
-
         } catch (error) {
             if (error.response) {
-                const mensajeError = error.response?.data?.error || "Hubo un problema con la solicitud. Inténtalo de nuevo";
-
+                const mensajeError = error.response?.data?.error || "Hubo un problema con la solicitud. Inténtalo de nuevo.";
                 Swal.fire({
                     icon: "warning",
                     title: "Error",
-                    text: "Este usuario no tiene acceso",
+                    text: mensajeError,
                     confirmButtonText: "Vale"
                 });
-
-                setErrores(prevState => ({
-                    ...prevState,
-                    serverError: mensajeError
-                }));
-
-
-            } else if (error.message && error.message.includes("Network Error")) {
+            } else if (error.message.includes("Network Error")) {
                 Swal.fire({
                     icon: "question",
                     title: "Error de Conexión",
-                    text: "Verifica tu conexión a internet o inténtalo de nuevo",
+                    text: "Verifica tu conexión a internet o inténtalo de nuevo.",
                     confirmButtonText: "Vale"
                 });
             }
         } finally {
-            setCargando(false);
+            setSubmitting(false);
         }
-    }
+    };
 
     return (
-        <div className='inicioSesion'>
-            <h1>Inicio de Sesión</h1>
-            <div className='contenedorSesion'>
-                <form onSubmit={iniciarSesion} className='campos'>
-                    {errores.serverError && <div className="errorServidor"> {errores.serverError}</div>}
+        <Container fluid="md" className="inicioSesion">
+            <h1 className="text-center mb-4">Inicio de Sesión</h1>
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}
+            >
+                {({ isSubmitting }) => (
+                    <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light">
 
-                    <EntradaTexto label="ID de Trabajador" name="idTrabajador" value={datosSesion.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 4" error={errores.idTrabajador} />
-                    <EntradaTexto label="Contraseña" name="contrasena" value={datosSesion.contrasena} onChange={handleChange} type="password" placeholder="Introduce tu contraseña" error={errores.contrasena} />
+                        <Row className="mb-3">
+                            <Col xs={12}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>ID de Trabajador *</BootstrapForm.Label>
+                                    <Field name="idTrabajador" type="number" className="form-control" placeholder="Ej: 4" />
+                                    <ErrorMessage name="idTrabajador" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                        </Row>
 
-                    <button type="submit">Iniciar Sesión</button>
-                </form>
-            </div>
-        </div>
+                        <Row className="mb-3">
+                            <Col xs={12}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Contraseña *</BootstrapForm.Label>
+                                    <Field name="contrasena" type="password" className="form-control" placeholder="Introduce tu contraseña" />
+                                    <ErrorMessage name="contrasena" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                        </Row>
+
+                        <div className="d-flex justify-content-center">
+                            <Button type="submit" disabled={isSubmitting} className="mt-3">
+                                {isSubmitting ? "Cargando..." : "Iniciar Sesión"}
+                            </Button>
+                        </div>
+                    </Form>
+                )}
+            </Formik>
+        </Container>
     );
 }

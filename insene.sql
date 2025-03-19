@@ -5,7 +5,7 @@ USE insene;
 
 CREATE TABLE trabajador(
 	id_trabajador INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(50) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
     contrasena VARCHAR(255) NOT NULL,
     telefono CHAR(9),
     rol ENUM("Administrador", "Captador", "Comercial", "Coordinador", "Instalador", "Recursos_Humanos", "Tramitador"),
@@ -24,7 +24,7 @@ DESCRIBE trabajador;
 
 CREATE TABLE cliente(
 	id_cliente INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(50),
+    nombre VARCHAR(100),
     telefono CHAR(9) NOT NULL UNIQUE,
     correo VARCHAR(100) NOT NULL UNIQUE,
     dni CHAR(9) UNIQUE,

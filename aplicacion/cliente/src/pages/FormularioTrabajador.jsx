@@ -1,11 +1,11 @@
-import "../styles/Trabajador.css";
-import { useState, useEffect } from "react";
-import Axios from "../axiosConfig";
-import { EntradaTexto, EntradaSelect } from '../components/CamposFormulario';
+import { useEffect } from "react";
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Form as BootstrapForm, Button } from 'react-bootstrap';
 
-const datosInicialesTrabajador = {
+const initialValues = {
     nombre: "",
     contrasena: "",
     telefono: "",
@@ -14,137 +14,133 @@ const datosInicialesTrabajador = {
     subequipo: "",
 };
 
-const validaciones = {
-    nombre: (valor) => !valor ? "Este campo es obligatorio" : null,
-    contrasena: (valor) => !valor ? "Este campo es obligatorio" : null,
-    telefono: (valor) => (!valor || !/^\d{9}$/.test(valor)) ? "Este campo es obligatorio y debe tener 9 digitos" : null,
-    rol: (valor) => !valor ? "Este campo es obligatorio" : null,
-    equipo: (valor) => !valor ? "Este campo es obligatorio" : null,
-    subequipo: (valor) => !valor ? "Este campo es obligatorio" : null,
-};
+const validationSchema = Yup.object({
+    nombre: Yup.string().required("Este campo es obligatorio"),
+    contrasena: Yup.string().required("Este campo es obligatorio"),
+    telefono: Yup.string()
+        .matches(/^\d{9}$/, "Debe tener 9 dígitos")
+        .required("Este campo es obligatorio"),
+    rol: Yup.string().required("Este campo es obligatorio"),
+    equipo: Yup.string().required("Este campo es obligatorio"),
+    subequipo: Yup.string().required("Este campo es obligatorio"),
+});
 
 export default function FormularioTrabajador() {
     useEffect(() => {
         document.title = "Formulario de trabajador";
     }, []);
 
-    const [datosTrabajador, setDatosTrabajador] = useState(datosInicialesTrabajador);
-    const [errores, setErrores] = useState({});
-    const redirigir = useNavigate();
+    const navigate = useNavigate();
 
-    // validamos los campos
-    const validarCampo = (campo, valor) => {
-        const error = validaciones[campo]?.(valor);
-        setErrores(prevState => ({
-            ...prevState,
-            [campo]: error
-        }));
-    };
-
-    // manejamos los cambios
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setDatosTrabajador(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-        validarCampo(name, value);
-    };
-
-    // comprobamos las validaciones
-    const validar = () => {
-        const nuevoError = {};
-        Object.keys(validaciones).forEach(campo => {
-            const error = validaciones[campo](datosTrabajador[campo]);
-            if (error) nuevoError[campo] = error;
-        });
-        setErrores(nuevoError);
-
-        if (Object.keys(nuevoError).length > 0) {
+    const onSubmit = async (values, { setSubmitting, resetForm }) => {
+        try {
+            const response = await Axios.post("/registrarTrabajador", values);
+            Swal.fire({
+                icon: "success",
+                title: `El ID de trabajador de ${response.data.nombreTrabajador} es: ${response.data.idTrabajador}`,
+                text: "Datos registrados correctamente",
+                confirmButtonText: "Vale"
+            }).then(() => navigate(-1));
+            resetForm();
+        } catch (error) {
+            let mensajeError = "Hubo un problema con la solicitud. Inténtalo de nuevo";
+            if (error.response) {
+                mensajeError = error.response?.data?.error || mensajeError;
+            } else if (error.message.includes("Network Error")) {
+                mensajeError = "Error de conexión. Verifica tu internet";
+            }
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "Revisa los campos del formulario",
+                text: mensajeError,
                 confirmButtonText: "Vale"
             });
-        }
-        return Object.keys(nuevoError).length === 0;
-    };
-
-    // registrar trabajadores
-    const registrarTrabajador = (e) => {
-        e.preventDefault();
-        if (validar()) {
-            Axios.post("/registrarTrabajador", datosTrabajador)
-                .then((response) => {
-                    setErrores({});
-
-                    Swal.fire({
-                        icon: "success",
-                        title: `El ID de trabajador de ${response.data.nombreTrabajador} es:  ${response.data.idTrabajador}`,
-                        text: "Datos registrados correctamente",
-                        confirmButtonText: "Vale"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            redirigir(-1);
-                        }
-                    });
-                    setDatosTrabajador(datosInicialesTrabajador);
-                })
-                .catch((error) => {
-                    if (error.response) {
-                        const mensajeError = error.response?.data?.error || "Hubo un problema con la solicitud. Inténtalo de nuevo";
-
-                        Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            text: "Revisa los datos del formulario",
-                            confirmButtonText: "Vale"
-                        });
-
-                        setErrores(prevState => ({
-                            ...prevState,
-                            serverError: mensajeError
-                        }));
-
-                    } else if (error.message && error.message.includes("Network Error")) {
-                        Swal.fire({
-                            icon: "question",
-                            title: "Error de conexión",
-                            text: "Verifica tu conexión a internet e inténtalo de nuevo",
-                            confirmButtonText: "Vale"
-                        });
-                    }
-                });
+        } finally {
+            setSubmitting(false);
         }
     };
 
     return (
-        <div className="trabajador">
-            <h1>Registrar un Trabajador</h1>
+        <Container fluid="md" className="trabajador">
+            <h1 className="text-center mb-4">Registrar un Trabajador</h1>
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}
+            >
+                {({ isSubmitting }) => (
+                    <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light">
+                        {/* Nombre y Contraseña */}
+                        <Row className="mb-3">
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Nombre completo del trabajador *</BootstrapForm.Label>
+                                    <Field name="nombre" type="text" className="form-control" placeholder="Ej: Carlos Martínez Gómez" />
+                                    <ErrorMessage name="nombre" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Contraseña *</BootstrapForm.Label>
+                                    <Field name="contrasena" type="password" className="form-control" placeholder="Ej: 3jjh48721&nsk" />
+                                    <ErrorMessage name="contrasena" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                        </Row>
 
-            <div className="contenedorTrabajador">
-                <form onSubmit={registrarTrabajador} className="campos">
-                    {errores.serverError && <div className="errorServidor">{errores.serverError}</div>}
+                        {/* Teléfono y Equipo */}
+                        <Row className="mb-3">
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Teléfono *</BootstrapForm.Label>
+                                    <Field name="telefono" type="tel" className="form-control" placeholder="Ej: 666555444" />
+                                    <ErrorMessage name="telefono" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Equipo *</BootstrapForm.Label>
+                                    <Field name="equipo" type="text" className="form-control" placeholder="Ej: Comercial" />
+                                    <ErrorMessage name="equipo" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                        </Row>
 
-                    <EntradaTexto label="Nombre completo del trabajador *" name="nombre" value={datosTrabajador.nombre} onChange={handleChange} type="text" placeholder="Ej: Carlos Martínez Gómez" error={errores.nombre} />
-                    <EntradaTexto label="Contraseña para el trabajador *" name="contrasena" value={datosTrabajador.contrasena} onChange={handleChange} type="text" placeholder="Ej: 3jjh48721&nsk" error={errores.contrasena} />
-                    <EntradaTexto label="Teléfono del trabajador *" name="telefono" value={datosTrabajador.telefono} onChange={handleChange} type="tel" placeholder="Ej: 666555444" error={errores.telefono} />
-                    <EntradaTexto label="Equipo *" name="equipo" value={datosTrabajador.equipo} onChange={handleChange} type="text" placeholder="Ej: " error={errores.equipo} />
-                    <EntradaTexto label="Subequipo *" name="subequipo" value={datosTrabajador.subequipo} onChange={handleChange} type="text" placeholder="Ej: " error={errores.subequipo} />
-                    <EntradaSelect label="Rol del trabajador *" name="rol" value={datosTrabajador.rol} onChange={handleChange} error={errores.rol} options={[
-                        { value: "Administrador", label: "Administrador" },
-                        { value: "Captador", label: "Captador" },
-                        { value: "Comercial", label: "Comercial" },
-                        { value: "Coordinador", label: "Coordinador" },
-                        { value: "Instalador", label: "Instalador" },
-                        { value: "Recursos_Humanos", label: "Recursos Humanos" },
-                        { value: "Tramitador", label: "Tramitador" },
-                    ]} />
+                        {/* Subequipo y Rol */}
+                        <Row className="mb-3">
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Subequipo *</BootstrapForm.Label>
+                                    <Field name="subequipo" type="text" className="form-control" placeholder="Ej: Telemarketing" />
+                                    <ErrorMessage name="subequipo" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Rol *</BootstrapForm.Label>
+                                    <Field as="select" name="rol" className="form-control">
+                                        <option value="">Seleccione un rol</option>
+                                        <option value="Administrador">Administrador</option>
+                                        <option value="Captador">Captador</option>
+                                        <option value="Comercial">Comercial</option>
+                                        <option value="Coordinador">Coordinador</option>
+                                        <option value="Instalador">Instalador</option>
+                                        <option value="Recursos_Humanos">Recursos Humanos</option>
+                                        <option value="Tramitador">Tramitador</option>
+                                    </Field>
+                                    <ErrorMessage name="rol" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                        </Row>
 
-                    <button type="submit">Registrar Trabajador</button>
-                </form>
-            </div>
-        </div>
+                        <div className="d-flex justify-content-center">
+                            <Button type="submit" className="mt-3" disabled={isSubmitting}>
+                                {isSubmitting ? "Registrando..." : "Registrar Trabajador"}
+                            </Button>
+                        </div>
+                    </Form>
+                )}
+            </Formik>
+        </Container>
     );
 }

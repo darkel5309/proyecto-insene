@@ -1,212 +1,290 @@
-import '../styles/Visita.css';
-import { useState, useEffect } from 'react';
-import Axios from "../axiosConfig";
-import { EntradaTexto, EntradaRadio } from '../components/CamposFormulario';
+import { useEffect, useCallback } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Form as BootstrapForm, Button } from 'react-bootstrap';
+import Axios from "../axiosConfig";
 
-const datosInicialesVisita = {
-    idTrabajador: 0,
-    idCliente: 0,
-    nombre: "",
-    telefono: "",
-    correo: "",
-    direccion: "",
-    localidad: "",
-    provincia: "",
-    fecha: "",
-    hora: "",
-    numeroPersonas: 0,
-    numeroDecisores: 0,
-    tieneBombona: "Sin_datos",
-    tieneGas: "Sin_datos",
-    tieneTermo: "Sin_datos",
-    tienePlacas: "Sin_datos",
-    importeLuz: 0,
-    importeGas: 0
-};
-
+// Opciones para los botones de radio
 const opcionesRadio = [
     { value: "Si", label: "Sí" },
     { value: "No", label: "No" },
     { value: "Sin_datos", label: "Sin datos" }
 ];
 
-const validaciones = {
-    idTrabajador: (valor) => (!valor || isNaN(valor)) ? "Este campo es obligatorio" : null,
-    idCliente: (valor) => (!valor || isNaN(valor)) ? "Este campo es obligatorio" : null,
-    fecha: (valor) => !valor ? "Este campo es obligatorio" : null,
-    hora: (valor) => !valor ? "Este campo es obligatorio" : null,
-    numeroPersonas: (valor) => (isNaN(valor) || valor < 0) ? "El número de personas debe ser mayor a 0" : null,
-    numeroDecisores: (valor) => (!valor || isNaN(valor) || valor < 0) ? "Este campo es obligatorio y debe ser mayor a 0" : null,
-    importeLuz: (valor) => (isNaN(valor) || valor < 0) ? "El importe debe ser mayor a 0" : null,
-    importeGas: (valor) => (isNaN(valor) || valor < 0) ? "El importe debe ser mayor a 0" : null,
+// Valores iniciales del formulario
+const initialValues = {
+    idTrabajador: '',
+    idCliente: '',
+    nombre: '',
+    telefono: '',
+    correo: '',
+    direccion: '',
+    localidad: '',
+    provincia: '',
+    fecha: '',
+    hora: '',
+    numeroPersonas: '',
+    numeroDecisores: '',
+    tieneBombona: "Sin_datos",
+    tieneGas: "Sin_datos",
+    tieneTermo: "Sin_datos",
+    tienePlacas: "Sin_datos",
+    importeLuz: '',
+    importeGas: ''
 };
+
+// Validaciones con Yup
+const validationSchema = Yup.object({
+    idTrabajador: Yup.number().required('Este campo es obligatorio'),
+    idCliente: Yup.number().required('Este campo es obligatorio'),
+    fecha: Yup.string().required('Este campo es obligatorio'),
+    hora: Yup.string().required('Este campo es obligatorio'),
+    numeroPersonas: Yup.number().min(1, 'Debe ser al menos 1'),
+    numeroDecisores: Yup.number().min(1, 'Debe ser al menos 1').required('Este campo es obligatorio'),
+    importeLuz: Yup.number().min(0, 'Debe ser mayor o igual a 0'),
+    importeGas: Yup.number().min(0, 'Debe ser mayor o igual a 0')
+});
 
 export default function FormularioVisita() {
     useEffect(() => {
-        document.title = "Formulario de visita";
+        document.title = "Formulario de Visitas";
     }, []);
 
-    const [datosVisita, setDatosVisita] = useState(datosInicialesVisita);
-    const [errores, setErrores] = useState({});
-    const redirigir = useNavigate();
+    const navigate = useNavigate();
 
-    const resetearDatosCliente = () => {
-        setDatosVisita(prevState => ({
-            ...prevState,
-            nombre: "",
-            telefono: "",
-            correo: "",
-            direccion: "",
-            localidad: "",
-            provincia: ""
-        }));
-    };
+    const obtenerCliente = useCallback(async (idCliente, setFieldValue) => {
+        if (!idCliente) return;
 
-    // obtener datos del cliente
-    useEffect(() => {
-        const obtenerCliente = async (idCliente) => {
-            try {
-                const response = await Axios.get(`recuperarCliente/${idCliente}`);
-                const cliente = response.data;
-                if (cliente) {
-                    setDatosVisita(prevState => ({
-                        ...prevState,
-                        nombre: cliente.nombre || "",
-                        direccion: cliente.direccion || "",
-                        localidad: cliente.localidad || "",
-                        provincia: cliente.provincia || "",
-                        telefono: cliente.telefono || "",
-                        correo: cliente.correo || ""
-                    }));
-                    setErrores(prevState => ({ ...prevState, idCliente: null }));
-                }
-            } catch {
-                resetearDatosCliente();
+        try {
+            const { data } = await Axios.get(`/recuperarCliente/${idCliente}`);
+            if (data) {
+                setFieldValue("nombre", data.nombre || "");
+                setFieldValue("telefono", data.telefono || "");
+                setFieldValue("correo", data.correo || "");
+                setFieldValue("direccion", data.direccion || "");
+                setFieldValue("localidad", data.localidad || "");
+                setFieldValue("provincia", data.provincia || "");
             }
-        };
-
-        if (datosVisita.idCliente) {
-            obtenerCliente(datosVisita.idCliente);
+        } catch (error) {
+            setFieldValue("nombre", "");
+            setFieldValue("telefono", "");
+            setFieldValue("correo", "");
+            setFieldValue("direccion", "");
+            setFieldValue("localidad", "");
+            setFieldValue("provincia", "");
         }
-    }, [datosVisita.idCliente]);
+    }, []);
 
-    // validamos los campos
-    const validarCampo = (campo, valor) => {
-        const error = validaciones[campo]?.(valor);
-        setErrores(prevState => ({ ...prevState, [campo]: error }));
-    };
-
-    // manejamos los cambios
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setDatosVisita(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-        validarCampo(name, value);
-    };
-
-    // comprobamos las validaciones
-    const validar = () => {
-        const nuevoError = Object.keys(validaciones).reduce((acc, campo) => {
-            const error = validaciones[campo](datosVisita[campo]);
-            if (error) acc[campo] = error;
-            return acc;
-        }, {});
-        setErrores(nuevoError);
-
-        if (Object.keys(nuevoError).length > 0) {
+    const onSubmit = async (values, { setSubmitting, resetForm }) => {
+        try {
+            const response = await Axios.post("/registrarVisita", values);
+            Swal.fire({
+                icon: "success",
+                title: `Visita nº ${response.data.idVisita} registrada`,
+                text: "Visita registrada correctamente",
+                confirmButtonText: "Vale"
+            }).then(() => navigate(-1));
+            resetForm();
+        } catch (error) {
+            let mensajeError = "Hubo un problema con la solicitud. Inténtalo de nuevo";
+            if (error.response) {
+                mensajeError = error.response?.data?.error || mensajeError;
+            } else if (error.message.includes("Network Error")) {
+                mensajeError = "Error de conexión. Verifica tu internet";
+            }
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "Revisa los campos del formulario",
+                text: mensajeError,
                 confirmButtonText: "Vale"
             });
-            return false;
-        }
-        return true;
-    };
-
-    // registrar visitas
-    const registrarVisita = async (e) => {
-        e.preventDefault();
-        if (validar()) {
-            try {
-                const response = await Axios.post("/registrarVisita", datosVisita);
-                setErrores({});
-
-                Swal.fire({
-                    icon: "success",
-                    title: `Visita nº ${response.data.idVisita} registrada`,
-                    text: "Visita registrada correctamente",
-                    confirmButtonText: "Vale"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        redirigir(-1);
-                    }
-                });
-                setDatosVisita(datosInicialesVisita);
-
-            } catch (error) {
-                if (error.response) {
-                    const mensajeError = error.response?.data?.error || "Hubo un problema al registrar la visita. Inténtalo de nuevo.";
-
-                    Swal.fire({
-                        icon: "error",
-                        title: "Error",
-                        text: "Revisa los campos del formulario",
-                        confirmButtonText: "Vale"
-                    });
-
-                    setErrores(prevState => ({
-                        ...prevState,
-                        serverError: mensajeError
-                    }));
-
-                } else if (error.message && error.message.includes("Network Error")) {
-                    Swal.fire({
-                        icon: "question",
-                        title: "Error de conexión",
-                        text: "Verifica tu conexión a internet e inténtalo de nuevo",
-                        confirmButtonText: "Vale"
-                    });
-                }
-            };
+        } finally {
+            setSubmitting(false);
         }
     };
 
     return (
-        <div className="visita">
-            <h1>Formulario de Visitas</h1>
+        <Container fluid="md" className="visita">
+            <h1 className="text-center mb-4">Formulario de Visitas</h1>
+            <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}
+            >
+                {({ isSubmitting, setFieldValue, values }) => (
+                    <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light">
+                        <Row className="mb-3">
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>ID de Trabajador *</BootstrapForm.Label>
+                                    <Field name="idTrabajador" type="number" className="form-control" />
+                                    <ErrorMessage name="idTrabajador" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>ID del Cliente *</BootstrapForm.Label>
+                                    <Field
+                                        name="idCliente"
+                                        type="number"
+                                        className="form-control"
+                                        onChange={(e) => {
+                                            const idCliente = e.target.value;
+                                            setFieldValue("idCliente", idCliente);
+                                            obtenerCliente(idCliente, setFieldValue);
+                                        }}
+                                    />
+                                    <ErrorMessage name="idCliente" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                        </Row>
 
-            <div className="contenedorVisita">
-                <form onSubmit={registrarVisita} className="campos">
-                    {errores.serverError && <div className="errorServidor">{errores.serverError}</div>}
+                        <Row className="mb-3">
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Nombre del Cliente</BootstrapForm.Label>
+                                    <Field name="nombre" type="text" className="form-control" disabled value={values.nombre} />
+                                </BootstrapForm.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Teléfono</BootstrapForm.Label>
+                                    <Field name="telefono" type="tel" className="form-control" disabled value={values.telefono} />
+                                </BootstrapForm.Group>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3">
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Correo</BootstrapForm.Label>
+                                    <Field name="correo" type="email" className="form-control" disabled value={values.correo} />
+                                </BootstrapForm.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Dirección</BootstrapForm.Label>
+                                    <Field name="direccion" type="text" className="form-control" disabled value={values.direccion} />
+                                </BootstrapForm.Group>
+                            </Col>
+                        </Row>
 
-                    <EntradaTexto label="ID de Trabajador *" name="idTrabajador" value={datosVisita.idTrabajador} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idTrabajador} />
-                    <EntradaTexto label="ID del Cliente *" name="idCliente" value={datosVisita.idCliente} onChange={handleChange} type="number" placeholder="Ej: 1" error={errores.idCliente} />
-                    <EntradaTexto label="Nombre completo del cliente" name="nombre" value={datosVisita.nombre} onChange={handleChange} type="text" disabled={true} />
-                    <EntradaTexto label="Dirección del cliente" name="direccion" value={datosVisita.direccion} onChange={handleChange} type="text" disabled={true} />
-                    <EntradaTexto label="Localidad del cliente" name="localidad" value={datosVisita.localidad} onChange={handleChange} type="text" disabled={true} />
-                    <EntradaTexto label="Provincia del cliente" name="provincia" value={datosVisita.provincia} onChange={handleChange} type="text" disabled={true} />
-                    <EntradaTexto label="Teléfono del cliente" name="telefono" value={datosVisita.telefono} onChange={handleChange} type="tel" disabled={true} />
-                    <EntradaTexto label="Correo del cliente" name="correo" value={datosVisita.correo} onChange={handleChange} type="email" error={errores.correo} disabled={true} />
-                    <EntradaTexto label="Fecha de la visita *" name="fecha" value={datosVisita.fecha} onChange={handleChange} type="date" placeholder="Ej: 17/01/2025" error={errores.fecha} />
-                    <EntradaTexto label="Hora de la visita *" name="hora" value={datosVisita.hora} onChange={handleChange} type="time" placeholder="Ej: 10:22" error={errores.hora} />
-                    <EntradaTexto label="Número de personas en la vivienda" name="numeroPersonas" value={datosVisita.numeroPersonas} onChange={handleChange} type="number" placeholder="Ej: 4" error={errores.numeroPersonas} />
-                    <EntradaTexto label="Número de decisores *" name="numeroDecisores" value={datosVisita.numeroDecisores} onChange={handleChange} type="number" placeholder="Ej: 2" error={errores.numeroDecisores} />
-                    <EntradaRadio label="¿Tiene bombona?" name="tieneBombona" options={opcionesRadio} value={datosVisita.tieneBombona} onChange={handleChange} error={errores.tieneBombona} />
-                    <EntradaRadio label="¿Tiene gas?" name="tieneGas" options={opcionesRadio} value={datosVisita.tieneGas} onChange={handleChange} error={errores.tieneGas} />
-                    <EntradaRadio label="¿Tiene termo eléctrico?" name="tieneTermo" options={opcionesRadio} value={datosVisita.tieneTermo} onChange={handleChange} error={errores.tieneTermo} />
-                    <EntradaRadio label="¿Tiene placas térmicas?" name="tienePlacas" options={opcionesRadio} value={datosVisita.tienePlacas} onChange={handleChange} error={errores.tienePlacas} />
-                    <EntradaTexto label="Importe de recibo de luz (€)" name="importeLuz" value={datosVisita.importeLuz} onChange={handleChange} type="number" placeholder="Ej: 45,50" error={errores.importeLuz} />
-                    <EntradaTexto label="Importe de recibo de gas (€)" name="importeGas" value={datosVisita.importeGas} onChange={handleChange} type="number" placeholder="Ej: 30,00" error={errores.importeGas} />
+                        <Row className="mb-3">
+							<Col xs={12} md={6}>
+								<BootstrapForm.Group>
+									<BootstrapForm.Label>Localidad</BootstrapForm.Label>
+									<Field name="localidad" type="text" className="form-control" disabled value={values.localidad} />
+								</BootstrapForm.Group>
+							</Col>
+							<Col xs={12} md={6}>
+								<BootstrapForm.Group>
+									<BootstrapForm.Label>Provincia</BootstrapForm.Label>
+									<Field name="provincia" type="text" className="form-control" disabled value={values.provincia} />
+								</BootstrapForm.Group>
+							</Col>
+						</Row>
 
-                    <button>Registrar Visita</button>
-                </form>
-            </div>
-        </div>
+                        <Row className="mb-3">
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Fecha de la Visita *</BootstrapForm.Label>
+                                    <Field name="fecha" type="date" className="form-control" />
+                                    <ErrorMessage name="fecha" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Hora de la Visita *</BootstrapForm.Label>
+                                    <Field name="hora" type="time" className="form-control" />
+                                    <ErrorMessage name="hora" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                        </Row>
+
+                        <Row className="mb-3">
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>¿Tiene Bombona?</BootstrapForm.Label>
+                                    <Field as="select" name="tieneBombona" className="form-control">
+                                        {opcionesRadio.map((opcion) => (
+                                            <option key={opcion.value} value={opcion.value}>
+                                                {opcion.label}
+                                            </option>
+                                        ))}
+                                    </Field>
+                                    <ErrorMessage name="tieneBombona" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>¿Tiene Gas?</BootstrapForm.Label>
+                                    <Field as="select" name="tieneGas" className="form-control">
+                                        {opcionesRadio.map((opcion) => (
+                                            <option key={opcion.value} value={opcion.value}>
+                                                {opcion.label}
+                                            </option>
+                                        ))}
+                                    </Field>
+                                    <ErrorMessage name="tieneGas" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                        </Row>
+
+                        <Row className="mb-3">
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>¿Tiene Termo Eléctrico?</BootstrapForm.Label>
+                                    <Field as="select" name="tieneTermo" className="form-control">
+                                        {opcionesRadio.map((opcion) => (
+                                            <option key={opcion.value} value={opcion.value}>
+                                                {opcion.label}
+                                            </option>
+                                        ))}
+                                    </Field>
+                                    <ErrorMessage name="tieneTermo" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>¿Tiene Placas Térmicas?</BootstrapForm.Label>
+                                    <Field as="select" name="tienePlacas" className="form-control">
+                                        {opcionesRadio.map((opcion) => (
+                                            <option key={opcion.value} value={opcion.value}>
+                                                {opcion.label}
+                                            </option>
+                                        ))}
+                                    </Field>
+                                    <ErrorMessage name="tienePlacas" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                        </Row>
+
+                        <Row className="mb-3">
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Importe de Recibo de Luz (€)</BootstrapForm.Label>
+                                    <Field name="importeLuz" type="number" className="form-control" placeholder="Ej: 45.50" />
+                                    <ErrorMessage name="importeLuz" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <BootstrapForm.Group>
+                                    <BootstrapForm.Label>Importe de Recibo de Gas (€)</BootstrapForm.Label>
+                                    <Field name="importeGas" type="number" className="form-control" placeholder="Ej: 30.00" />
+                                    <ErrorMessage name="importeGas" component="div" className="text-danger" />
+                                </BootstrapForm.Group>
+                            </Col>
+                        </Row>
+
+                        <div className="d-flex justify-content-center">
+                            <Button type="submit" className="mt-3" disabled={isSubmitting}>
+                                {isSubmitting ? "Registrando..." : "Registrar Visita"}
+                            </Button>
+                        </div>
+                    </Form>
+                )}
+            </Formik>
+        </Container>
     );
 }

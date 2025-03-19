@@ -4,6 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Inicio from "./pages/Inicio";
 import routes from "./routesConfig";
 import PrivateRoute from "./components/PrivateRoute";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (
