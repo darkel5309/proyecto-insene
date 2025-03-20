@@ -1,3 +1,4 @@
+import '../styles/FormularioFeedback.css';
 import { useEffect, useCallback } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -12,37 +13,15 @@ const opcionesRadio = [
 	{ value: "Sin_datos", label: "Sin datos" }
 ];
 
-const initialValues = {
-	idTrabajador: '',
-	idCliente: '',
-	nombre: '',
-	telefono: '',
-	correo: '',
-	direccion: '',
-	localidad: '',
-	provincia: '',
-	fecha: '',
-	hora: '',
-	numeroPersonas: '',
-	numeroDecisores: '',
-	tieneBombona: "Sin_datos",
-	tieneGas: "Sin_datos",
-	tieneTermo: "Sin_datos",
-	tienePlacas: "Sin_datos",
-	importeLuz: '',
-	importeGas: '',
-	resultado: '',
-	oferta: '',
-	observaciones: '',
-};
+const initialValues = { idTrabajador: '', idCliente: '', nombre: '', telefono: '', correo: '', direccion: '', localidad: '', provincia: '', fecha: '', hora: '', numeroPersonas: '', numeroDecisores: '', tieneBombona: "Sin_datos", tieneGas: "Sin_datos", tieneTermo: "Sin_datos", tienePlacas: "Sin_datos", importeLuz: '', importeGas: '', resultado: '', oferta: '', observaciones: '', };
 
 const validationSchema = Yup.object({
-	idTrabajador: Yup.number().required('Este campo es obligatorio'),
-	idCliente: Yup.number().required('Este campo es obligatorio'),
+	idTrabajador: Yup.number().integer().required('Este campo es obligatorio'),
+	idCliente: Yup.number().integer().required('Este campo es obligatorio'),
 	fecha: Yup.string().required('Este campo es obligatorio'),
 	hora: Yup.string().required('Este campo es obligatorio'),
-	numeroPersonas: Yup.number().min(1, 'Debe ser al menos 1').required('Este campo es obligatorio'),
-	numeroDecisores: Yup.number().min(1, 'Debe ser al menos 1').required('Este campo es obligatorio'),
+	numeroPersonas: Yup.number().min(1, 'Debe ser mayor a 0'),
+	numeroDecisores: Yup.number().min(1, 'Debe ser mayor a 0').required('Este campo es obligatorio'),
 	importeLuz: Yup.number().min(0, 'Debe ser mayor o igual a 0'),
 	importeGas: Yup.number().min(0, 'Debe ser mayor o igual a 0'),
 	resultado: Yup.string().required('Este campo es obligatorio'),
@@ -54,73 +33,75 @@ export default function FormularioFeedback() {
 	}, []);
 
 	const navigate = useNavigate();
-
 	const obtenerCliente = useCallback(async (idCliente, setFieldValue) => {
 		if (!idCliente) return;
 
+		const campos = ["nombre", "telefono", "correo", "direccion", "localidad", "provincia"];
+
 		try {
 			const { data } = await Axios.get(`/recuperarCliente/${idCliente}`);
-			if (data) {
-				setFieldValue("nombre", data.nombre || "");
-				setFieldValue("telefono", data.telefono || "");
-				setFieldValue("correo", data.correo || "");
-				setFieldValue("direccion", data.direccion || "");
-				setFieldValue("localidad", data.localidad || "");
-				setFieldValue("provincia", data.provincia || "");
-			}
+			campos.forEach(campo => setFieldValue(campo, data[campo] || ""));
 		} catch (error) {
-			setFieldValue("nombre", "");
-			setFieldValue("telefono", "");
-			setFieldValue("correo", "");
-			setFieldValue("direccion", "");
-			setFieldValue("localidad", "");
-			setFieldValue("provincia", "");
+			campos.forEach(campo => setFieldValue(campo, ""));
 		}
 	}, []);
 
-	const onSubmit = async (values, { setSubmitting, resetForm }) => {
+
+	const onSubmit = useCallback(async (values, { setSubmitting, resetForm }) => {
+		if (values.importeLuz === '') values.importeLuz = 0;
+		if (values.importeGas === '') values.importeGas = 0;
+
 		try {
 			const response = await Axios.post("/registrarFeedback", values);
+
 			Swal.fire({
 				icon: "success",
 				title: `El código del feedback es: ${response.data.idVisita}`,
 				text: "Feedback registrado correctamente",
 				confirmButtonText: "Vale"
 			}).then(() => navigate(-1));
+
 			resetForm();
 		} catch (error) {
-			let mensajeError = "Hubo un problema con la solicitud. Inténtalo de nuevo";
 			if (error.response) {
-				mensajeError = error.response?.data?.error || mensajeError;
-			} else if (error.message.includes("Network Error")) {
-				mensajeError = "Error de conexión. Verifica tu internet";
+				const mensajeError = error.response?.data?.error || "Hubo un problema con la solicitud. Inténtalo de nuevo.";
+				Swal.fire({
+					icon: "warning",
+					title: "Error",
+					text: mensajeError,
+					confirmButtonText: "Vale"
+				});
+			} else if (error.message.includes("Network Error") || error.message.includes("ERR_CONNECTION_REFUSED")) {
+				Swal.fire({
+					icon: "question",
+					title: "Error de Conexión",
+					text: "Verifica tu conexión a internet e inténtalo de nuevo",
+					confirmButtonText: "Vale"
+				});
+			} else {
+				Swal.fire({
+					icon: "error",
+					title: "Error",
+					text: "Ocurrió un error inesperado. Inténtalo de nuevo",
+					confirmButtonText: "Vale"
+				});
 			}
-			Swal.fire({
-				icon: "error",
-				title: "Error",
-				text: mensajeError,
-				confirmButtonText: "Vale"
-			});
 		} finally {
 			setSubmitting(false);
 		}
-	};
+	}, []);
 
 	return (
 		<Container fluid="md" className="feedback">
 			<h1 className="text-center mb-4">Feedback de la Visita</h1>
-			<Formik
-				initialValues={initialValues}
-				validationSchema={validationSchema}
-				onSubmit={onSubmit}
-			>
-				{({ isSubmitting, setFieldValue, values }) => (
+			<Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} >
+				{({ errors, touched, isSubmitting, setFieldValue, values }) => (
 					<Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light">
 						<Row className="mb-3">
 							<Col xs={12} md={6}>
 								<BootstrapForm.Group>
 									<BootstrapForm.Label>ID de Trabajador *</BootstrapForm.Label>
-									<Field name="idTrabajador" type="number" className="form-control" />
+									<Field name="idTrabajador" type="number" className={`form-control ${errors.idTrabajador && touched.idTrabajador ? "is-invalid" : ""}`} placeholder="Ej: 5" />
 									<ErrorMessage name="idTrabajador" component="div" className="text-danger" />
 								</BootstrapForm.Group>
 							</Col>
@@ -128,10 +109,7 @@ export default function FormularioFeedback() {
 								<BootstrapForm.Group>
 									<BootstrapForm.Label>ID del Cliente *</BootstrapForm.Label>
 									<Field
-										name="idCliente"
-										type="number"
-										className="form-control"
-										onChange={(e) => {
+										name="idCliente" type="number" className={`form-control ${errors.idCliente && touched.idCliente ? "is-invalid" : ""}`} placeholder="Ej: 2" onChange={(e) => {
 											const idCliente = e.target.value;
 											setFieldValue("idCliente", idCliente);
 											obtenerCliente(idCliente, setFieldValue);
@@ -191,14 +169,14 @@ export default function FormularioFeedback() {
 							<Col xs={12} md={6}>
 								<BootstrapForm.Group>
 									<BootstrapForm.Label>Fecha *</BootstrapForm.Label>
-									<Field name="fecha" type="date" className="form-control" />
+									<Field name="fecha" type="date" className={`form-control ${errors.fecha && touched.fecha ? "is-invalid" : ""}`} />
 									<ErrorMessage name="fecha" component="div" className="text-danger" />
 								</BootstrapForm.Group>
 							</Col>
 							<Col xs={12} md={6}>
 								<BootstrapForm.Group>
 									<BootstrapForm.Label>Hora *</BootstrapForm.Label>
-									<Field name="hora" type="time" className="form-control" />
+									<Field name="hora" type="time" className={`form-control ${errors.hora && touched.hora ? "is-invalid" : ""}`} />
 									<ErrorMessage name="hora" component="div" className="text-danger" />
 								</BootstrapForm.Group>
 							</Col>
@@ -208,14 +186,14 @@ export default function FormularioFeedback() {
 							<Col xs={12} md={6}>
 								<BootstrapForm.Group>
 									<BootstrapForm.Label>Número de Personas</BootstrapForm.Label>
-									<Field name="numeroPersonas" type="number" className="form-control" />
+									<Field name="numeroPersonas" type="number" className={`form-control ${errors.numeroPersonas && touched.numeroPersonas ? "is-invalid" : ""}`} placeholder="Ej: 4" />
 									<ErrorMessage name="numeroPersonas" component="div" className="text-danger" />
 								</BootstrapForm.Group>
 							</Col>
 							<Col xs={12} md={6}>
 								<BootstrapForm.Group>
 									<BootstrapForm.Label>Número de Decisores *</BootstrapForm.Label>
-									<Field name="numeroDecisores" type="number" className="form-control" />
+									<Field name="numeroDecisores" type="number" className={`form-control ${errors.numeroDecisores && touched.numeroDecisores ? "is-invalid" : ""}`} placeholder="Ej: 2" />
 									<ErrorMessage name="numeroDecisores" component="div" className="text-danger" />
 								</BootstrapForm.Group>
 							</Col>
@@ -224,15 +202,15 @@ export default function FormularioFeedback() {
 						<Row className="mb-3">
 							<Col xs={12} md={6}>
 								<BootstrapForm.Group>
-									<BootstrapForm.Label>Importe Luz</BootstrapForm.Label>
-									<Field name="importeLuz" type="number" className="form-control" />
+									<BootstrapForm.Label>Importe Luz (€)</BootstrapForm.Label>
+									<Field name="importeLuz" type="number" className="form-control" placeholder="30,99" />
 									<ErrorMessage name="importeLuz" component="div" className="text-danger" />
 								</BootstrapForm.Group>
 							</Col>
 							<Col xs={12} md={6}>
 								<BootstrapForm.Group>
-									<BootstrapForm.Label>Importe Gas</BootstrapForm.Label>
-									<Field name="importeGas" type="number" className="form-control" />
+									<BootstrapForm.Label>Importe Gas (€)</BootstrapForm.Label>
+									<Field name="importeGas" type="number" className="form-control" placeholder="20,99" />
 									<ErrorMessage name="importeGas" component="div" className="text-danger" />
 								</BootstrapForm.Group>
 							</Col>
@@ -242,7 +220,7 @@ export default function FormularioFeedback() {
 							<Col xs={12} md={6}>
 								<BootstrapForm.Group>
 									<BootstrapForm.Label>Resultado *</BootstrapForm.Label>
-									<Field as="select" name="resultado" className="form-control">
+									<Field as="select" name="resultado" className={`form-control ${errors.resultado && touched.resultado ? "is-invalid" : ""}`} >
 										<option value="">Seleccione una opción</option>
 										<option value="Visitado_pdte_contestación">Visitado pendiente de contestación</option>
 										<option value="Visitado_no_hacen_nada">Visitado pero no hacen nada</option>
@@ -256,7 +234,7 @@ export default function FormularioFeedback() {
 							</Col>
 							<Col xs={12} md={6}>
 								<BootstrapForm.Group>
-									<BootstrapForm.Label>Oferta *</BootstrapForm.Label>
+									<BootstrapForm.Label>Oferta</BootstrapForm.Label>
 									<Field name="oferta" type="text" className="form-control" />
 									<ErrorMessage name="oferta" component="div" className="text-danger" />
 								</BootstrapForm.Group>
@@ -322,7 +300,11 @@ export default function FormularioFeedback() {
 							</Col>
 						</Row>
 
-						<Button type="submit" variant="primary" disabled={isSubmitting}>Enviar</Button>
+						<div className="d-flex justify-content-center">
+							<Button type="submit" className="mt-3" disabled={isSubmitting}>
+								{isSubmitting ? "Enviando..." : "Registrar Feedback"}
+							</Button>
+						</div>
 					</Form>
 				)}
 			</Formik>
