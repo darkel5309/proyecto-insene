@@ -1,5 +1,5 @@
 import '../styles/FormularioFeedback.css';
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
@@ -7,32 +7,32 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form as BootstrapForm, Button } from 'react-bootstrap';
 import Axios from "../axiosConfig";
 
-const opcionesRadio = [
-	{ value: "Si", label: "Sí" },
-	{ value: "No", label: "No" },
-	{ value: "Sin_datos", label: "Sin datos" }
-];
-
-const initialValues = { idTrabajador: '', idCliente: '', nombre: '', telefono: '', correo: '', direccion: '', localidad: '', provincia: '', fecha: '', hora: '', numeroPersonas: '', numeroDecisores: '', tieneBombona: "Sin_datos", tieneGas: "Sin_datos", tieneTermo: "Sin_datos", tienePlacas: "Sin_datos", importeLuz: '', importeGas: '', resultado: '', oferta: '', observaciones: '', };
-
-const validationSchema = Yup.object({
-	idTrabajador: Yup.number().integer().required('Este campo es obligatorio'),
-	idCliente: Yup.number().integer().required('Este campo es obligatorio'),
-	fecha: Yup.string().required('Este campo es obligatorio'),
-	hora: Yup.string().required('Este campo es obligatorio'),
-	numeroPersonas: Yup.number().min(1, 'Debe ser mayor a 0'),
-	numeroDecisores: Yup.number().min(1, 'Debe ser mayor a 0').required('Este campo es obligatorio'),
-	importeLuz: Yup.number().min(0, 'Debe ser mayor o igual a 0'),
-	importeGas: Yup.number().min(0, 'Debe ser mayor o igual a 0'),
-	resultado: Yup.string().required('Este campo es obligatorio'),
-});
-
 export default function FormularioFeedback() {
 	useEffect(() => {
 		document.title = "Formulario de Feedback";
 	}, []);
 
-	const navigate = useNavigate();
+	const opcionesRadio = [
+		{ value: "Si", label: "Sí" },
+		{ value: "No", label: "No" },
+		{ value: "Sin_datos", label: "Sin datos" }
+	];
+	
+	const initialValues = { idTrabajador: '', idCliente: '', nombre: '', telefono: '', correo: '', direccion: '', localidad: '', provincia: '', fecha: '', hora: '', numeroPersonas: '', numeroDecisores: '', tieneBombona: "Sin_datos", tieneGas: "Sin_datos", tieneTermo: "Sin_datos", tienePlacas: "Sin_datos", importeLuz: '', importeGas: '', resultado: '', oferta: '', observaciones: '', };
+	
+	const validationSchema = useMemo(() => Yup.object({
+		idTrabajador: Yup.number().integer().required('Este campo es obligatorio'),
+		idCliente: Yup.number().integer().required('Este campo es obligatorio'),
+		fecha: Yup.string().required('Este campo es obligatorio'),
+		hora: Yup.string().required('Este campo es obligatorio'),
+		numeroPersonas: Yup.number().min(1, 'Debe ser mayor a 0'),
+		numeroDecisores: Yup.number().min(1, 'Debe ser mayor a 0').required('Este campo es obligatorio'),
+		importeLuz: Yup.number().min(0, 'Debe ser mayor o igual a 0'),
+		importeGas: Yup.number().min(0, 'Debe ser mayor o igual a 0'),
+		resultado: Yup.string().required('Este campo es obligatorio'),
+	}), []);
+
+	const redirigir = useNavigate();
 	const obtenerCliente = useCallback(async (idCliente, setFieldValue) => {
 		if (!idCliente) return;
 
@@ -59,7 +59,7 @@ export default function FormularioFeedback() {
 				title: `El código del feedback es: ${response.data.idVisita}`,
 				text: "Feedback registrado correctamente",
 				confirmButtonText: "Vale"
-			}).then(() => navigate(-1));
+			}).then(() => redirigir(-1));
 
 			resetForm();
 		} catch (error) {
