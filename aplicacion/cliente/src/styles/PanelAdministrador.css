@@ -1,0 +1,16 @@
+.custom-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    margin: 0px 20px;
+    background: linear-gradient(to right, #007bff, #003059);
+}
+
+.custom-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+}
+
