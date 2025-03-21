@@ -1,4 +1,4 @@
-import '../styles/PanelAdministrador.css';
+import '../styles/Paneles.css';
 import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
