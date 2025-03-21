@@ -1,18 +1,18 @@
-.feedback label {
+label {
     font-weight: bold;
     color: #003059;
 }
 
 @media (max-width: 768px) {
-    .feedback .mb-3 {
+    .mb-3 {
         margin-bottom: 0px !important;
     }
 
-    .feedback .mb-3 div {
+    .mb-3 div {
         margin: 0px 0px 10px 0px;
     }
 
-    .feedback .text-danger {
+    .text-danger {
         margin-bottom: 15px;
     }
 }
