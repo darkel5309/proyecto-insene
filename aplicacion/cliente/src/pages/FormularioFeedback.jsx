@@ -17,12 +17,12 @@ export default function FormularioFeedback() {
 		{ value: "No", label: "No" },
 		{ value: "Sin_datos", label: "Sin datos" }
 	];
-	
+
 	const initialValues = { idTrabajador: '', idCliente: '', nombre: '', telefono: '', correo: '', direccion: '', localidad: '', provincia: '', fecha: '', hora: '', numeroPersonas: '', numeroDecisores: '', tieneBombona: "Sin_datos", tieneGas: "Sin_datos", tieneTermo: "Sin_datos", tienePlacas: "Sin_datos", importeLuz: '', importeGas: '', resultado: '', oferta: '', observaciones: '', };
-	
+
 	const validationSchema = useMemo(() => Yup.object({
-		idTrabajador: Yup.number().integer().required('Este campo es obligatorio'),
-		idCliente: Yup.number().integer().required('Este campo es obligatorio'),
+		idTrabajador: Yup.number().integer().required('Este campo es obligatorio').min(1, 'El ID no es válido'),
+		idCliente: Yup.number().integer().required('Este campo es obligatorio').min(1, 'El ID no es válido'),
 		fecha: Yup.string().required('Este campo es obligatorio'),
 		hora: Yup.string().required('Este campo es obligatorio'),
 		numeroPersonas: Yup.number().min(1, 'Debe ser mayor a 0'),
@@ -202,48 +202,6 @@ export default function FormularioFeedback() {
 						<Row className="mb-3">
 							<Col xs={12} md={6}>
 								<BootstrapForm.Group>
-									<BootstrapForm.Label>Importe Luz (€)</BootstrapForm.Label>
-									<Field name="importeLuz" type="number" className="form-control" placeholder="30,99" />
-									<ErrorMessage name="importeLuz" component="div" className="text-danger" />
-								</BootstrapForm.Group>
-							</Col>
-							<Col xs={12} md={6}>
-								<BootstrapForm.Group>
-									<BootstrapForm.Label>Importe Gas (€)</BootstrapForm.Label>
-									<Field name="importeGas" type="number" className="form-control" placeholder="20,99" />
-									<ErrorMessage name="importeGas" component="div" className="text-danger" />
-								</BootstrapForm.Group>
-							</Col>
-						</Row>
-
-						<Row className="mb-3">
-							<Col xs={12} md={6}>
-								<BootstrapForm.Group>
-									<BootstrapForm.Label>Resultado *</BootstrapForm.Label>
-									<Field as="select" name="resultado" className={`form-control ${errors.resultado && touched.resultado ? "is-invalid" : ""}`} >
-										<option value="">Seleccione una opción</option>
-										<option value="Visitado_pdte_contestación">Visitado pendiente de contestación</option>
-										<option value="Visitado_no_hacen_nada">Visitado pero no hacen nada</option>
-										<option value="Recitar">Volver a citar</option>
-										<option value="No_visita">No ha habido visita</option>
-										<option value="Firmada_no_financiable">Firmada y no financiable</option>
-										<option value="Venta">Venta</option>
-									</Field>
-									<ErrorMessage name="resultado" component="div" className="text-danger" />
-								</BootstrapForm.Group>
-							</Col>
-							<Col xs={12} md={6}>
-								<BootstrapForm.Group>
-									<BootstrapForm.Label>Oferta</BootstrapForm.Label>
-									<Field name="oferta" type="text" className="form-control" />
-									<ErrorMessage name="oferta" component="div" className="text-danger" />
-								</BootstrapForm.Group>
-							</Col>
-						</Row>
-
-						<Row className="mb-3">
-							<Col xs={12} md={6}>
-								<BootstrapForm.Group>
 									<BootstrapForm.Label>¿Tiene bombona?</BootstrapForm.Label>
 									<Field as="select" name="tieneBombona" className="form-control">
 										{opcionesRadio.map(opcion => (
@@ -280,13 +238,55 @@ export default function FormularioFeedback() {
 							</Col>
 							<Col xs={12} md={6}>
 								<BootstrapForm.Group>
-									<BootstrapForm.Label>¿Tiene placas solares?</BootstrapForm.Label>
+									<BootstrapForm.Label>¿Tiene placas?</BootstrapForm.Label>
 									<Field as="select" name="tienePlacas" className="form-control">
 										{opcionesRadio.map(opcion => (
 											<option key={opcion.value} value={opcion.value}>{opcion.label}</option>
 										))}
 									</Field>
 									<ErrorMessage name="tienePlacas" component="div" className="text-danger" />
+								</BootstrapForm.Group>
+							</Col>
+						</Row>
+
+						<Row className="mb-3">
+							<Col xs={12} md={6}>
+								<BootstrapForm.Group>
+									<BootstrapForm.Label>Importe Luz (€)</BootstrapForm.Label>
+									<Field name="importeLuz" type="number" className="form-control" placeholder="30,99" />
+									<ErrorMessage name="importeLuz" component="div" className="text-danger" />
+								</BootstrapForm.Group>
+							</Col>
+							<Col xs={12} md={6}>
+								<BootstrapForm.Group>
+									<BootstrapForm.Label>Importe Gas (€)</BootstrapForm.Label>
+									<Field name="importeGas" type="number" className="form-control" placeholder="20,99" />
+									<ErrorMessage name="importeGas" component="div" className="text-danger" />
+								</BootstrapForm.Group>
+							</Col>
+						</Row>
+
+						<Row className="mb-3">
+							<Col xs={12} md={6}>
+								<BootstrapForm.Group>
+									<BootstrapForm.Label>Oferta</BootstrapForm.Label>
+									<Field name="oferta" type="text" className="form-control" />
+									<ErrorMessage name="oferta" component="div" className="text-danger" />
+								</BootstrapForm.Group>
+							</Col>
+							<Col xs={12} md={6}>
+								<BootstrapForm.Group>
+									<BootstrapForm.Label>Resultado *</BootstrapForm.Label>
+									<Field as="select" name="resultado" className={`form-control ${errors.resultado && touched.resultado ? "is-invalid" : ""}`} >
+										<option value="">Seleccione una opción</option>
+										<option value="Visitado_pdte_contestación">Visitado pendiente de contestación</option>
+										<option value="Visitado_no_hacen_nada">Visitado pero no hacen nada</option>
+										<option value="Recitar">Volver a citar</option>
+										<option value="No_visita">No ha habido visita</option>
+										<option value="Firmada_no_financiable">Firmada y no financiable</option>
+										<option value="Venta">Venta</option>
+									</Field>
+									<ErrorMessage name="resultado" component="div" className="text-danger" />
 								</BootstrapForm.Group>
 							</Col>
 						</Row>
