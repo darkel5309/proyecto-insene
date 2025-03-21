@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import '../styles/Paneles.css';
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { esES } from "@mui/x-data-grid/locales";
+import { CircularProgress } from "@mui/material";
 import Axios from "../axiosConfig";
-import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 
 export default function PanelComercial() {
     useEffect(() => {
@@ -13,11 +15,11 @@ export default function PanelComercial() {
     const [filas, setFilas] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const columnas = [
+    const columnas = useMemo(() => [
         { field: "id_cliente", headerName: "ID", flex: 0.5, minWidth: 90 },
         { field: "nombre", headerName: "Cliente", flex: 1, minWidth: 150 },
         { field: "telefono", headerName: "Teléfono", flex: 1, minWidth: 130 },
-    ];
+    ], []);
 
     useEffect(() => {
         const obtenerClientes = async () => {
@@ -33,43 +35,28 @@ export default function PanelComercial() {
 
     return (
         <Container fluid="md" className="comercial">
-            <h1 className="text-center my-4">Panel de Comerciales</h1>
+            <h1 className="text-center mb-4">Panel de Comerciales</h1>
 
             {loading ? (
                 <div className="d-flex justify-content-center align-items-center vh-100">
-                    <Spinner animation="border" role="status" />
-                    <span className="ms-2">Cargando...</span>
+                    <CircularProgress />
+                    <p className="ms-2">Cargando...</p>
                 </div>
             ) : (
                 <>
-                    <Row className="mb-4">
-                        <Col>
-                            <Button
-                                as={Link}
-                                to="/comerciales/contacto"
-                                variant="primary"
-                                className="me-2"
-                                aria-label="Crear un nuevo contacto"
-                            >
-                                Nuevo Contacto
-                            </Button>
-                            <Button
-                                as={Link}
-                                to="/comerciales/feedback"
-                                variant="success"
-                                aria-label="Crear un nuevo feedback"
-                            >
-                                Nuevo Feedback
-                            </Button>
+                    <Row className="g-3 justify-content-center">
+                        <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                            <Button as={Link} to="/comerciales/contacto" variant="primary" className="custom-button" aria-label="Registrar un nuevo contacto" > Registrar Cliente </Button>
+                        </Col>
+                        <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                            <Button as={Link} to="/comerciales/feedback" variant="primary" className="custom-button" aria-label="Registrar un nuevo feedback" > Registrar Feedback </Button>
                         </Col>
                     </Row>
 
                     <Row>
                         <Col>
-                            <div
-                                className="tabla border rounded shadow-sm p-3 bg-light"
-                                style={{ width: "100%" }}
-                            >
+                            <h4 className="text-center mt-4">Lista de Clientes</h4>
+                            <div className="tabla border rounded shadow-sm p-3 bg-light mt-2 mb-4 ">
                                 <DataGrid
                                     localeText={esES.components.MuiDataGrid.defaultProps.localeText}
                                     rows={filas}
@@ -77,13 +64,13 @@ export default function PanelComercial() {
                                     pageSize={5}
                                     getRowId={(row) => row.id_cliente}
                                     autoHeight
-                                    style={{ width: "100%" }}
                                 />
                             </div>
                         </Col>
                     </Row>
                 </>
-            )}
+            )
+            }
         </Container>
     );
 }
