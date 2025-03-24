@@ -5,7 +5,7 @@ USE insene;
 
 CREATE TABLE trabajador(
 	id_trabajador INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(100) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
     contrasena VARCHAR(255) NOT NULL,
     telefono CHAR(9),
     rol ENUM("Administrador", "Captador", "Comercial", "Coordinador", "Instalador", "Recursos_Humanos", "Tramitador"),
@@ -24,7 +24,7 @@ DESCRIBE trabajador;
 
 CREATE TABLE cliente(
 	id_cliente INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(100),
+    nombre VARCHAR(50),
     telefono CHAR(9) NOT NULL UNIQUE,
     correo VARCHAR(100) NOT NULL UNIQUE,
     dni CHAR(9) UNIQUE,
@@ -333,12 +333,12 @@ SELECT * FROM venta;
 
 INSERT INTO instalacion (id_trabajador, id_vivienda, id_venta, fecha_instalacion, n_placas, grua, importe_grua, instalador_tipo, instalacion_terminada, fecha_terminada, otros_costes, observaciones) VALUES
 (1, 1, 1, '2025-01-20', 5, 'Si', 200.00, 'Propio', 'Si', '2025-01-21', 'Ninguno', 'Instalación realizada sin problemas'),
-(2, 2, 2, '2025-02-21', 6, 'No', NULL, 'Subcontrata', 'No', NULL, 'Falta completar'),
+(2, 2, 2, '2025-02-21', 6, 'No', NULL, 'Subcontrata', 'No', NULL , NULL, 'Falta completar'),
 (3, 3, 3, '2025-02-22', 8, 'Si', 150.00, 'Propio', 'Si', '2025-02-23', 'Costo adicional', 'Placas de mayor capacidad instaladas'),
 (4, 4, 4, '2025-02-24', 7, 'No', NULL, 'Propio', 'Si', '2025-02-25', 'Ninguno', 'Instalación terminada con éxito'),
-(5, 5, 5, '2025-01-27', 10, 'Si', 250.00, 'Subcontrata', 'No', NULL, 'Costos adicionales en mano de obra', 'Requiere revisión de algunos detalles'),
+(5, 5, 5, '2025-01-27', 10, 'Si', 250.00, 'Subcontrata', 'No', NULL,'Costos adicionales en mano de obra', 'Requiere revisión de algunos detalles'),
 (6, 6, 6, '2025-02-26', 9, 'No', NULL, 'Propio', 'Si', '2025-02-27', 'Sin otros costes', 'Instalación completa'),
-(7, 7, 7, '2025-03-01', 5, 'No', NULL, 'Subcontrata', 'No', NULL, 'Incompleta'),
+(7, 7, 7, '2025-03-01', 5, 'No', NULL, 'Subcontrata', 'No', NULL, NULL , 'Incompleta'),
 (8, 8, 8, '2025-03-02', 4, 'Si', 300.00, 'Propio', 'Si', '2025-03-03', 'Sin costes adicionales', 'Instalación lista para funcionamiento'),
 (9, 9, 9, '2025-03-05', 6, 'No', NULL, 'Subcontrata', 'Si', '2025-03-06', 'Sin otros costes', 'Instalación en perfectas condiciones'),
 (10, 10, 10, '2025-03-07', 3, 'No', NULL, 'Propio', 'Si', '2025-03-08', 'Ninguno', 'Trabajo finalizado');
