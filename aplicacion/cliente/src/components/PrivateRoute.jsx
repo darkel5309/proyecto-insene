@@ -5,11 +5,21 @@ import { AuthContext } from "../context/AuthProvider";
 const Loader = () => <div className="loader">Cargando...</div>;
 
 const PrivateRoute = ({ allowedRoles }) => {
-  const { authData, loading, error } = useContext(AuthContext);
+  const { authData, loading, error, verificarSesion } = useContext(AuthContext);
   const outlet = useOutlet();
 
   if (loading) return <Loader />;
-  if (error || !authData || (allowedRoles && !allowedRoles.includes(authData.tipoTrabajador))) {
+
+  if (error) {
+    return (
+      <div>
+        <p>{error}</p>
+        <button onClick={verificarSesion}>Reintentar</button>
+      </div>
+    );
+  }
+
+  if (!authData || (allowedRoles && !allowedRoles.includes(authData.tipoTrabajador))) {
     return <Navigate to="/" replace />;
   }
 

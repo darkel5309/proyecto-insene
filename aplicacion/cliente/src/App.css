@@ -8,9 +8,13 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 5px 0px;
+  padding: 5px 0px;;
 }
 
 .logo img {
-  max-width: 200px;
+  max-width: 150px;
+}
+
+.cerrar-sesion {
+  margin: 0px 10px;
 }
