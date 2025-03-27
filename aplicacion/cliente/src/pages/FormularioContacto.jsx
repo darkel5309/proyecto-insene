@@ -1,5 +1,5 @@
 import '../styles/Formularios.css';
-import { useEffect, useCallback, useMemo } from "react";
+import { useEffect, useCallback, useMemo, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
@@ -13,11 +13,19 @@ export default function FormularioCliente() {
     }, []);
 
     const redirigir = useNavigate();
+    const [idTrabajador, setIdTrabajador] = useState('');
 
-    const initialValues = { idTrabajador: '', nombre: '', telefono: '', correo: '', modoCaptacion: '', observaciones: '', direccion: '', localidad: '', provincia: '', };
+    useEffect(() => {
+        const verificarSesion = async () => {
+            const response = await Axios.get('/verificarSesion', { withCredentials: true });
+            setIdTrabajador(response.data.id);
+        };
+        verificarSesion();
+    },);
+
+    const initialValues = { idTrabajador: idTrabajador || '', nombre: '', telefono: '', correo: '', modoCaptacion: '', observaciones: '', direccion: '', localidad: '', provincia: '', };
 
     const validationSchema = useMemo(() => Yup.object({
-        idTrabajador: Yup.number().integer().required('Este campo es obligatorio'),
         nombre: Yup.string().required('Este campo es obligatorio'),
         telefono: Yup.string().matches(/^\d{9}$/, 'El teléfono debe tener 9 dígitos').required('Este campo es obligatorio'),
         correo: Yup.string().email('El correo no es válido').required('Este campo es obligatorio'),
@@ -71,15 +79,14 @@ export default function FormularioCliente() {
     return (
         <Container fluid="md" className="contacto">
             <h1 className="text-center mb-4">Formulario de Contactos</h1>
-            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} >
+            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize>
                 {({ errors, touched, isSubmitting }) => (
                     <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light">
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
                                 <BootstrapForm.Group>
                                     <BootstrapForm.Label>ID de Trabajador *</BootstrapForm.Label>
-                                    <Field name="idTrabajador" type="number" className={`form-control ${errors.idTrabajador && touched.idTrabajador ? "is-invalid" : ""}`}  placeholder="Ej: 5" />
-                                    <ErrorMessage name="idTrabajador" component="div" className="text-danger" />
+                                    <Field name="idTrabajador" type="number" className={`form-control ${errors.idTrabajador && touched.idTrabajador ? "is-invalid" : ""}`} placeholder="Ej: 5" disabled/>
                                 </BootstrapForm.Group>
                             </Col>
                             <Col xs={12} md={6}>

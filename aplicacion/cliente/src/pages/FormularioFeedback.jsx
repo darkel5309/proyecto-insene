@@ -1,5 +1,5 @@
 import '../styles/Formularios.css';
-import { useEffect, useCallback, useMemo } from "react";
+import { useEffect, useCallback, useMemo, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
@@ -18,10 +18,20 @@ export default function FormularioFeedback() {
 		{ value: "Sin_datos", label: "Sin datos" }
 	];
 
-	const initialValues = { idTrabajador: '', idCliente: '', nombre: '', telefono: '', correo: '', direccion: '', localidad: '', provincia: '', fecha: '', hora: '', numeroPersonas: '', numeroDecisores: '', tieneBombona: "Sin_datos", tieneGas: "Sin_datos", tieneTermo: "Sin_datos", tienePlacas: "Sin_datos", importeLuz: '', importeGas: '', resultado: '', oferta: '', observaciones: '', };
+	const redirigir = useNavigate();
+	const [idTrabajador, setIdTrabajador] = useState('');
+	
+	useEffect(() => {
+        const verificarSesion = async () => {
+            const response = await Axios.get('/verificarSesion', { withCredentials: true });
+            setIdTrabajador(response.data.id);
+        };
+        verificarSesion();
+    },);
+
+	const initialValues = { idTrabajador: idTrabajador || '', idCliente: '', nombre: '', telefono: '', correo: '', direccion: '', localidad: '', provincia: '', fecha: '', hora: '', numeroPersonas: '', numeroDecisores: '', tieneBombona: "Sin_datos", tieneGas: "Sin_datos", tieneTermo: "Sin_datos", tienePlacas: "Sin_datos", importeLuz: '', importeGas: '', resultado: '', oferta: '', observaciones: '', };
 
 	const validationSchema = useMemo(() => Yup.object({
-		idTrabajador: Yup.number().integer().required('Este campo es obligatorio').min(1, 'El ID no es válido'),
 		idCliente: Yup.number().integer().required('Este campo es obligatorio').min(1, 'El ID no es válido'),
 		fecha: Yup.string().required('Este campo es obligatorio'),
 		hora: Yup.string().required('Este campo es obligatorio'),
@@ -32,7 +42,7 @@ export default function FormularioFeedback() {
 		resultado: Yup.string().required('Este campo es obligatorio'),
 	}), []);
 
-	const redirigir = useNavigate();
+
 	const obtenerCliente = useCallback(async (idCliente, setFieldValue) => {
 		if (!idCliente) return;
 
@@ -94,15 +104,14 @@ export default function FormularioFeedback() {
 	return (
 		<Container fluid="md" className="feedback">
 			<h1 className="text-center mb-4">Feedback de la Visita</h1>
-			<Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} >
+			<Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize>
 				{({ errors, touched, isSubmitting, setFieldValue, values }) => (
 					<Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light">
 						<Row className="mb-3">
 							<Col xs={12} md={6}>
 								<BootstrapForm.Group>
 									<BootstrapForm.Label>ID de Trabajador *</BootstrapForm.Label>
-									<Field name="idTrabajador" type="number" className={`form-control ${errors.idTrabajador && touched.idTrabajador ? "is-invalid" : ""}`} placeholder="Ej: 5" />
-									<ErrorMessage name="idTrabajador" component="div" className="text-danger" />
+									<Field name="idTrabajador" type="number" className={`form-control ${errors.idTrabajador && touched.idTrabajador ? "is-invalid" : ""}`} placeholder="Ej: 5" disabled/>
 								</BootstrapForm.Group>
 							</Col>
 							<Col xs={12} md={6}>
