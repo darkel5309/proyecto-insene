@@ -41,4 +41,15 @@ const actualizarTrabajador = async (req, res) => {
     }
 };
 
-module.exports = { registrarTrabajador, obtenerTrabajadoresSimplificado, obtenerTrabajador, actualizarTrabajador };
+const eliminarTrabajador = async (req, res) => {
+    const { id_trabajador } = req.params;
+
+    try {
+        await trabajadorService.eliminarTrabajador(id_trabajador);
+        res.status(200).json({ message: "Trabajador eliminado correctamente" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+module.exports = { registrarTrabajador, obtenerTrabajadoresSimplificado, obtenerTrabajador, actualizarTrabajador, eliminarTrabajador };

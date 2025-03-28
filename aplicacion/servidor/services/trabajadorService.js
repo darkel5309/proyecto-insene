@@ -78,4 +78,22 @@ const actualizarTrabajador = async (id_trabajador, trabajador) => {
     }
 };
 
-module.exports = { registrarTrabajador, obtenerTrabajadoresSimplificado, obtenerTrabajador, actualizarTrabajador };
+const eliminarTrabajador = async (id_trabajador) => {
+    try {
+        const comprobarTrabajador = 'SELECT 1 FROM trabajador WHERE id_trabajador = ?';
+        const resultadoTrabajador = await query(comprobarTrabajador, [id_trabajador]);
+        
+        if (resultadoTrabajador.length === 0) {
+            throw new Error('El trabajador no existe');
+        }
+
+        const eliminarTrabajador = 'DELETE FROM trabajador WHERE id_trabajador = ?';
+        await query(eliminarTrabajador, [id_trabajador]);
+
+        return { message: "Trabajador eliminado correctamente" };
+    } catch (err) {
+        throw err;
+    }
+};
+
+module.exports = { registrarTrabajador, obtenerTrabajadoresSimplificado, obtenerTrabajador, actualizarTrabajador, eliminarTrabajador };

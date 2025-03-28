@@ -66,6 +66,34 @@ export default function ModificarTrabajador() {
         }
     }, []);
 
+    const onDelete = useCallback(async () => {
+        try {
+            const confirmDelete = await Swal.fire({
+                title: "¿Estás seguro de que deseas eliminar este trabajador?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar",
+            });
+
+            if (confirmDelete.isConfirmed) {
+                await Axios.delete(`/trabajadores/${id_trabajador}`);
+                Swal.fire({
+                    icon: "success",
+                    title: "Trabajador eliminado correctamente",
+                    confirmButtonText: "Vale",
+                }).then(() => navigate("/administradores"));
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "No se pudo eliminar al trabajador. Inténtalo de nuevo.",
+                confirmButtonText: "Vale",
+            });
+        }
+    }, [id_trabajador, navigate]);
+
     return (
         <Container fluid="md" className="trabajador">
             <h1 className="text-center mb-4">Modificar Trabajador</h1>
@@ -143,6 +171,12 @@ export default function ModificarTrabajador() {
                         <div className="d-flex justify-content-center">
                             <Button type="submit" className="mt-3" disabled={isSubmitting}>
                                 {isSubmitting ? "Registrando..." : "Modificar Trabajador"}
+                            </Button>
+                        </div>
+
+                        <div className="d-flex justify-content-center mt-3">
+                            <Button variant="danger" onClick={onDelete} className="mt-3">
+                                Eliminar Trabajador
                             </Button>
                         </div>
                     </Form>
