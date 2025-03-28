@@ -6,6 +6,7 @@ import FormularioContacto from "./pages/FormularioContacto";
 import FormularioVisita from "./pages/FormularioVisita";
 import FormularioFeedback from "./pages/FormularioFeedback";
 import InformacionClientes from "./pages/InformacionClientes";
+import FormularioModificarTrabajador from "./pages/FormularioModificarTrabajador";
 
 const routes = [
     {
@@ -16,6 +17,11 @@ const routes = [
     {
         path: "/administradores/RegistroTrabajador",
         element: <FormularioTrabajador />,
+        roles: ["Administrador"],
+    },
+    {
+        path: "/administradores/modificarTrabajador/:id_trabajador",
+        element: <FormularioModificarTrabajador />,
         roles: ["Administrador"],
     },
     {

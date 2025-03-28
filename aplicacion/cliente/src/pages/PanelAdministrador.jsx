@@ -1,6 +1,6 @@
 import '../styles/Paneles.css';
 import { useEffect, useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { esES } from "@mui/x-data-grid/locales";
 import { CircularProgress } from "@mui/material";
@@ -14,15 +14,24 @@ export default function PanelAdministrador() {
 
     const [filas, setFilas] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const navigate = useNavigate();
 
     const columnas = useMemo(() => [
         { field: 'id_trabajador', headerName: 'ID', flex: 0.5, minWidth: 90, cellClassName: 'datagrid-cell' },
         { field: 'nombre', headerName: 'Trabajador', flex: 1, minWidth: 150, cellClassName: 'datagrid-cell' },
         { field: 'rol', headerName: 'Rol', flex: 1, minWidth: 130, cellClassName: 'datagrid-cell' },
         { field: 'telefono', headerName: 'Teléfono', flex: 1, minWidth: 130, cellClassName: 'datagrid-cell' },
+        { field: 'modificar',  headerName: '',  flex: 0.8, minWidth: 100,  renderCell: (params) => (
+                <Button  variant="warning"  onClick={() => handleModificar(params.row.id_trabajador)}>
+                    Modificar
+                </Button>
+            ),
+        },
     ], []);
     
+    const handleModificar = (id_trabajador) => {
+        navigate(`/administradores/modificarTrabajador/${id_trabajador}`);
+    };
 
     useEffect(() => {
         const obtenerTrabajadores = async () => {

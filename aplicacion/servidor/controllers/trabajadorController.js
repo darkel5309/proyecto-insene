@@ -18,4 +18,27 @@ const obtenerTrabajadoresSimplificado = async (_req, res) => {
     }
 };
 
-module.exports = { registrarTrabajador, obtenerTrabajadoresSimplificado };
+const obtenerTrabajador = async (req, res) => {
+    const { id_trabajador } = req.params;
+
+    try {
+        const trabajador = await trabajadorService.obtenerTrabajador(id_trabajador);
+        res.status(200).json(trabajador);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+const actualizarTrabajador = async (req, res) => {
+    const { id_trabajador } = req.params;
+    const trabajador = req.body;
+
+    try {
+        const resultado = await trabajadorService.actualizarTrabajador(id_trabajador, trabajador);
+        res.status(200).json(resultado);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+module.exports = { registrarTrabajador, obtenerTrabajadoresSimplificado, obtenerTrabajador, actualizarTrabajador };
