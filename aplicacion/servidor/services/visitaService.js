@@ -1,7 +1,7 @@
 const { query } = require("../models/db");
 
 const registrarVisita = async (datosVisita) => {
-    const { idTrabajador, idCliente, fecha, hora, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, importeLuz, importeGas } = datosVisita;
+    const { idTrabajador, idCliente, fecha, hora, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, importeLuz, importeGas, observaciones } = datosVisita;
 
     await query('START TRANSACTION');
 
@@ -32,7 +32,7 @@ const registrarVisita = async (datosVisita) => {
 
         await query('INSERT INTO recibo (importe_luz, importe_gas, id_vivienda) VALUES (?, ?, ?)', [importeLuz, importeGas, idVivienda]);
 
-        const resultadoVisita = await query('INSERT INTO visita (fecha, hora, id_vivienda, id_trabajador) VALUES (?, ?, ?, ?)', [fecha, hora, idVivienda, idTrabajador]);
+        const resultadoVisita = await query('INSERT INTO visita (fecha, hora, observaciones_visita, id_vivienda, id_trabajador) VALUES (?, ?, ?, ?, ?)', [fecha, hora, observaciones, idVivienda, idTrabajador]);
 
         await query('COMMIT');
         return { message: "Visita registrada correctamente", idVisita: resultadoVisita.insertId };

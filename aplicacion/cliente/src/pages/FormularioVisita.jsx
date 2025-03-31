@@ -29,7 +29,7 @@ export default function FormularioVisita() {
         verificarSesion();
     },);
     
-    const initialValues = { idTrabajador: idTrabajador || '', idCliente: '', nombre: '', telefono: '', correo: '', direccion: '', localidad: '', provincia: '', fecha: '', hora: '', numeroPersonas: '', numeroDecisores: '', tieneBombona: "Sin_datos", tieneGas: "Sin_datos", tieneTermo: "Sin_datos", tienePlacas: "Sin_datos", importeLuz: '', importeGas: '' };
+    const initialValues = { idTrabajador: idTrabajador || '', idCliente: '', nombre: '', telefono: '', correo: '', direccion: '', localidad: '', provincia: '', fecha: '', hora: '', numeroPersonas: '', numeroDecisores: '', tieneBombona: "Sin_datos", tieneGas: "Sin_datos", tieneTermo: "Sin_datos", tienePlacas: "Sin_datos", importeLuz: '', importeGas: '', observaciones: '' };
 
     const validationSchema = useMemo(() => Yup.object({
         idCliente: Yup.number().integer().required('Este campo es obligatorio').min(1, 'El ID no es válido'),
@@ -278,6 +278,15 @@ export default function FormularioVisita() {
                                 </BootstrapForm.Group>
                             </Col>
                         </Row>
+
+                        <Row className="mb-3">
+							<Col xs={12}>
+								<BootstrapForm.Group>
+									<BootstrapForm.Label>Observaciones</BootstrapForm.Label>
+									<Field name="observaciones" as="textarea" className="form-control" rows="3"/>
+								</BootstrapForm.Group>
+							</Col>
+						</Row>
 
                         <div className="d-flex justify-content-center">
                             <Button type="submit" className="mt-3" disabled={isSubmitting}>
