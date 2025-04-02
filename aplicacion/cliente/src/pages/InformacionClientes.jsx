@@ -19,6 +19,7 @@ export default function InformacionClientes() {
     const [loading, setLoading] = useState(true);
     const [idCliente, setIdCliente] = useState("");
     const [datosCliente, setDatosCliente] = useState(null);
+    const [actualizaciones, setActualizaciones] = useState([]);
 
     useEffect(() => {
         const obtenerTodosClientes = async () => {
@@ -34,11 +35,21 @@ export default function InformacionClientes() {
     }, []);
 
     const handleBuscarCliente = async () => {
+        if (!idCliente) return;
+        
+        setLoading(true);
         try {
-            const response = await Axios.get(`/obtenerInformacionCliente/${idCliente}`);
-            setDatosCliente(response.data);
+            const responseCliente = await Axios.get(`/obtenerInformacionCliente/${idCliente}`);
+            setDatosCliente(responseCliente.data);
+            
+            const responseActualizaciones = await Axios.get(`/mostrarActualizaciones/${idCliente}`);
+            setActualizaciones(responseActualizaciones.data);
         } catch (error) {
+            console.error("Error al buscar cliente:", error);
             setDatosCliente(null);
+            setActualizaciones([]);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -54,24 +65,31 @@ export default function InformacionClientes() {
             ) : (
                 <>
                     <Row className="mb-4">
-                        <Col>
-                            <div className="tabla border rounded shadow-sm p-3 bg-light" style={{ width: "100%" }}>
-                                <DataGrid
-                                    localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-                                    rows={filas}
-                                    columns={columnas}
-                                    pageSize={5}
-                                    getRowId={(row) => row.id_cliente}
-                                    autoHeight
-                                    style={{ width: "100%" }}
-                                />
-                            </div>
+                        <Col md={6}>
+                            <Card className="shadow-sm">
+                                <Card.Header as="h5">Lista de Clientes</Card.Header>
+                                <Card.Body>
+                                    <div className="tabla border rounded shadow-sm p-3 bg-light">
+                                        <DataGrid
+                                            localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+                                            rows={filas}
+                                            columns={columnas}
+                                            pageSize={5}
+                                            getRowId={(row) => row.id_cliente}
+                                            autoHeight
+                                            style={{ width: "100%" }}
+                                            onRowClick={(params) => {
+                                                setIdCliente(params.row.id_cliente.toString());
+                                                handleBuscarCliente();
+                                            }}
+                                        />
+                                    </div>
+                                </Card.Body>
+                            </Card>
                         </Col>
-                    </Row>
-
-                    <Row className="mb-4">
-                        <Col xs={12} md={6} className="mx-auto">
-                            <Form className="d-flex">
+                        <Col md={6}>
+                            {/* Botón de búsqueda arriba a la derecha */}
+                            <div className="d-flex justify-content-end mb-3">
                                 <Form.Control
                                     type="text"
                                     value={idCliente}
@@ -82,10 +100,44 @@ export default function InformacionClientes() {
                                 <Button onClick={handleBuscarCliente} variant="primary">
                                     Buscar Cliente
                                 </Button>
-                            </Form>
+                            </div>
+                            
+                            {/* Tabla de actualizaciones debajo del botón */}
+                            <Card className="shadow-sm mb-4">
+                                <Card.Header as="h5">Actualizaciones del Cliente</Card.Header>
+                                <Card.Body>
+                                    {actualizaciones.length > 0 ? (
+                                        <div className="table-responsive">
+                                            <table className="table table-striped table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Fecha</th>
+                                                        <th>Tipo de Actualización</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {actualizaciones.map((act, index) => (
+                                                        <tr key={index}>
+                                                            <td>{act.fecha}</td>
+                                                            <td>{act.ultimas_actualizaciones}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    ) : idCliente ? (
+                                        <div className="text-center p-3">
+                                            No hay actualizaciones para este cliente
+                                        </div>
+                                    ) : (
+                                        <div className="text-center p-3">
+                                            Ingrese un ID de cliente para ver sus actualizaciones
+                                        </div>
+                                    )}
+                                </Card.Body>
+                            </Card>
                         </Col>
                     </Row>
-
                     {datosCliente && (
                         <Row>
                             <Col>

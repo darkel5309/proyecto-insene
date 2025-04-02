@@ -58,5 +58,24 @@ const obtenerInformacionCliente = async (req, res) => {
     }
 };
 
+const mostrarActualizaciones = async (req, res) => {
+    const { idCliente } = req.params;
+    try {
+        if (!idCliente || isNaN(idCliente)) {
+            return res.status(400).json({ error: "El ID del cliente debe ser un número válido" });
+        }
 
-module.exports = { registrarCliente, recuperarCliente, obtenerClientesSimplificado, obtenerTodosClientes, obtenerInformacionCliente };
+        const actualizaciones = await clienteService.mostrarActualizaciones(idCliente);
+
+        if (actualizaciones.length === 0) {
+            return res.status(200).json({ message: "No hay actualizaciones para este cliente", actualizaciones: [] });
+        }
+
+        res.status(200).json(actualizaciones);
+    } catch (err) {
+        console.error("Error al obtener actualizaciones del cliente:", err);
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+};
+
+module.exports = { registrarCliente, recuperarCliente, obtenerClientesSimplificado, obtenerTodosClientes, obtenerInformacionCliente, mostrarActualizaciones };

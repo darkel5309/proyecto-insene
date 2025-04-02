@@ -96,4 +96,70 @@ const obtenerInformacionCliente = async (idCliente) => {
     return resultado;
 };
 
-module.exports = { registrarCliente, recuperarCliente, obtenerClientesSimplificado, obtenerTodosClientes, obtenerInformacionCliente };
+const mostrarActualizaciones = async (idCliente) => {
+
+    if (!idCliente || isNaN(idCliente)) {
+        throw new Error('El ID del cliente debe ser un número válido');
+    }
+
+    const consultaActualizaciones = `
+        SELECT fecha_alta AS fecha, 'fecha_alta_cliente' AS ultimas_actualizaciones FROM cliente WHERE id_cliente = ?
+        UNION ALL
+        SELECT fecha_subvencion AS fecha, 'fecha_subvencion' AS ultimas_actualizaciones FROM subvencion 
+        JOIN cliente ON subvencion.id_cliente = cliente.id_cliente WHERE cliente.id_cliente = ? AND fecha_subvencion IS NOT NULL
+        UNION ALL
+        SELECT fecha_firma AS fecha, 'fecha_firma_venta' AS ultimas_actualizaciones FROM venta 
+        JOIN cliente ON venta.id_cliente = cliente.id_cliente WHERE cliente.id_cliente = ?
+        UNION ALL
+        SELECT fecha_legalizacion AS fecha, 'fecha_legalizacion_venta' AS ultimas_actualizaciones FROM venta 
+        JOIN cliente ON venta.id_cliente = cliente.id_cliente WHERE cliente.id_cliente = ? AND fecha_legalizacion IS NOT NULL
+        UNION ALL
+        SELECT fecha_instalacion AS fecha, 'fecha_instalacion' AS ultimas_actualizaciones FROM instalacion
+        JOIN venta ON instalacion.id_venta = venta.id_venta
+        JOIN cliente ON venta.id_cliente = cliente.id_cliente WHERE cliente.id_cliente = ? AND fecha_instalacion IS NOT NULL
+        UNION ALL
+        SELECT fecha_terminada AS fecha, 'fecha_instalacion_terminada' AS ultimas_actualizaciones FROM instalacion
+        JOIN venta ON instalacion.id_venta = venta.id_venta
+        JOIN cliente ON venta.id_cliente = cliente.id_cliente WHERE cliente.id_cliente = ? AND fecha_terminada IS NOT NULL
+        UNION ALL
+        SELECT fecha_factura AS fecha, 'fecha_factura' AS ultimas_actualizaciones FROM factura
+        JOIN venta ON factura.id_venta = venta.id_venta
+        JOIN cliente ON venta.id_cliente = cliente.id_cliente WHERE cliente.id_cliente = ?
+        UNION ALL
+        SELECT fecha AS fecha, 'fecha_visita' AS ultimas_actualizaciones FROM visita
+        JOIN vivienda ON visita.id_vivienda = vivienda.id_vivienda
+        JOIN domicilio ON vivienda.id_domicilio = domicilio.id_domicilio
+        JOIN cliente ON domicilio.id_cliente = cliente.id_cliente WHERE cliente.id_cliente = ?
+        UNION ALL
+        SELECT fecha_registro AS fecha, 'fecha_registro_visita' AS ultimas_actualizaciones FROM visita
+        JOIN vivienda ON visita.id_vivienda = vivienda.id_vivienda
+        JOIN domicilio ON vivienda.id_domicilio = domicilio.id_domicilio
+        JOIN cliente ON domicilio.id_cliente = cliente.id_cliente WHERE cliente.id_cliente = ?
+        ORDER BY fecha DESC
+    `;
+
+    try {
+        const params = Array(9).fill(idCliente);
+        
+        const resultados = await query(consultaActualizaciones, params);
+        
+        const resultadosFormateados = resultados.map(row => {
+            if (row.fecha instanceof Date) {
+                return {
+                    ...row,
+                    fecha: row.fecha.toLocaleDateString('es-ES', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    })
+                };
+            }
+            return row;
+        });
+        
+        return resultadosFormateados;
+    } catch (err) {
+        throw err;
+    }
+}
+module.exports = { registrarCliente, recuperarCliente, obtenerClientesSimplificado, obtenerTodosClientes, obtenerInformacionCliente, mostrarActualizaciones };
