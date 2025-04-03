@@ -1,23 +1,13 @@
 import { Navigate, useOutlet } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
-
-const Loader = () => <div className="loader">Cargando...</div>;
+import LoadingSpinner from './LoadingSpinner';
 
 const PrivateRoute = ({ allowedRoles }) => {
-  const { authData, loading, error, verificarSesion } = useContext(AuthContext);
+  const { authData, loading } = useContext(AuthContext);
   const outlet = useOutlet();
 
-  if (loading) return <Loader />;
-
-  if (error) {
-    return (
-      <div>
-        <p>{error}</p>
-        <button onClick={verificarSesion}>Reintentar</button>
-      </div>
-    );
-  }
+  if (loading) return <LoadingSpinner message="Cargando..." />;
 
   if (!authData || (allowedRoles && !allowedRoles.includes(authData.tipoTrabajador))) {
     return <Navigate to="/" replace />;
