@@ -1,17 +1,13 @@
-const { verificarTrabajador, comprobarContrasena, generarToken, verificarToken } = require("../services/sesionService");
+const { verificarTrabajadorYContrasena, generarToken, verificarToken } = require("../services/sesionService");
 
 const iniciarSesion = async (req, res) => {
     const { idTrabajador, contrasena } = req.body;
 
     try {
-        const trabajador = await verificarTrabajador(idTrabajador);
-        if (!trabajador) {
-            return res.status(400).json({ error: "El trabajador no existe" });
-        }
+        const trabajador = await verificarTrabajadorYContrasena(idTrabajador, contrasena);
 
-        const esContrasenaValida = await comprobarContrasena(contrasena, trabajador.contrasena);
-        if (!esContrasenaValida) {
-            return res.status(400).json({ error: "Contraseña incorrecta" });
+        if (!trabajador) {
+            return res.status(400).json({ error: "Datos incorrectos" });
         }
 
         const token = generarToken(trabajador.id_trabajador, trabajador.rol);
@@ -22,9 +18,7 @@ const iniciarSesion = async (req, res) => {
             sameSite: "Strict",
             expires: new Date(Date.now() + 3600000),
         });
-
-        res.json({ success: true, tipoTrabajador: trabajador.rol,});
-
+        res.json({ success: true, tipoTrabajador: trabajador.rol });
     } catch (err) {
         res.status(500).json({ error: "Error al iniciar sesión" });
     }
@@ -41,7 +35,6 @@ const verificarSesion = (req, res) => {
         if (!decoded) {
             return res.status(401).json({ error: "La sesión no es válida" });
         }
-
         res.json({ id: decoded.id, tipoTrabajador: decoded.rol });
     } catch (error) {
         return res.status(401).json({ error: "Error al verificar el token" });

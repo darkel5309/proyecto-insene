@@ -2,13 +2,20 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { query } = require("../models/db");
 
-const verificarTrabajador = async (idTrabajador) => {
+const verificarTrabajadorYContrasena = async (idTrabajador, contrasena) => {
     const trabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
-    return trabajador.length > 0 ? trabajador[0] : null;
-};
 
-const comprobarContrasena = async (contrasena, contrasenaHash) => {
-    return bcrypt.compare(contrasena, contrasenaHash);
+    if (trabajador.length === 0) {
+        return null;
+    }
+
+    const contrasenaValida = await bcrypt.compare(contrasena, trabajador[0].contrasena);
+    
+    if (!contrasenaValida) {
+        return null;
+    }
+
+    return trabajador[0];
 };
 
 const generarToken = (idTrabajador, rol) => {
@@ -27,4 +34,4 @@ const verificarToken = (token) => {
     }
 };
 
-module.exports = { verificarTrabajador, comprobarContrasena, generarToken, verificarToken };
+module.exports = { verificarTrabajadorYContrasena, generarToken, verificarToken };
