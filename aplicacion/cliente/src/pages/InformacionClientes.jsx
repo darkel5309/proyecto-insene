@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Axios from "../axiosConfig";
-import { DataGrid } from "@mui/x-data-grid";
-import { esES } from "@mui/x-data-grid/locales";
+import { MaterialReactTable } from "material-react-table";
 import { Container, Row, Col, Form, Button, Card, Alert } from "react-bootstrap";
-import useDocumentTitle from '../components/Titulo';
+import useDocumentTitle from "../components/Titulo";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function InformacionClientes() {
@@ -16,11 +15,11 @@ export default function InformacionClientes() {
     const [datosCliente, setDatosCliente] = useState(null);
     const [actualizaciones, setActualizaciones] = useState([]);
 
-    const columnas = [
-        { field: "id_cliente", headerName: "ID", flex: 0.5, minWidth: 90 },
-        { field: "nombre", headerName: "Nombre", flex: 1, minWidth: 150 },
-        { field: "telefono", headerName: "Teléfono", flex: 1, minWidth: 130 },
-    ];
+    const columns = useMemo(() => [
+        { accessorKey: "id_cliente", header: "ID", size: 90 },
+        { accessorKey: "nombre", header: "Nombre", size: 150 },
+        { accessorKey: "telefono", header: "Teléfono", size: 130 },
+    ], []);
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -30,7 +29,7 @@ export default function InformacionClientes() {
             setError(null);
             try {
                 const response = await Axios.get("/obtenerTodosClientes", {
-                    signal: abortController.signal
+                    signal: abortController.signal,
                 });
                 setClientes([...response.data].reverse());
             } finally {
@@ -51,9 +50,8 @@ export default function InformacionClientes() {
         try {
             const [responseCliente, responseActualizaciones] = await Promise.all([
                 Axios.get(`/obtenerInformacionCliente/${id}`),
-                Axios.get(`/mostrarActualizaciones/${id}`)
+                Axios.get(`/mostrarActualizaciones/${id}`),
             ]);
-
             setDatosCliente(responseCliente.data);
             setActualizaciones(responseActualizaciones.data);
         } catch (err) {
@@ -65,26 +63,28 @@ export default function InformacionClientes() {
         }
     }, []);
 
-    const renderClientesDataGrid = () => (
+    const renderClientesTable = () => (
         <Card className="shadow-sm">
             <Card.Header as="h5">Lista de Clientes</Card.Header>
             <Card.Body>
                 <div className="tabla border rounded shadow-sm p-3 bg-light">
-                    <DataGrid
-                        localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-                        rows={clientes}
-                        columns={columnas}
-                        pageSize={5}
-                        rowsPerPageOptions={[5, 10, 25]}
-                        getRowId={(row) => row.id_cliente}
-                        autoHeight
-                        disableSelectionOnClick
-                        style={{ width: "100%" }}
-                        onRowClick={(params) => {
-                            setIdCliente(params.row.id_cliente.toString());
-                            cargarDatosCliente(params.row.id_cliente.toString());
+                    <MaterialReactTable
+                        columns={columns}
+                        data={clientes}
+                        initialState={{ pagination: { pageIndex: 0, pageSize: 25 } }}
+                        muiTableProps={{
+                            sx: { width: "100%" },
+                            "aria-label": "Tabla de clientes",
                         }}
-                        aria-label="Tabla de clientes"
+                        muiTableContainerProps={{ sx: { width: "100%" } }}
+                        muiTableBodyRowProps={({ row }) => ({
+                            onClick: () => {
+                                const id = row.original.id_cliente.toString();
+                                setIdCliente(id);
+                                cargarDatosCliente(id);
+                            },
+                            sx: { cursor: "pointer" },
+                        })}
                     />
                 </div>
             </Card.Body>
@@ -93,8 +93,11 @@ export default function InformacionClientes() {
 
     const renderBuscador = () => (
         <div className="d-flex justify-content-end mb-3">
-            <Form.Control type="text" value={idCliente} onChange={(e) => setIdCliente(e.target.value)} placeholder="Introduce el ID del cliente" className="me-2" aria-label="ID del cliente" />
-            <Button onClick={() => cargarDatosCliente(idCliente)} variant="primary" aria-label="Buscar cliente" > Buscar Cliente </Button>
+            <Form.Control type="text" value={idCliente} onChange={(e) => setIdCliente(e.target.value)} placeholder="Introduce el ID del cliente"
+                className="me-2" aria-label="ID del cliente" />
+            <Button onClick={() => cargarDatosCliente(idCliente)} variant="primary" aria-label="Buscar cliente" >
+                Buscar Cliente
+            </Button>
         </div>
     );
 
@@ -150,7 +153,7 @@ export default function InformacionClientes() {
                                 <strong>DNI:</strong> {datosCliente.dni} <br />
                                 <strong>IBAN:</strong> {datosCliente.iban} <br />
                                 <strong>Correo:</strong> {datosCliente.correo} <br />
-                                <strong>Modo de Captación:</strong> {datosCliente.modo_captacion} <br />
+                                <strong>Modo de Captación:</strong> {datosCliente.modo_captacion}{" "} <br />
                                 <strong>Observaciones:</strong> {datosCliente.observaciones_cliente}
                             </Card.Text>
                         </Card.Body>
@@ -200,9 +203,7 @@ export default function InformacionClientes() {
             ) : (
                 <>
                     <Row className="mb-4">
-                        <Col md={6}>
-                            {renderClientesDataGrid()}
-                        </Col>
+                        <Col md={6}>{renderClientesTable()}</Col>
                         <Col md={6}>
                             {renderBuscador()}
                             {renderActualizaciones()}
