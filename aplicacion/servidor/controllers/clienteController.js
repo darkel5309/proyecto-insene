@@ -1,6 +1,6 @@
-const clienteService = require('../services/clienteService');
+import * as clienteService from '../services/clienteService.js';
 
-const registrarCliente = async (req, res) => {
+export const registrarCliente = async (req, res) => {
     try {
         const resultado = await clienteService.registrarCliente(req.body);
         res.status(200).json(resultado);
@@ -9,7 +9,7 @@ const registrarCliente = async (req, res) => {
     }
 };
 
-const recuperarCliente = async (req, res) => {
+export const recuperarCliente = async (req, res) => {
     try {
         const cliente = await clienteService.recuperarCliente(req.params.idCliente);
         res.status(200).json(cliente);
@@ -18,7 +18,7 @@ const recuperarCliente = async (req, res) => {
     }
 };
 
-const obtenerClientesSimplificado = async (_req, res) => {
+export const obtenerClientesSimplificado = async (_req, res) => {
     try {
         const clientes = await clienteService.obtenerClientesSimplificado();
         res.status(200).json(clientes);
@@ -27,7 +27,7 @@ const obtenerClientesSimplificado = async (_req, res) => {
     }
 };
 
-const obtenerTodosClientes = async (__req, res) => {
+export const obtenerTodosClientes = async (__req, res) => {
     try {
         const resultado = await clienteService.obtenerTodosClientes();
 
@@ -37,12 +37,11 @@ const obtenerTodosClientes = async (__req, res) => {
 
         res.status(200).json(resultado);
     } catch (err) {
-        console.error("Error al obtener clientes:", err);
         res.status(500).json({ error: "Error interno del servidor" });
     }
 };
 
-const obtenerInformacionCliente = async (req, res) => {
+export const obtenerInformacionCliente = async (req, res) => {
     const { idCliente } = req.params;
     try {
         const clienteResultado = await clienteService.obtenerInformacionCliente(idCliente);
@@ -53,12 +52,11 @@ const obtenerInformacionCliente = async (req, res) => {
 
         res.status(200).json(clienteResultado[0]);
     } catch (err) {
-        console.error("Error al obtener cliente:", err);
         res.status(500).json({ error: "Error interno del servidor" });
     }
 };
 
-const mostrarActualizaciones = async (req, res) => {
+export const mostrarActualizaciones = async (req, res) => {
     const { idCliente } = req.params;
     try {
         if (!idCliente || isNaN(idCliente)) {
@@ -73,9 +71,6 @@ const mostrarActualizaciones = async (req, res) => {
 
         res.status(200).json(actualizaciones);
     } catch (err) {
-        console.error("Error al obtener actualizaciones del cliente:", err);
         res.status(500).json({ error: "Error interno del servidor" });
     }
 };
-
-module.exports = { registrarCliente, recuperarCliente, obtenerClientesSimplificado, obtenerTodosClientes, obtenerInformacionCliente, mostrarActualizaciones };

@@ -1,16 +1,16 @@
-const { query } = require("../models/db");
+import { query } from "../models/db.js";
 
-const registrarCliente = async (cliente) => {
+export const registrarCliente = async (cliente) => {
     const { idTrabajador, nombre, direccion, localidad, provincia, telefono, correo, modoCaptacion, observaciones } = cliente;
-    
+
     await query('START TRANSACTION');
-    
+
     try {
         const existeTrabajador = await query('SELECT 1 FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
         if (existeTrabajador.length === 0) {
             throw new Error("El trabajador no existe");
         }
-        
+
         const existeCliente = await query('SELECT telefono, correo FROM cliente WHERE telefono = ? OR correo = ?', [telefono, correo]);
         if (existeCliente.length > 0) {
             const existe = existeCliente[0];
@@ -21,14 +21,14 @@ const registrarCliente = async (cliente) => {
                 throw new Error("Ya existe un cliente con ese correo");
             }
         }
-        
+
         const insertarCliente = 'INSERT INTO cliente (nombre, telefono, correo, modo_captacion, observaciones_cliente) VALUES (?,?,?,?,?)';
         const resultadoCliente = await query(insertarCliente, [nombre, telefono, correo, modoCaptacion, observaciones]);
         const idCliente = resultadoCliente.insertId;
-        
+
         const insertarDomicilio = 'INSERT INTO domicilio (direccion, localidad, provincia, id_cliente) VALUES (?, ?, ?, ?)';
         await query(insertarDomicilio, [direccion, localidad, provincia, idCliente]);
-        
+
         await query('COMMIT');
         return { message: "Cliente registrado correctamente", idCliente };
     } catch (err) {
@@ -37,13 +37,14 @@ const registrarCliente = async (cliente) => {
     }
 };
 
-const recuperarCliente = async (idCliente) => {
+export const recuperarCliente = async (idCliente) => {
     try {
-        const recuperarDatosCliente = `SELECT c.id_cliente, c.nombre, c.telefono, c.correo, d.direccion, d.localidad, d.provincia 
-                                      FROM cliente c
-                                      LEFT JOIN domicilio d ON c.id_cliente = d.id_cliente
-                                      WHERE c.id_cliente = ?`;
-        
+        const recuperarDatosCliente =
+            `SELECT c.id_cliente, c.nombre, c.telefono, c.correo, d.direccion, d.localidad, d.provincia 
+            FROM cliente c
+            LEFT JOIN domicilio d ON c.id_cliente = d.id_cliente
+            WHERE c.id_cliente = ?`;
+
         const resultado = await query(recuperarDatosCliente, [idCliente]);
         if (resultado.length === 0) {
             throw new Error("Cliente no encontrado");
@@ -54,7 +55,7 @@ const recuperarCliente = async (idCliente) => {
     }
 };
 
-const obtenerClientesSimplificado = async () => {
+export const obtenerClientesSimplificado = async () => {
     try {
         const obtenerClientes = 'SELECT id_cliente, nombre, telefono FROM cliente';
         const resultado = await query(obtenerClientes);
@@ -67,14 +68,14 @@ const obtenerClientesSimplificado = async () => {
     }
 };
 
-const obtenerTodosClientes = async () => {
+export const obtenerTodosClientes = async () => {
     const obtenerClientes = `SELECT * FROM cliente`;
     const resultado = await query(obtenerClientes);
     return resultado;
 };
 
-const obtenerInformacionCliente = async (idCliente) => {
-    const infoCliente= `
+export const obtenerInformacionCliente = async (idCliente) => {
+    const infoCliente = `
         SELECT 
             c.*, 
             d.direccion, 
@@ -96,8 +97,7 @@ const obtenerInformacionCliente = async (idCliente) => {
     return resultado;
 };
 
-const mostrarActualizaciones = async (idCliente) => {
-
+export const mostrarActualizaciones = async (idCliente) => {
     if (!idCliente || isNaN(idCliente)) {
         throw new Error('El ID del cliente debe ser un número válido');
     }
@@ -140,9 +140,9 @@ const mostrarActualizaciones = async (idCliente) => {
 
     try {
         const params = Array(9).fill(idCliente);
-        
+
         const resultados = await query(consultaActualizaciones, params);
-        
+
         const resultadosFormateados = resultados.map(row => {
             if (row.fecha instanceof Date) {
                 return {
@@ -156,10 +156,9 @@ const mostrarActualizaciones = async (idCliente) => {
             }
             return row;
         });
-        
+
         return resultadosFormateados;
     } catch (err) {
         throw err;
     }
-}
-module.exports = { registrarCliente, recuperarCliente, obtenerClientesSimplificado, obtenerTodosClientes, obtenerInformacionCliente, mostrarActualizaciones };
+};

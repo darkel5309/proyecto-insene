@@ -1,4 +1,4 @@
-const validarDatosTrabajador = async (req, res, next) => {
+export const validarDatosTrabajador = async (req, res, next) => {
     const { nombre, contrasena, telefono, rol, equipo, subequipo } = req.body;
 
     // obligatorios
@@ -6,12 +6,10 @@ const validarDatosTrabajador = async (req, res, next) => {
         return res.status(400).json({ error: "Todos los campos son obligatorios" });
     }
 
-    // telefono
+    // teléfono
     if (!/^\d{9}$/.test(telefono)) {
         return res.status(400).json({ error: "El teléfono debe tener 9 dígitos" });
     }
     
     next();
 };
-
-module.exports = validarDatosTrabajador;

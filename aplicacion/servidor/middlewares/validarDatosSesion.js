@@ -1,4 +1,4 @@
-const validarDatosSesion = (req, res, next) => {
+export const validarDatosSesion = (req, res, next) => {
     const { idTrabajador, contrasena } = req.body;
 
     // obligatorios
@@ -8,5 +8,3 @@ const validarDatosSesion = (req, res, next) => {
 
     next();
 };
-
-module.exports = validarDatosSesion;

@@ -1,8 +1,9 @@
-const express = require("express");
+import express from "express";
+import { registrarFeedback } from "../controllers/feedbackController.js";
+import { validarDatosFeedback } from "../middlewares/validarDatosFeedback.js";
+
 const router = express.Router();
-const { registrarFeedback } = require("../controllers/feedbackController");
-const validarDatosFeedback = require("../middlewares/validarDatosFeedback");
 
 router.post("/registrarFeedback", validarDatosFeedback, registrarFeedback);
 
-module.exports = router;
+export default router;

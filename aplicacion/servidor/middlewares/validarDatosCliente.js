@@ -1,5 +1,5 @@
-const validarDatosCliente = async (req, res, next) => {
-    const { idTrabajador, nombre, direccion, localidad, provincia, telefono, correo} = req.body;
+export const validarDatosCliente = async (req, res, next) => {
+    const { idTrabajador, nombre, direccion, localidad, provincia, telefono, correo } = req.body;
 
     // obligatorios
     if (!idTrabajador || !nombre || !direccion || !localidad || !provincia || !telefono || !correo) {
@@ -17,5 +17,3 @@ const validarDatosCliente = async (req, res, next) => {
 
     next();
 };
-
-module.exports = validarDatosCliente;

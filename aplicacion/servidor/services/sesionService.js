@@ -1,8 +1,8 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { query } = require("../models/db");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { query } from "../models/db.js";
 
-const verificarTrabajadorYContrasena = async (idTrabajador, contrasena) => {
+export const verificarTrabajadorYContrasena = async (idTrabajador, contrasena) => {
     const trabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
 
     if (trabajador.length === 0) {
@@ -18,7 +18,7 @@ const verificarTrabajadorYContrasena = async (idTrabajador, contrasena) => {
     return trabajador[0];
 };
 
-const generarToken = (idTrabajador, rol) => {
+export const generarToken = (idTrabajador, rol) => {
     return jwt.sign(
         { id: idTrabajador, rol },
         process.env.JWT_SECRET,
@@ -26,12 +26,10 @@ const generarToken = (idTrabajador, rol) => {
     );
 };
 
-const verificarToken = (token) => {
+export const verificarToken = (token) => {
     try {
         return jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
         return null;
     }
 };
-
-module.exports = { verificarTrabajadorYContrasena, generarToken, verificarToken };

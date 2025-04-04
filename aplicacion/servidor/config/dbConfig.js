@@ -1,5 +1,7 @@
-require("dotenv").config();
-const mysql = require("mysql2");
+import dotenv from "dotenv";
+import mysql from "mysql2";
+
+dotenv.config();
 
 const db = mysql.createPool({
     host: process.env.DB_HOST,
@@ -9,7 +11,7 @@ const db = mysql.createPool({
     connectionLimit: 10,
 }).promise();
 
-async function connectDB() {
+export async function connectDB() {
     try {
         await db.query("SELECT 1");
         console.log("Conexión establecida correctamente con la base de datos.");
@@ -21,4 +23,4 @@ async function connectDB() {
 
 connectDB();
 
-module.exports = db;
+export default db;

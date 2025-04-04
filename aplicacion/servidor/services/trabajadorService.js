@@ -1,7 +1,7 @@
-const { query } = require("../models/db");
-const bcrypt = require("bcrypt");
+import { query } from "../models/db.js";
+import bcrypt from "bcrypt";
 
-const registrarTrabajador = async (trabajador) => {
+export const registrarTrabajador = async (trabajador) => {
     const { nombre, contrasena, telefono, rol, equipo, subequipo } = trabajador;
 
     await query('START TRANSACTION');
@@ -27,7 +27,7 @@ const registrarTrabajador = async (trabajador) => {
     }
 };
 
-const obtenerTrabajadoresSimplificado = async () => {
+export const obtenerTrabajadoresSimplificado = async () => {
     try {
         const obtenerTrabajadores = 'SELECT id_trabajador, nombre, telefono, rol FROM trabajador';
         const resultado = await query(obtenerTrabajadores);
@@ -40,7 +40,7 @@ const obtenerTrabajadoresSimplificado = async () => {
     }
 };
 
-const obtenerTrabajador = async (id_trabajador) => {
+export const obtenerTrabajador = async (id_trabajador) => {
     try {
         const obtenerTrabajador = 'SELECT id_trabajador, nombre, contrasena, telefono, rol, equipo, subequipo FROM trabajador WHERE id_trabajador = ?';
         const resultado = await query(obtenerTrabajador, [id_trabajador]);
@@ -54,7 +54,7 @@ const obtenerTrabajador = async (id_trabajador) => {
     }
 };
 
-const actualizarTrabajador = async (id_trabajador, trabajador) => {
+export const actualizarTrabajador = async (id_trabajador, trabajador) => {
     const { nombre, contrasena, telefono, rol, equipo, subequipo } = trabajador;
 
     try {
@@ -78,7 +78,7 @@ const actualizarTrabajador = async (id_trabajador, trabajador) => {
     }
 };
 
-const eliminarTrabajador = async (id_trabajador) => {
+export const eliminarTrabajador = async (id_trabajador) => {
     try {
         const comprobarTrabajador = 'SELECT 1 FROM trabajador WHERE id_trabajador = ?';
         const resultadoTrabajador = await query(comprobarTrabajador, [id_trabajador]);
@@ -95,5 +95,3 @@ const eliminarTrabajador = async (id_trabajador) => {
         throw err;
     }
 };
-
-module.exports = { registrarTrabajador, obtenerTrabajadoresSimplificado, obtenerTrabajador, actualizarTrabajador, eliminarTrabajador };

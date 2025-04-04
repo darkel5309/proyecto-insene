@@ -1,13 +1,13 @@
-const express = require("express");
-const cors = require("cors");
-const cookieParser = require('cookie-parser');
-const dotenv = require('dotenv');
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 
-const sesionRoutes = require("./routes/sesionRoutes");
-const clienteRoutes = require("./routes/clienteRoutes");
-const visitaRoutes = require("./routes/visitaRoutes")
-const feedbackRoutes = require("./routes/feedbackRoutes");
-const trabajadorRoutes = require("./routes/trabajadorRoutes");
+import sesionRoutes from "./routes/sesionRoutes.js";
+import clienteRoutes from "./routes/clienteRoutes.js";
+import visitaRoutes from "./routes/visitaRoutes.js";
+import feedbackRoutes from "./routes/feedbackRoutes.js";
+import trabajadorRoutes from "./routes/trabajadorRoutes.js";
 
 dotenv.config();
 
@@ -30,11 +30,11 @@ app.use("/api", feedbackRoutes);
 app.use("/api", trabajadorRoutes);
 
 app.use((__err, __req, res, __next) => {
-    res.status(500).send("Algo salió mal");
+  res.status(500).send("Algo salió mal");
 });
 
 // puerto
 const PORT = process.env.PORT || 5174;
 app.listen(PORT, () => {
-    console.log(`Servidor funcionando correctamente en el puerto ${PORT}.`);
+  console.log(`Servidor funcionando correctamente en el puerto ${PORT}.`);
 });

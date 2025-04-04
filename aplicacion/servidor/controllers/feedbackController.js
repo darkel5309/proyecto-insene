@@ -1,6 +1,6 @@
-const feedbackService = require("../services/feedbackService");
+import * as feedbackService from "../services/feedbackService.js";
 
-const registrarFeedback = async (req, res) => {
+export const registrarFeedback = async (req, res) => {
     try {
         const resultado = await feedbackService.registrarFeedback(req.body);
         res.status(200).json(resultado);
@@ -8,6 +8,3 @@ const registrarFeedback = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
-
-module.exports = { registrarFeedback };
-

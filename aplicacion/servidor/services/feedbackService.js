@@ -1,6 +1,6 @@
-const { query } = require("../models/db");
+import { query } from "../models/db.js";
 
-const registrarFeedback = async (datosFeedback) => {
+export const registrarFeedback = async (datosFeedback) => {
     const { idTrabajador, idCliente, fecha, hora, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, importeLuz, importeGas, resultado, oferta, observaciones } = datosFeedback;
 
     await query('START TRANSACTION');
@@ -37,5 +37,3 @@ const registrarFeedback = async (datosFeedback) => {
         throw new Error(error.message);
     }
 };
-
-module.exports = { registrarFeedback };

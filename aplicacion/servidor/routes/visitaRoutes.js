@@ -1,8 +1,9 @@
-const express = require("express");
+import express from "express";
+import { registrarVisita } from "../controllers/visitaController.js";
+import { validarDatosVisita } from "../middlewares/validarDatosVisita.js";
+
 const router = express.Router();
-const { registrarVisita } = require("../controllers/visitaController");
-const validarDatosVisita = require("../middlewares/validarDatosVisita");
 
 router.post("/registrarVisita", validarDatosVisita, registrarVisita);
 
-module.exports = router;
+export default router;

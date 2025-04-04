@@ -1,6 +1,6 @@
-const { query } = require("../models/db");
+import { query } from "../models/db.js";
 
-const registrarVisita = async (datosVisita) => {
+export const registrarVisita = async (datosVisita) => {
     const { idTrabajador, idCliente, fecha, hora, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, importeLuz, importeGas, observaciones } = datosVisita;
 
     await query('START TRANSACTION');
@@ -22,7 +22,8 @@ const registrarVisita = async (datosVisita) => {
 
             const idDomicilio = resultadoDomicilio.id_domicilio;
 
-            const resultadoInserccionVivienda = await query('INSERT INTO vivienda (n_personas, n_decisores, tiene_bombona, tiene_gas, tiene_termo_electrico, tiene_placas_termicas, id_domicilio) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+            const resultadoInserccionVivienda = await query(
+                'INSERT INTO vivienda (n_personas, n_decisores, tiene_bombona, tiene_gas, tiene_termo_electrico, tiene_placas_termicas, id_domicilio) VALUES (?, ?, ?, ?, ?, ?, ?)', 
                 [numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, idDomicilio]
             );
             idVivienda = resultadoInserccionVivienda.insertId;
@@ -32,7 +33,10 @@ const registrarVisita = async (datosVisita) => {
 
         await query('INSERT INTO recibo (importe_luz, importe_gas, id_vivienda) VALUES (?, ?, ?)', [importeLuz, importeGas, idVivienda]);
 
-        const resultadoVisita = await query('INSERT INTO visita (fecha, hora, observaciones_visita, id_vivienda, id_trabajador) VALUES (?, ?, ?, ?, ?)', [fecha, hora, observaciones, idVivienda, idTrabajador]);
+        const resultadoVisita = await query(
+            'INSERT INTO visita (fecha, hora, observaciones_visita, id_vivienda, id_trabajador) VALUES (?, ?, ?, ?, ?)', 
+            [fecha, hora, observaciones, idVivienda, idTrabajador]
+        );
 
         await query('COMMIT');
         return { message: "Visita registrada correctamente", idVisita: resultadoVisita.insertId };
@@ -42,5 +46,3 @@ const registrarVisita = async (datosVisita) => {
         throw new Error(error.message);
     }
 };
-
-module.exports = { registrarVisita };

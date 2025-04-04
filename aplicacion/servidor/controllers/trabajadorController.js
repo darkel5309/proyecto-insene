@@ -1,6 +1,6 @@
-const trabajadorService = require('../services/trabajadorService');
+import * as trabajadorService from '../services/trabajadorService.js';
 
-const registrarTrabajador = async (req, res) => {
+export const registrarTrabajador = async (req, res) => {
     try {
         const trabajador = await trabajadorService.registrarTrabajador(req.body);
         res.status(200).json(trabajador);
@@ -9,7 +9,7 @@ const registrarTrabajador = async (req, res) => {
     }
 };
 
-const obtenerTrabajadoresSimplificado = async (_req, res) => {
+export const obtenerTrabajadoresSimplificado = async (_req, res) => {
     try {
         const trabajadores = await trabajadorService.obtenerTrabajadoresSimplificado();
         res.status(200).json(trabajadores);
@@ -18,7 +18,7 @@ const obtenerTrabajadoresSimplificado = async (_req, res) => {
     }
 };
 
-const obtenerTrabajador = async (req, res) => {
+export const obtenerTrabajador = async (req, res) => {
     const { id_trabajador } = req.params;
 
     try {
@@ -29,7 +29,7 @@ const obtenerTrabajador = async (req, res) => {
     }
 };
 
-const actualizarTrabajador = async (req, res) => {
+export const actualizarTrabajador = async (req, res) => {
     const { id_trabajador } = req.params;
     const trabajador = req.body;
 
@@ -41,7 +41,7 @@ const actualizarTrabajador = async (req, res) => {
     }
 };
 
-const eliminarTrabajador = async (req, res) => {
+export const eliminarTrabajador = async (req, res) => {
     const { id_trabajador } = req.params;
 
     try {
@@ -51,5 +51,3 @@ const eliminarTrabajador = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
-
-module.exports = { registrarTrabajador, obtenerTrabajadoresSimplificado, obtenerTrabajador, actualizarTrabajador, eliminarTrabajador };

@@ -1,6 +1,6 @@
-const db = require("../config/dbConfig");
+import db from "../config/dbConfig.js";
 
-const query = async (sql, params) => {
+export const query = async (sql, params) => {
     try {
         const [results] = await db.query(sql, params);
         return results;
@@ -8,5 +8,3 @@ const query = async (sql, params) => {
         throw err;
     }
 };
-
-module.exports = { query };

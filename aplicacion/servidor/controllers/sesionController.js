@@ -1,16 +1,16 @@
-const { verificarTrabajadorYContrasena, generarToken, verificarToken } = require("../services/sesionService");
+import * as sesionService from "../services/sesionService.js";
 
-const iniciarSesion = async (req, res) => {
+export const iniciarSesion = async (req, res) => {
     const { idTrabajador, contrasena } = req.body;
 
     try {
-        const trabajador = await verificarTrabajadorYContrasena(idTrabajador, contrasena);
+        const trabajador = await sesionService.verificarTrabajadorYContrasena(idTrabajador, contrasena);
 
         if (!trabajador) {
             return res.status(400).json({ error: "Datos incorrectos" });
         }
 
-        const token = generarToken(trabajador.id_trabajador, trabajador.rol);
+        const token = sesionService.generarToken(trabajador.id_trabajador, trabajador.rol);
 
         res.cookie("token", token, {
             httpOnly: true,
@@ -18,20 +18,21 @@ const iniciarSesion = async (req, res) => {
             sameSite: "Strict",
             expires: new Date(Date.now() + 3600000),
         });
+
         res.json({ success: true, tipoTrabajador: trabajador.rol });
     } catch (err) {
-        res.status(500).json({ error: "Error al iniciar sesión" });
+        res.status(500).json({ error: "Error interno del servidor" });
     }
 };
 
-const verificarSesion = (req, res) => {
+export const verificarSesion = (req, res) => {
     const token = req.cookies.token;
     if (!token) {
         return res.status(401).json({ error: "No hay ninguna sesión activa" });
     }
 
     try {
-        const decoded = verificarToken(token);
+        const decoded = sesionService.verificarToken(token);
         if (!decoded) {
             return res.status(401).json({ error: "La sesión no es válida" });
         }
@@ -41,7 +42,7 @@ const verificarSesion = (req, res) => {
     }
 };
 
-const cerrarSesion = (_req, res) => {
+export const cerrarSesion = (_req, res) => {
     res.clearCookie("token", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -50,5 +51,3 @@ const cerrarSesion = (_req, res) => {
 
     res.json({ success: true, message: "Sesión cerrada correctamente" });
 };
-
-module.exports = { iniciarSesion, verificarSesion, cerrarSesion };
