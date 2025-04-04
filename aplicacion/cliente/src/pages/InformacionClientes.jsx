@@ -10,10 +10,12 @@ export default function InformacionClientes() {
 
     const [clientes, setClientes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchLoading, setSearchLoading] = useState(false);
     const [error, setError] = useState(null);
     const [idCliente, setIdCliente] = useState("");
     const [datosCliente, setDatosCliente] = useState(null);
     const [actualizaciones, setActualizaciones] = useState([]);
+    const [buscado, setBuscado] = useState(false);
 
     const columns = useMemo(() => [
         { accessorKey: "id_cliente", header: "ID", size: 90 },
@@ -45,8 +47,10 @@ export default function InformacionClientes() {
     const cargarDatosCliente = useCallback(async (id) => {
         if (!id) return;
 
-        setLoading(true);
+        setSearchLoading(true);
         setError(null);
+        setBuscado(true);
+        
         try {
             const [responseCliente, responseActualizaciones] = await Promise.all([
                 Axios.get(`/obtenerInformacionCliente/${id}`),
@@ -59,9 +63,15 @@ export default function InformacionClientes() {
             setDatosCliente(null);
             setActualizaciones([]);
         } finally {
-            setLoading(false);
+            setSearchLoading(false);
         }
     }, []);
+
+    const handleIdChange = (e) => {
+        setIdCliente(e.target.value);
+        setBuscado(false);
+        if (error) setError(null);
+    };
 
     const renderClientesTable = () => (
         <Card className="shadow-sm">
@@ -81,7 +91,10 @@ export default function InformacionClientes() {
                             onClick: () => {
                                 const id = row.original.id_cliente.toString();
                                 setIdCliente(id);
-                                cargarDatosCliente(id);
+                                setBuscado(false); 
+                                setTimeout(() => {
+                                    cargarDatosCliente(id);
+                                }, 0);
                             },
                             sx: { cursor: "pointer" },
                         })}
@@ -93,10 +106,28 @@ export default function InformacionClientes() {
 
     const renderBuscador = () => (
         <div className="d-flex justify-content-end mb-3">
-            <Form.Control type="text" value={idCliente} onChange={(e) => setIdCliente(e.target.value)} placeholder="Introduce el ID del cliente"
-                className="me-2" aria-label="ID del cliente" />
-            <Button onClick={() => cargarDatosCliente(idCliente)} variant="primary" aria-label="Buscar cliente" >
-                Buscar Cliente
+            <Form.Control 
+                type="text" 
+                value={idCliente} 
+                onChange={handleIdChange} 
+                placeholder="Introduce el ID del cliente"
+                className="me-2" 
+                aria-label="ID del cliente" 
+            />
+            <Button 
+                onClick={() => cargarDatosCliente(idCliente)} 
+                variant="primary" 
+                aria-label="Buscar cliente"
+                disabled={searchLoading}
+            >
+                {searchLoading ? (
+                    <>
+                        <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                        Buscando...
+                    </>
+                ) : (
+                    "Buscar Cliente"
+                )}
             </Button>
         </div>
     );
@@ -105,32 +136,34 @@ export default function InformacionClientes() {
         <Card className="shadow-sm mb-4">
             <Card.Header as="h5">Actualizaciones del Cliente</Card.Header>
             <Card.Body>
-                {actualizaciones.length > 0 ? (
-                    <div className="table-responsive">
-                        <table className="table table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Fecha</th>
-                                    <th scope="col">Tipo de Actualización</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {actualizaciones.map((act, index) => (
-                                    <tr key={index}>
-                                        <td>{act.fecha}</td>
-                                        <td>{act.ultimas_actualizaciones}</td>
+                {buscado ? (
+                    actualizaciones.length > 0 ? (
+                        <div className="table-responsive">
+                            <table className="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Fecha</th>
+                                        <th scope="col">Tipo de Actualización</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                ) : idCliente ? (
-                    <div className="text-center p-3">
-                        No hay actualizaciones para este cliente
-                    </div>
+                                </thead>
+                                <tbody>
+                                    {actualizaciones.map((act, index) => (
+                                        <tr key={index}>
+                                            <td>{act.fecha}</td>
+                                            <td>{act.ultimas_actualizaciones}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : !error ? (
+                        <div className="text-center p-3">
+                            No hay actualizaciones para este cliente
+                        </div>
+                    ) : null
                 ) : (
                     <div className="text-center p-3">
-                        Introduce un ID de cliente para ver sus actualizaciones
+                        Introduce el ID del cliente y haz clic en "Buscar Cliente".
                     </div>
                 )}
             </Card.Body>
