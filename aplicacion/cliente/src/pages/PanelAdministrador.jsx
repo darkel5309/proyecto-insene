@@ -20,9 +20,9 @@ export default function PanelAdministrador() {
 
     const columns = useMemo(() => [
         { accessorKey: 'id_trabajador', header: 'ID', size: 70 },
-        { accessorKey: 'nombre', header: 'Trabajador', size: 150 },
-        { accessorKey: 'rol', header: 'Rol', size: 130 },
-        { accessorKey: 'telefono', header: 'Teléfono', size: 130 },
+        { accessorKey: 'nombre', header: 'TRABAJADOR', size: 150 },
+        { accessorKey: 'rol', header: 'ROL', size: 130 },
+        { accessorKey: 'telefono', header: 'TELÉFONO', size: 130 },
         {
             id: 'modificar', header: '', size: 100, Cell: ({ row }) => (
                 <Button variant="warning" onClick={() => handleModificar(row.original.id_trabajador)}
@@ -78,7 +78,14 @@ export default function PanelAdministrador() {
                     <MaterialReactTable
                         columns={columns}
                         data={data}
-                        initialState={{ pagination: { pageIndex: 0, pageSize: 25 } }}
+                        enableColumnFilterModes={true}
+                        enableDensityToggle={false}
+                        enableColumnPinning={true}
+                        initialState={{
+                            density: "compact",
+                            pagination: { pageIndex: 0, pageSize: 25 },
+                            showColumnFilters: true,
+                        }}
                     />
                 </div>
             </Col>

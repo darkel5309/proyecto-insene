@@ -8,7 +8,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 export default function InformacionClientes() {
     useDocumentTitle("Panel de Administrador");
 
-    const [clientes, setClientes] = useState([]);
+    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchLoading, setSearchLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -19,9 +19,9 @@ export default function InformacionClientes() {
 
     const columns = useMemo(() => [
         { accessorKey: "id_cliente", header: "ID", size: 80 },
-        { accessorKey: "nombre", header: "Nombre", size: 150 },
-        { accessorKey: "telefono", header: "Teléfono", size: 130 },
-        { accessorKey: "localidad", header: "Localidad", size: 130 },
+        { accessorKey: "nombre", header: "CLIENTE", size: 150 },
+        { accessorKey: "telefono", header: "TELÉFONO", size: 130 },
+        { accessorKey: "localidad", header: "LOCALIDAD", size: 130 },
     ], []);
 
     useEffect(() => {
@@ -34,7 +34,7 @@ export default function InformacionClientes() {
                 const response = await Axios.get("/obtenerTodosClientes", {
                     signal: abortController.signal,
                 });
-                setClientes([...response.data].reverse());
+                setData([...response.data].reverse());
             } finally {
                 if (!abortController.signal.aborted) {
                     setLoading(false);
@@ -51,7 +51,7 @@ export default function InformacionClientes() {
         setSearchLoading(true);
         setError(null);
         setBuscado(true);
-        
+
         try {
             const [responseCliente, responseActualizaciones] = await Promise.all([
                 Axios.get(`/obtenerInformacionCliente/${id}`),
@@ -81,18 +81,20 @@ export default function InformacionClientes() {
                 <div className="tabla border rounded shadow-sm p-3 bg-light">
                     <MaterialReactTable
                         columns={columns}
-                        data={clientes}
-                        initialState={{ pagination: { pageIndex: 0, pageSize: 25 } }}
-                        muiTableProps={{
-                            sx: { width: "100%" },
-                            "aria-label": "Tabla de clientes",
+                        data={data}
+                        enableColumnFilterModes={true}
+                        enableDensityToggle={false}
+                        enableColumnPinning={true}
+                        initialState={{
+                            density: "compact",
+                            pagination: { pageIndex: 0, pageSize: 25 },
+                            showColumnFilters: true,
                         }}
-                        muiTableContainerProps={{ sx: { width: "100%" } }}
                         muiTableBodyRowProps={({ row }) => ({
                             onClick: () => {
                                 const id = row.original.id_cliente.toString();
                                 setIdCliente(id);
-                                setBuscado(false); 
+                                setBuscado(false);
                                 setTimeout(() => {
                                     cargarDatosCliente(id);
                                 }, 0);
@@ -107,17 +109,17 @@ export default function InformacionClientes() {
 
     const renderBuscador = () => (
         <div className="d-flex justify-content-end mb-3">
-            <Form.Control 
-                type="text" 
-                value={idCliente} 
-                onChange={handleIdChange} 
+            <Form.Control
+                type="text"
+                value={idCliente}
+                onChange={handleIdChange}
                 placeholder="Introduce el ID del cliente"
-                className="me-2" 
-                aria-label="ID del cliente" 
+                className="me-2"
+                aria-label="ID del cliente"
             />
-            <Button 
-                onClick={() => cargarDatosCliente(idCliente)} 
-                variant="primary" 
+            <Button
+                onClick={() => cargarDatosCliente(idCliente)}
+                variant="primary"
                 aria-label="Buscar cliente"
                 disabled={searchLoading}
             >

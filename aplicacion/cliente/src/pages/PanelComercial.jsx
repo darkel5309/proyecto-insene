@@ -15,8 +15,8 @@ export default function PanelComercial() {
 
     const columns = useMemo(() => [
         { accessorKey: "id_cliente", header: "ID", size: 70 },
-        { accessorKey: "nombre", header: "Cliente", size: 150 },
-        { accessorKey: "telefono", header: "Teléfono", size: 130 },
+        { accessorKey: "nombre", header: "CLIENTE", size: 150 },
+        { accessorKey: "telefono", header: "TELÉFONO", size: 130 },
     ], []);
 
     useEffect(() => {
@@ -55,7 +55,14 @@ export default function PanelComercial() {
                     <MaterialReactTable
                         columns={columns}
                         data={data}
-                        initialState={{ pagination: { pageIndex: 0, pageSize: 25 } }}
+                        enableColumnFilterModes={true}
+                        enableDensityToggle={false}
+                        enableColumnPinning={true}
+                        initialState={{
+                            density: "compact",
+                            pagination: { pageIndex: 0, pageSize: 25 },
+                            showColumnFilters: true,
+                        }}
                     />
                 </div>
             </Col>
