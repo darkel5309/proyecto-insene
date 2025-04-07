@@ -69,7 +69,7 @@ export const obtenerClientesSimplificado = async () => {
 };
 
 export const obtenerTodosClientes = async () => {
-    const obtenerClientes = `SELECT * FROM cliente`;
+    const obtenerClientes = `SELECT c.*, d.* FROM cliente c lEFT JOIN domicilio d ON c.id_cliente = d.id_cliente`;
     const resultado = await query(obtenerClientes);
     return resultado;
 };

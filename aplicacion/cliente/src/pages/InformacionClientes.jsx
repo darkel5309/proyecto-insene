@@ -18,9 +18,10 @@ export default function InformacionClientes() {
     const [buscado, setBuscado] = useState(false);
 
     const columns = useMemo(() => [
-        { accessorKey: "id_cliente", header: "ID", size: 90 },
+        { accessorKey: "id_cliente", header: "ID", size: 80 },
         { accessorKey: "nombre", header: "Nombre", size: 150 },
         { accessorKey: "telefono", header: "Teléfono", size: 130 },
+        { accessorKey: "localidad", header: "Localidad", size: 130 },
     ], []);
 
     useEffect(() => {

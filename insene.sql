@@ -232,16 +232,16 @@ SELECT * FROM cliente;
 
 INSERT INTO domicilio (direccion, localidad, provincia, id_cliente)
 VALUES
-('Calle Falsa 123', 'Madrid', 'Madrid', 1),
-('Avenida del Sol 456', 'Barcelona', 'Barcelona', 2),
-('Calle Real 789', 'Valencia', 'Valencia', 3),
-('Calle Luna 101', 'Sevilla', 'Sevilla', 4),
-('Calle Estrella 202', 'Zaragoza', 'Zaragoza', 5),
-('Calle Verde 303', 'Murcia', 'Murcia', 6),
+('Calle Falsa 123', 'Aranjuez', 'Madrid', 1),
+('Avenida del Sol 456', 'Sitges', 'Barcelona', 2),
+('Calle Real 789', 'Serra', 'Valencia', 3),
+('Calle Luna 101', 'Mairena del Alcor', 'Sevilla', 4),
+('Calle Estrella 202', 'Tarazona', 'Zaragoza', 5),
+('Calle Verde 303', 'Mula', 'Murcia', 6),
 ('Calle Azul 404', 'Bilbao', 'Vizcaya', 7),
-('Calle Viento 505', 'Granada', 'Granada', 8),
-('Calle Mar 606', 'Málaga', 'Málaga', 9),
-('Calle Río 707', 'Salamanca', 'Salamanca', 10);
+('Calle Viento 505', 'Pampaneira', 'Granada', 8),
+('Calle Mar 606', 'Frigiliana', 'Málaga', 9),
+('Calle Río 707', 'La Alberca', 'Salamanca', 10);
 
 SELECT * FROM domicilio;
 
