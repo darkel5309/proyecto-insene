@@ -4,6 +4,7 @@ import { MaterialReactTable } from "material-react-table";
 import { Container, Row, Col, Form, Button, Card, Alert } from "react-bootstrap";
 import useDocumentTitle from "../components/Titulo";
 import LoadingSpinner from "../components/LoadingSpinner";
+import dayjs from "dayjs";
 
 export default function InformacionClientes() {
     useDocumentTitle("Panel de Administrador");
@@ -18,10 +19,11 @@ export default function InformacionClientes() {
     const [buscado, setBuscado] = useState(false);
 
     const columns = useMemo(() => [
-        { accessorKey: "id_cliente", header: "ID", size: 80 },
+        { accessorKey: "id_cliente", header: "ID", size: 60 },
         { accessorKey: "nombre", header: "CLIENTE", size: 150 },
         { accessorKey: "telefono", header: "TELÉFONO", size: 130 },
         { accessorKey: "localidad", header: "LOCALIDAD", size: 130 },
+        { accessorKey: "provincia", header: "PROVINCIA", size: 130 },
     ], []);
 
     useEffect(() => {
@@ -202,7 +204,9 @@ export default function InformacionClientes() {
                             <Card.Text>
                                 <strong>Estado de Venta:</strong> {datosCliente.estado_venta} <br />
                                 <strong>ID Trabajador:</strong> {datosCliente.id_trabajador} <br />
-                                <strong>Fecha de Firma:</strong> {datosCliente.fecha_firma} <br />
+                                <strong>Fecha de Firma:</strong>{" "}
+                                {datosCliente.fecha_firma
+                                    ? dayjs(datosCliente.fecha_firma).format("DD/MM/YYYY HH:mm:ss") : "Sin registrar"} <br />
                                 <strong>Forma de Pago:</strong> {datosCliente.forma_pago}
                             </Card.Text>
                         </Card.Body>

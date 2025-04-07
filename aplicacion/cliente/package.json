@@ -17,6 +17,7 @@
     "@mui/x-date-pickers": "^7.28.3",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
+    "dayjs": "^1.11.13",
     "formik": "^2.4.6",
     "material-react-table": "^3.2.1",
     "prop-types": "^15.8.1",
