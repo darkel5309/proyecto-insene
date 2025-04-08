@@ -1,7 +1,7 @@
 import { query } from "../models/db.js";
 import bcrypt from "bcrypt";
 
-export const registrarTrabajador = async (trabajador) => {
+export const crear = async (trabajador) => {
     const { nombre, contrasena, telefono, rol, equipo, subequipo } = trabajador;
 
     await query('START TRANSACTION');
@@ -27,18 +27,13 @@ export const registrarTrabajador = async (trabajador) => {
     }
 };
 
-export const obtenerTrabajadoresSimplificado = async () => {
-    const obtenerTrabajadores = 'SELECT id_trabajador, nombre, telefono, rol FROM trabajador';
-    const resultado = await query(obtenerTrabajadores);
-    if (resultado.length === 0) {
-        throw new Error("No hay trabajadores registrados");
-    }
-    return resultado;
-};
-
-export const obtenerTrabajador = async (id_trabajador) => {
-    const obtenerTrabajador = 'SELECT id_trabajador, nombre, contrasena, telefono, rol, equipo, subequipo FROM trabajador WHERE id_trabajador = ?';
-    const resultado = await query(obtenerTrabajador, [id_trabajador]);
+export const obtenerPorId = async (id) => {
+    const obtenerTrabajador = `
+        SELECT id_trabajador, nombre, telefono, rol, equipo, subequipo, fecha_alta, fecha_baja
+        FROM trabajador
+        WHERE id_trabajador = ?
+`;
+    const resultado = await query(obtenerTrabajador, [id]);
 
     if (resultado.length === 0) {
         throw new Error("Trabajador no encontrado");
@@ -46,11 +41,11 @@ export const obtenerTrabajador = async (id_trabajador) => {
     return resultado[0];
 };
 
-export const actualizarTrabajador = async (id_trabajador, trabajador) => {
+export const actualizar = async (id, trabajador) => {
     const { nombre, contrasena, telefono, rol, equipo, subequipo } = trabajador;
 
     const comprobarTrabajador = 'SELECT 1 FROM trabajador WHERE id_trabajador = ?';
-    const resultadoTrabajador = await query(comprobarTrabajador, [id_trabajador]);
+    const resultadoTrabajador = await query(comprobarTrabajador, [id]);
     if (resultadoTrabajador.length === 0) {
         throw new Error('El trabajador no existe');
     }
@@ -61,21 +56,33 @@ export const actualizarTrabajador = async (id_trabajador, trabajador) => {
     }
 
     const actualizarTrabajador = 'UPDATE trabajador SET nombre = ?, contrasena = COALESCE(?, contrasena), telefono = ?, rol = ?, equipo = ?, subequipo = ? WHERE id_trabajador = ?';
-    await query(actualizarTrabajador, [nombre, nuevaContrasena, telefono, rol, equipo, subequipo, id_trabajador]);
+    await query(actualizarTrabajador, [nombre, nuevaContrasena, telefono, rol, equipo, subequipo, id]);
 
     return { message: "Trabajador actualizado correctamente" };
 };
 
-export const eliminarTrabajador = async (id_trabajador) => {
+export const eliminar = async (id) => {
     const comprobarTrabajador = 'SELECT 1 FROM trabajador WHERE id_trabajador = ?';
-    const resultadoTrabajador = await query(comprobarTrabajador, [id_trabajador]);
+    const resultadoTrabajador = await query(comprobarTrabajador, [id]);
 
     if (resultadoTrabajador.length === 0) {
         throw new Error('El trabajador no existe');
     }
 
     const eliminarTrabajador = 'DELETE FROM trabajador WHERE id_trabajador = ?';
-    await query(eliminarTrabajador, [id_trabajador]);
+    await query(eliminarTrabajador, [id]);
 
     return { message: "Trabajador eliminado correctamente" };
+};
+
+export const obtenerTodos = async () => {
+    const obtenerTrabajadores = `
+        SELECT id_trabajador, nombre, telefono, rol, equipo, subequipo, fecha_alta, fecha_baja
+        FROM trabajador
+    `;
+    const resultado = await query(obtenerTrabajadores);
+    if (resultado.length === 0) {
+        throw new Error("No hay trabajadores registrados");
+    }
+    return resultado;
 };

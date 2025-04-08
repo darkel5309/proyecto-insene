@@ -20,7 +20,7 @@ const routes = [
         roles: ["Administrador"],
     },
     {
-        path: "/administradores/modificarTrabajador/:id_trabajador",
+        path: "/administradores/modificarTrabajador/:id",
         element: <FormularioModificarTrabajador />,
         roles: ["Administrador"],
     },

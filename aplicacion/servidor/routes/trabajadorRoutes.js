@@ -1,13 +1,13 @@
 import express from "express";
-import { registrarTrabajador, obtenerTrabajadoresSimplificado, obtenerTrabajador, actualizarTrabajador, eliminarTrabajador } from "../controllers/trabajadorController.js";
+import { crear, obtenerPorId, actualizar, eliminar, obtenerTodos } from "../controllers/trabajadorController.js";
 import { validarDatosTrabajador } from "../middlewares/validarDatosTrabajador.js";
 
 const router = express.Router();
 
-router.post("/registrarTrabajador", validarDatosTrabajador, registrarTrabajador);
-router.get("/obtenerTrabajadoresSimplificado", obtenerTrabajadoresSimplificado);
-router.get("/trabajadores/:id_trabajador", obtenerTrabajador);
-router.put("/trabajadores/:id_trabajador", actualizarTrabajador);
-router.delete("/trabajadores/:id_trabajador", eliminarTrabajador);
+router.post("/trabajadores", validarDatosTrabajador, crear);
+router.get("/trabajadores/:id", obtenerPorId);
+router.put("/trabajadores/:id", actualizar);
+router.delete("/trabajadores/:id", eliminar);
+router.get("/trabajadores", obtenerTodos);
 
 export default router;

@@ -14,8 +14,8 @@ import { useDatosTrabajador } from '../hooks/useDatosTrabajador';
 export default function ModificarTrabajador() {
     useDocumentTitle("Modificación de Trabajador");
 
-    const { id_trabajador } = useParams();
-    const trabajador = useDatosTrabajador(id_trabajador);
+    const { id } = useParams();
+    const trabajador = useDatosTrabajador(id);
     const navigate = useNavigate();
 
     const initialValues = useMemo(() => ({
@@ -37,7 +37,7 @@ export default function ModificarTrabajador() {
             const trabajadorActualizado = { ...values };
             if (!values.contrasena) delete trabajadorActualizado.contrasena;
 
-            await Axios.put(`/trabajadores/${id_trabajador}`, trabajadorActualizado);
+            await Axios.put(`/trabajadores/${id}`, trabajadorActualizado);
             Swal.fire({
                 icon: "success",
                 title: "Trabajador actualizado correctamente",
@@ -48,7 +48,7 @@ export default function ModificarTrabajador() {
         } finally {
             setSubmitting(false);
         }
-    }, [id_trabajador, navigate]);
+    }, [id, navigate]);
 
     const onDelete = useCallback(async () => {
         try {
@@ -61,7 +61,7 @@ export default function ModificarTrabajador() {
             });
 
             if (confirmDelete.isConfirmed) {
-                await Axios.delete(`/trabajadores/${id_trabajador}`);
+                await Axios.delete(`/trabajadores/${id}`);
                 Swal.fire({
                     icon: "success",
                     title: "Trabajador eliminado correctamente",
@@ -71,7 +71,7 @@ export default function ModificarTrabajador() {
         } catch (error) {
             erroresSweetAlert2(error);
         }
-    }, [id_trabajador, navigate]);
+    }, [id, navigate]);
 
     return (
         <Container fluid="md" className="trabajador">

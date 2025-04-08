@@ -30,7 +30,7 @@ export default function FormularioTrabajador() {
 
     const onSubmit = useCallback(async (values, { setSubmitting, resetForm }) => {
         try {
-            const response = await Axios.post("/registrarTrabajador", values);
+            const response = await Axios.post("/trabajadores", values);
 
             Swal.fire({
                 icon: "success",

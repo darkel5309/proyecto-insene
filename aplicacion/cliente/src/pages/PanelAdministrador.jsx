@@ -23,7 +23,10 @@ export default function PanelAdministrador() {
         { accessorKey: 'id_trabajador', header: 'ID', size: 70 },
         { accessorKey: 'nombre', header: 'TRABAJADOR', size: 150 },
         { accessorKey: 'rol', header: 'ROL', size: 130 },
-        { accessorKey: 'telefono', header: 'TELÉFONO', size: 130 },
+        { accessorKey: 'equipo', header: 'EQUIPO', size: 130 },
+        { accessorKey: 'subequipo', header: 'SUBEQUIPO', size: 130 },
+        { accessorKey: 'fecha_alta', header: 'FECHA DE ALTA', size: 130 },
+        { accessorKey: 'fecha_baja', header: 'FECHA DE BAJA', size: 130 },
         {
             id: 'modificar', header: '', size: 100, Cell: ({ row }) => (
                 <Button variant="warning" onClick={() => handleModificar(row.original.id_trabajador)}
@@ -37,7 +40,7 @@ export default function PanelAdministrador() {
         const obtenerTrabajadores = async () => {
             try {
                 setLoading(true);
-                const { data } = await Axios.get("/obtenerTrabajadoresSimplificado");
+                const { data } = await Axios.get("/trabajadores");
                 setData([...data].reverse());
             } finally {
                 setLoading(false);
