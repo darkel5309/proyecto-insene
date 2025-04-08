@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Axios from "../axiosConfig";
 import { MaterialReactTable } from "material-react-table";
 import { Container, Row, Col, Form, Button, Card, Alert } from "react-bootstrap";
@@ -9,14 +9,13 @@ import dayjs from "dayjs";
 export default function InformacionClientes() {
     useDocumentTitle("Panel de Administrador");
 
-    const [data, setData] = useState([]);
+    const [clientes, setClientes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchLoading, setSearchLoading] = useState(false);
     const [error, setError] = useState(null);
     const [idCliente, setIdCliente] = useState("");
     const [datosCliente, setDatosCliente] = useState(null);
     const [actualizaciones, setActualizaciones] = useState([]);
-    const [buscado, setBuscado] = useState(false);
 
     const columns = useMemo(() => [
         { accessorKey: "id_cliente", header: "ID", size: 60 },
@@ -27,203 +26,90 @@ export default function InformacionClientes() {
     ], []);
 
     useEffect(() => {
-        const abortController = new AbortController();
-
-        const obtenerTodosClientes = async () => {
-            setLoading(true);
-            setError(null);
+        const fetchClientes = async () => {
             try {
-                const response = await Axios.get("/obtenerTodosClientes", {
-                    signal: abortController.signal,
-                });
-                setData([...response.data].reverse());
+                const { data } = await Axios.get("/obtenerTodosClientes");
+                setClientes([...data].reverse());
+            } catch {
+                setError("No se pudo cargar la lista de clientes.");
             } finally {
-                if (!abortController.signal.aborted) {
-                    setLoading(false);
-                }
+                setLoading(false);
             }
         };
-        obtenerTodosClientes();
-        return () => abortController.abort();
+        fetchClientes();
     }, []);
 
-    const cargarDatosCliente = useCallback(async (id) => {
+    const fetchClienteData = async (id) => {
         if (!id) return;
-
         setSearchLoading(true);
         setError(null);
-        setBuscado(true);
+        setDatosCliente(null);
+        setActualizaciones([]);
 
         try {
-            const [responseCliente, responseActualizaciones] = await Promise.all([
+            const [cliente, actualizaciones] = await Promise.all([
                 Axios.get(`/obtenerInformacionCliente/${id}`),
                 Axios.get(`/mostrarActualizaciones/${id}`),
             ]);
-            setDatosCliente(responseCliente.data);
-            setActualizaciones(responseActualizaciones.data);
-        } catch (err) {
-            setError(`No se pudo encontrar el cliente con ID: ${id}`);
-            setDatosCliente(null);
-            setActualizaciones([]);
+            setDatosCliente(cliente.data);
+            setActualizaciones(actualizaciones.data);
+        } catch {
+            setError(`El cliente con ID ${id} no existe.`);
         } finally {
             setSearchLoading(false);
         }
-    }, []);
-
-    const handleIdChange = (e) => {
-        setIdCliente(e.target.value);
-        setBuscado(false);
-        if (error) setError(null);
     };
 
-    const renderClientesTable = () => (
-        <Card className="shadow-sm">
-            <Card.Header as="h5">Lista de Clientes</Card.Header>
-            <Card.Body>
-                <div className="tabla border rounded shadow-sm p-3 bg-light">
-                    <MaterialReactTable
-                        columns={columns}
-                        data={data}
-                        enableColumnFilterModes={true}
-                        enableDensityToggle={false}
-                        enableColumnPinning={true}
-                        initialState={{
-                            density: "compact",
-                            pagination: { pageIndex: 0, pageSize: 25 },
-                            showColumnFilters: true,
-                        }}
-                        muiTableBodyRowProps={({ row }) => ({
-                            onClick: () => {
-                                const id = row.original.id_cliente.toString();
-                                setIdCliente(id);
-                                setBuscado(false);
-                                setTimeout(() => {
-                                    cargarDatosCliente(id);
-                                }, 0);
-                            },
-                            sx: { cursor: "pointer" },
-                        })}
-                    />
-                </div>
-            </Card.Body>
-        </Card>
+    const handleSearch = () => fetchClienteData(idCliente);
+    const handleRowClick = (id) => {
+        setIdCliente(id);
+        fetchClienteData(id);
+    };
+
+    const renderDetalle = (label, value) => (
+        <><strong>{label}:</strong> {value || ""} <br /></>
     );
 
-    const renderBuscador = () => (
-        <div className="d-flex justify-content-end mb-3">
-            <Form.Control
-                type="text"
-                value={idCliente}
-                onChange={handleIdChange}
-                placeholder="Introduce el ID del cliente"
-                className="me-2"
-                aria-label="ID del cliente"
-            />
-            <Button
-                onClick={() => cargarDatosCliente(idCliente)}
-                variant="primary"
-                aria-label="Buscar cliente"
-                disabled={searchLoading}
-            >
-                {searchLoading ? (
-                    <>
-                        <span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-                        Buscando...
-                    </>
-                ) : (
-                    "Buscar Cliente"
-                )}
-            </Button>
-        </div>
-    );
+    const renderClienteData = () => {
+        const sections = [
+            { title: "Datos del Cliente", fields: [
+                { label: "ID", value: datosCliente?.id_cliente },
+                { label: "Nombre", value: datosCliente?.nombre },
+                { label: "Teléfono", value: datosCliente?.telefono },
+                { label: "DNI", value: datosCliente?.dni },
+                { label: "IBAN", value: datosCliente?.iban },
+                { label: "Correo", value: datosCliente?.correo },
+                { label: "Modo de Captación", value: datosCliente?.modo_captacion },
+                { label: "Observaciones", value: datosCliente?.observaciones_cliente }
+            ]},
+            { title: "Domicilio", fields: [
+                { label: "Dirección", value: datosCliente?.direccion },
+                { label: "Localidad", value: datosCliente?.localidad },
+                { label: "Provincia", value: datosCliente?.provincia }
+            ]},
+            { title: "Venta", fields: [
+                { label: "Estado de Venta", value: datosCliente?.estado_venta },
+                { label: "ID Trabajador", value: datosCliente?.id_trabajador },
+                { label: "Fecha de Firma", value: datosCliente?.fecha_firma ? dayjs(datosCliente.fecha_firma).format("DD/MM/YYYY HH:mm:ss") : null },
+                { label: "Forma de Pago", value: datosCliente?.forma_pago }
+            ]},
 
-    const renderActualizaciones = () => (
-        <Card className="shadow-sm mb-4">
-            <Card.Header as="h5">Actualizaciones del Cliente</Card.Header>
-            <Card.Body>
-                {buscado ? (
-                    actualizaciones.length > 0 ? (
-                        <div className="table-responsive">
-                            <table className="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Fecha</th>
-                                        <th scope="col">Tipo de Actualización</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {actualizaciones.map((act, index) => (
-                                        <tr key={index}>
-                                            <td>{act.fecha}</td>
-                                            <td>{act.ultimas_actualizaciones}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    ) : !error ? (
-                        <div className="text-center p-3">
-                            No hay actualizaciones para este cliente
-                        </div>
-                    ) : null
-                ) : (
-                    <div className="text-center p-3">
-                        Introduce el ID del cliente y haz clic en "Buscar Cliente".
-                    </div>
-                )}
-            </Card.Body>
-        </Card>
-    );
-
-    const renderDetallesCliente = () => {
-        if (!datosCliente) return null;
+        ];
 
         return (
             <Row>
-                <Col md={4}>
-                    <Card className="mb-3">
-                        <Card.Header as="h5">Datos del Cliente</Card.Header>
-                        <Card.Body>
-                            <Card.Text>
-                                <strong>ID:</strong> {datosCliente.id_cliente} <br />
-                                <strong>Nombre:</strong> {datosCliente.nombre} <br />
-                                <strong>Teléfono:</strong> {datosCliente.telefono} <br />
-                                <strong>DNI:</strong> {datosCliente.dni} <br />
-                                <strong>IBAN:</strong> {datosCliente.iban} <br />
-                                <strong>Correo:</strong> {datosCliente.correo} <br />
-                                <strong>Modo de Captación:</strong> {datosCliente.modo_captacion}{" "} <br />
-                                <strong>Observaciones:</strong> {datosCliente.observaciones_cliente}
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={4}>
-                    <Card className="mb-3">
-                        <Card.Header as="h5">Venta</Card.Header>
-                        <Card.Body>
-                            <Card.Text>
-                                <strong>Estado de Venta:</strong> {datosCliente.estado_venta} <br />
-                                <strong>ID Trabajador:</strong> {datosCliente.id_trabajador} <br />
-                                <strong>Fecha de Firma:</strong>{" "}
-                                {datosCliente.fecha_firma
-                                    ? dayjs(datosCliente.fecha_firma).format("DD/MM/YYYY HH:mm:ss") : "Sin registrar"} <br />
-                                <strong>Forma de Pago:</strong> {datosCliente.forma_pago}
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={4}>
-                    <Card className="mb-3">
-                        <Card.Header as="h5">Domicilio</Card.Header>
-                        <Card.Body>
-                            <Card.Text>
-                                <strong>Dirección:</strong> {datosCliente.direccion} <br />
-                                <strong>Localidad:</strong> {datosCliente.localidad} <br />
-                                <strong>Provincia:</strong> {datosCliente.provincia}
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
+                {sections.map(({ title, fields }, idx) => (
+                    <Col md={4} key={idx}>
+                        <Card className="mb-3">
+                            <Card.Header as="h5">{title}</Card.Header>
+                            <Card.Body>
+                                <Card.Text>
+                                    {fields.map(({ label, value }) => renderDetalle(label, value))}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                ))}
             </Row>
         );
     };
@@ -243,13 +129,82 @@ export default function InformacionClientes() {
             ) : (
                 <>
                     <Row className="mb-4">
-                        <Col md={6}>{renderClientesTable()}</Col>
                         <Col md={6}>
-                            {renderBuscador()}
-                            {renderActualizaciones()}
+                            <Card className="shadow-sm">
+                                <Card.Header as="h5">Lista de Clientes</Card.Header>
+                                <Card.Body>
+                                    <MaterialReactTable
+                                        columns={columns}
+                                        data={clientes}
+                                        enableColumnFilterModes
+                                        enableDensityToggle={false}
+                                        enableColumnPinning
+                                        initialState={{
+                                            density: "compact",
+                                            pagination: { pageIndex: 0, pageSize: 25 },
+                                            showColumnFilters: true,
+                                        }}
+                                        muiTableBodyRowProps={({ row }) => ({
+                                            onClick: () => handleRowClick(row.original.id_cliente.toString()),
+                                            sx: { cursor: "pointer" },
+                                        })}
+                                    />
+                                </Card.Body>
+                            </Card>
+                        </Col>
+
+                        <Col md={6}>
+                            <div className="d-flex justify-content-end mb-3">
+                                <Form.Control
+                                    type="text"
+                                    value={idCliente}
+                                    onChange={(e) => setIdCliente(e.target.value)}
+                                    placeholder="Introduce el ID del cliente"
+                                    className="me-2"
+                                />
+                                <Button onClick={handleSearch} variant="primary" disabled={searchLoading}>
+                                    {searchLoading ? (
+                                        <>
+                                            <span className="spinner-border spinner-border-sm me-1" role="status" />
+                                            Buscando...
+                                        </>
+                                    ) : (
+                                        "Buscar Cliente"
+                                    )}
+                                </Button>
+                            </div>
+
+                            <Card className="shadow-sm mb-4">
+                                <Card.Header as="h5">Actualizaciones del Cliente</Card.Header>
+                                <Card.Body>
+                                    {actualizaciones.length ? (
+                                        <div className="table-responsive">
+                                            <table className="table table-striped table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Fecha</th>
+                                                        <th>Tipo de Actualización</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {actualizaciones.map((act, index) => (
+                                                        <tr key={index}>
+                                                            <td>{act.fecha}</td>
+                                                            <td>{act.ultimas_actualizaciones}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    ) : (
+                                        <div className="text-center p-3">Sin actualizaciones</div>
+                                    )}
+                                </Card.Body>
+                            </Card>
                         </Col>
                     </Row>
-                    {renderDetallesCliente()}
+
+                    {renderClienteData()}
                 </>
             )}
         </Container>
