@@ -2,6 +2,7 @@ import { Navigate, useOutlet } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import LoadingSpinner from './LoadingSpinner';
+import PropTypes from 'prop-types';
 
 const PrivateRoute = ({ allowedRoles }) => {
   const { authData, loading } = useContext(AuthContext);
@@ -14,6 +15,10 @@ const PrivateRoute = ({ allowedRoles }) => {
   }
 
   return outlet;
+};
+
+PrivateRoute.propTypes = {
+  allowedRoles: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default PrivateRoute;

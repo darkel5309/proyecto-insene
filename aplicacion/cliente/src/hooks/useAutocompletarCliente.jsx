@@ -10,7 +10,7 @@ export const useAutocompletarCliente = () => {
     try {
       const { data } = await Axios.get(`/recuperarCliente/${idCliente}`);
       campos.forEach(campo => setFieldValue(campo, data[campo] || ""));
-    } catch (error) {
+    } catch {
       campos.forEach(campo => setFieldValue(campo, ""));
     }
   }, []);

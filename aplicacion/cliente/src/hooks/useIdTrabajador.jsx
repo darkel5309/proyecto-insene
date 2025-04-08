@@ -13,7 +13,7 @@ export const useIdTrabajador = () => {
             try {
                 const response = await Axios.get('/verificarSesion', { withCredentials: true });
                 setIdTrabajador(response.data.id);
-            } catch (error) {
+            } catch {
                 Swal.fire({
                     icon: "error",
                     title: "Error de sesión",

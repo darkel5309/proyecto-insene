@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Container } from 'react-bootstrap';
 
 const LoadingSpinner = ({ message = "Cargando...", height = "50vh", fullWidth = true }) => {
@@ -12,6 +13,12 @@ const LoadingSpinner = ({ message = "Cargando...", height = "50vh", fullWidth = 
             </div>
         </Container>
     );
+};
+
+LoadingSpinner.propTypes = {
+  message: PropTypes.string,
+  height: PropTypes.string,
+  fullWidth: PropTypes.bool,
 };
 
 export default LoadingSpinner;

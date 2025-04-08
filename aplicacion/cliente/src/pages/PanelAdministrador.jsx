@@ -6,6 +6,7 @@ import Axios from "../axiosConfig";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import useDocumentTitle from '../components/Titulo';
 import LoadingSpinner from "../components/LoadingSpinner";
+import PropTypes from 'prop-types';
 
 export default function PanelAdministrador() {
     useDocumentTitle("Panel de Administrador");
@@ -106,3 +107,14 @@ export default function PanelAdministrador() {
         </Container>
     );
 }
+
+PanelAdministrador.propTypes = {
+    row: PropTypes.shape({
+        original: PropTypes.shape({
+            id_trabajador: PropTypes.number.isRequired,
+            nombre: PropTypes.string.isRequired,
+            rol: PropTypes.string.isRequired,
+            telefono: PropTypes.string.isRequired,
+        }).isRequired,
+    }),
+};

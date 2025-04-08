@@ -1,22 +1,20 @@
 import { createContext, useState, useEffect } from "react";
 import Axios from "../axiosConfig";
+import PropTypes from 'prop-types';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [authData, setAuthData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const verificarSesion = async () => {
     setLoading(true);
     try {
       const response = await Axios.get("/verificarSesion");
       setAuthData(response.data);
-      setError(null);
-    } catch (error) {
+    } catch {
       setAuthData(null);
-      setError("No se ha podido verificar la sesión.");
     } finally {
       setLoading(false);
     }
@@ -28,25 +26,23 @@ export function AuthProvider({ children }) {
 
   const iniciarSesion = async (data) => {
     setAuthData(data);
-    setError(null);
   };
 
   const cerrarSesion = async () => {
-    try {
-      await Axios.post("/cerrarSesion");
-      setAuthData(null);
-      setError(null);
-    } catch (error) {
-      setError("Error al cerrar sesión.");
-    }
+    await Axios.post("/cerrarSesion");
+    setAuthData(null);
   };
 
   return (
-    <AuthContext.Provider value={{ authData, iniciarSesion, cerrarSesion, loading, error, verificarSesion }}>
+    <AuthContext.Provider value={{ authData, iniciarSesion, cerrarSesion, loading, verificarSesion }}>
       {children}
     </AuthContext.Provider>
   );
 }
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export { AuthContext };
 export default AuthProvider;
