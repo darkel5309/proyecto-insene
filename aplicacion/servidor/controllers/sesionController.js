@@ -20,7 +20,7 @@ export const iniciarSesion = async (req, res) => {
         });
 
         res.json({ success: true, tipoTrabajador: trabajador.rol });
-    } catch (err) {
+    } catch {
         res.status(500).json({ error: "Error interno del servidor" });
     }
 };
@@ -37,7 +37,7 @@ export const verificarSesion = (req, res) => {
             return res.status(401).json({ error: "La sesión no es válida" });
         }
         res.json({ id: decoded.id, tipoTrabajador: decoded.rol });
-    } catch (error) {
+    } catch {
         return res.status(401).json({ error: "Error al verificar el token" });
     }
 };

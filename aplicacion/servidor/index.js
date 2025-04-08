@@ -29,7 +29,7 @@ app.use("/api", visitaRoutes);
 app.use("/api", feedbackRoutes);
 app.use("/api", trabajadorRoutes);
 
-app.use((__err, __req, res, __next) => {
+app.use((__err, __req, res) => {
   res.status(500).send("Algo salió mal");
 });
 

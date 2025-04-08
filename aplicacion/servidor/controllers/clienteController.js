@@ -36,7 +36,7 @@ export const obtenerTodosClientes = async (__req, res) => {
         }
 
         res.status(200).json(resultado);
-    } catch (err) {
+    } catch {
         res.status(500).json({ error: "Error interno del servidor" });
     }
 };
@@ -51,7 +51,7 @@ export const obtenerInformacionCliente = async (req, res) => {
         }
 
         res.status(200).json(clienteResultado[0]);
-    } catch (err) {
+    } catch {
         res.status(500).json({ error: "Error interno del servidor" });
     }
 };
@@ -70,7 +70,7 @@ export const mostrarActualizaciones = async (req, res) => {
         }
 
         res.status(200).json(actualizaciones);
-    } catch (err) {
+    } catch {
         res.status(500).json({ error: "Error interno del servidor" });
     }
 };

@@ -39,34 +39,27 @@ export const registrarCliente = async (cliente) => {
 };
 
 export const recuperarCliente = async (idCliente) => {
-    try {
-        const recuperarDatosCliente =
-            `SELECT c.id_cliente, c.nombre, c.telefono, c.correo, d.direccion, d.localidad, d.provincia 
+
+    const recuperarDatosCliente =
+        `SELECT c.id_cliente, c.nombre, c.telefono, c.correo, d.direccion, d.localidad, d.provincia 
             FROM cliente c
             LEFT JOIN domicilio d ON c.id_cliente = d.id_cliente
             WHERE c.id_cliente = ?`;
 
-        const resultado = await query(recuperarDatosCliente, [idCliente]);
-        if (resultado.length === 0) {
-            throw new Error("Cliente no encontrado");
-        }
-        return resultado[0];
-    } catch (err) {
-        throw err;
+    const resultado = await query(recuperarDatosCliente, [idCliente]);
+    if (resultado.length === 0) {
+        throw new Error("Cliente no encontrado");
     }
+    return resultado[0];
 };
 
 export const obtenerClientesSimplificado = async () => {
-    try {
-        const obtenerClientes = 'SELECT id_cliente, nombre, telefono FROM cliente';
-        const resultado = await query(obtenerClientes);
-        if (resultado.length === 0) {
-            throw new Error("No hay clientes registrados");
-        }
-        return resultado;
-    } catch (err) {
-        throw err;
+    const obtenerClientes = 'SELECT id_cliente, nombre, telefono FROM cliente';
+    const resultado = await query(obtenerClientes);
+    if (resultado.length === 0) {
+        throw new Error("No hay clientes registrados");
     }
+    return resultado;
 };
 
 export const obtenerTodosClientes = async () => {
@@ -139,23 +132,19 @@ export const mostrarActualizaciones = async (idCliente) => {
         ORDER BY fecha DESC
     `;
 
-    try {
-        const params = Array(9).fill(idCliente);
+    const params = Array(9).fill(idCliente);
 
-        const resultados = await query(consultaActualizaciones, params);
+    const resultados = await query(consultaActualizaciones, params);
 
-        const resultadosFormateados = resultados.map(row => {
-            if (row.fecha instanceof Date) {
-                return {
-                    ...row,
-                    fecha: dayjs(row.fecha).format('DD/MM/YYYY HH:mm:ss')
-                };
-            }
-            return row;
-        });
+    const resultadosFormateados = resultados.map(row => {
+        if (row.fecha instanceof Date) {
+            return {
+                ...row,
+                fecha: dayjs(row.fecha).format('DD/MM/YYYY HH:mm:ss')
+            };
+        }
+        return row;
+    });
 
-        return resultadosFormateados;
-    } catch (err) {
-        throw err;
-    }
+    return resultadosFormateados;
 };

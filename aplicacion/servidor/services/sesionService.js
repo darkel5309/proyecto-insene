@@ -10,7 +10,7 @@ export const verificarTrabajadorYContrasena = async (idTrabajador, contrasena) =
     }
 
     const contrasenaValida = await bcrypt.compare(contrasena, trabajador[0].contrasena);
-    
+
     if (!contrasenaValida) {
         return null;
     }
@@ -29,7 +29,7 @@ export const generarToken = (idTrabajador, rol) => {
 export const verificarToken = (token) => {
     try {
         return jwt.verify(token, process.env.JWT_SECRET);
-    } catch (err) {
+    } catch {
         return null;
     }
 };
