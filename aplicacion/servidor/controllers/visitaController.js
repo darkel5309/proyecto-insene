@@ -1,9 +1,9 @@
 import * as visitaService from "../services/visitaService.js";
 
-export const registrarVisita = async (req, res) => {
+export const crear = async (req, res) => {
     try {
         const visitaData = req.body;
-        const { message, idVisita } = await visitaService.registrarVisita(visitaData);
+        const { message, idVisita } = await visitaService.crear(visitaData);
         res.status(200).json({
             message: message,
             idVisita: idVisita,

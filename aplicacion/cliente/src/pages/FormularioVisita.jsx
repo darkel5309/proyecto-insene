@@ -41,14 +41,14 @@ export default function FormularioVisita() {
         if (values.importeGas === '') values.importeGas = 0;
 
         try {
-            const response = await Axios.post("/registrarVisita", values);
+            const response = await Axios.post("/visitas", values);
 
             Swal.fire({
                 icon: "success",
-                title: `El código del feedback es: ${response.data.idVisita}`,
-                text: "Feedback registrado correctamente",
+                title: `El código de la visita es: ${response.data.idVisita}`,
+                text: "Visita registrada correctamente",
                 confirmButtonText: "Vale"
-            }).then(() => navigate(-1));
+            }).then(() => navigate('/captadores'));
             resetForm();
         } catch (error) {
             erroresSweetAlert2(error);

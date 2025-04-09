@@ -1,7 +1,7 @@
 import { query } from "../models/db.js";
 
-export const registrarVisita = async (datosVisita) => {
-    const { idTrabajador, idCliente, fecha, hora, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, importeLuz, importeGas, observaciones } = datosVisita;
+export const crear = async (visita) => {
+    const { idTrabajador, idCliente, fecha, hora, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, importeLuz, importeGas, observaciones } = visita;
 
     await query('START TRANSACTION');
 
