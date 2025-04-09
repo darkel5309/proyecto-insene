@@ -1,7 +1,7 @@
 import { query } from "../models/db.js";
 
-export const registrarFeedback = async (datosFeedback) => {
-    const { idTrabajador, idCliente, fecha, hora, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, importeLuz, importeGas, resultado, oferta, observaciones } = datosFeedback;
+export const crear = async (feedback) => {
+    const { idTrabajador, idCliente, fecha, hora, numeroPersonas, numeroDecisores, tieneBombona, tieneGas, tieneTermo, tienePlacas, importeLuz, importeGas, resultado, oferta, observaciones } = feedback;
 
     await query('START TRANSACTION');
 

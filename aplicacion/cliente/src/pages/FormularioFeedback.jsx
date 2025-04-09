@@ -42,14 +42,14 @@ export default function FormularioFeedback() {
 		if (values.importeGas === '') values.importeGas = 0;
 
 		try {
-			const response = await Axios.post("/registrarFeedback", values);
+			const response = await Axios.post("/feedbacks", values);
 
 			Swal.fire({
 				icon: "success",
 				title: `El código del feedback es: ${response.data.idVisita}`,
 				text: "Feedback registrado correctamente",
 				confirmButtonText: "Vale"
-			}).then(() => navigate(-1));
+			}).then(() => navigate('/comerciales'));
 
 			resetForm();
 		} catch (error) {
@@ -173,10 +173,10 @@ export default function FormularioFeedback() {
 
 						<Row className="mb-3">
 							<Col xs={12} md={6}>
-								<CamposFormulario label="Importe Luz (€)" name="importeLuz" type="number" placeholder="30,99" errors={errors} touched={touched} tooltip="Introduce el importe de luz de la última factura del cliente" />
+								<CamposFormulario label="Importe Luz (€)" name="importeLuz" type="number" placeholder="Ej: 30,99" errors={errors} touched={touched} tooltip="Introduce el importe de luz de la última factura del cliente" />
 							</Col>
 							<Col xs={12} md={6}>
-								<CamposFormulario label="Importe Gas (€)" name="importeGas" type="number" placeholder="20,99" errors={errors} touched={touched} tooltip="Introduce el importe de gas de la última factura del cliente" />
+								<CamposFormulario label="Importe Gas (€)" name="importeGas" type="number" placeholder="Ej: 20,99" errors={errors} touched={touched} tooltip="Introduce el importe de gas de la última factura del cliente" />
 							</Col>
 						</Row>
 
