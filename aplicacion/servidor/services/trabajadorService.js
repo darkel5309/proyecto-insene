@@ -42,7 +42,7 @@ export const obtenerPorId = async (id) => {
 };
 
 export const actualizar = async (id, trabajador) => {
-    const { nombre, contrasena, telefono, rol, equipo, subequipo } = trabajador;
+    const { nombre, contrasena, telefono, rol, equipo, subequipo, fechaAlta, fechaBaja } = trabajador;
 
     const comprobarTrabajador = 'SELECT 1 FROM trabajador WHERE id_trabajador = ?';
     const resultadoTrabajador = await query(comprobarTrabajador, [id]);
@@ -55,8 +55,8 @@ export const actualizar = async (id, trabajador) => {
         nuevaContrasena = await bcrypt.hash(contrasena, 10);
     }
 
-    const actualizarTrabajador = 'UPDATE trabajador SET nombre = ?, contrasena = COALESCE(?, contrasena), telefono = ?, rol = ?, equipo = ?, subequipo = ? WHERE id_trabajador = ?';
-    await query(actualizarTrabajador, [nombre, nuevaContrasena, telefono, rol, equipo, subequipo, id]);
+    const actualizarTrabajador = 'UPDATE trabajador SET nombre = ?, contrasena = COALESCE(?, contrasena), telefono = ?, rol = ?, equipo = ?, subequipo = ?, fecha_alta = ?, fecha_baja = ? WHERE id_trabajador = ?';
+    await query(actualizarTrabajador, [nombre, nuevaContrasena, telefono, rol, equipo, subequipo, fechaAlta, fechaBaja, id]);
 
     return { message: "Trabajador actualizado correctamente" };
 };

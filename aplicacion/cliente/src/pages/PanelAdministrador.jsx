@@ -7,6 +7,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import useDocumentTitle from '../components/Titulo';
 import LoadingSpinner from "../components/LoadingSpinner";
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 
 export default function PanelAdministrador() {
     useDocumentTitle("Panel de Administrador");
@@ -14,6 +15,7 @@ export default function PanelAdministrador() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const formatFecha = (fecha) => fecha ? dayjs(fecha).format("DD/MM/YYYY HH:mm") : "-";
 
     const handleModificar = (id_trabajador) => {
         navigate(`/administradores/modificarTrabajador/${id_trabajador}`);
@@ -25,8 +27,8 @@ export default function PanelAdministrador() {
         { accessorKey: 'rol', header: 'ROL', size: 130 },
         { accessorKey: 'equipo', header: 'EQUIPO', size: 130 },
         { accessorKey: 'subequipo', header: 'SUBEQUIPO', size: 130 },
-        { accessorKey: 'fecha_alta', header: 'FECHA DE ALTA', size: 130 },
-        { accessorKey: 'fecha_baja', header: 'FECHA DE BAJA', size: 130 },
+        { accessorKey: 'fecha_alta', header: 'FECHA DE ALTA', size: 130, Cell: ({ cell }) => formatFecha(cell.getValue()) },
+        { accessorKey: 'fecha_baja', header: 'FECHA DE BAJA', size: 130, Cell: ({ cell }) => formatFecha(cell.getValue()) },
         {
             id: 'modificar', header: '', size: 100, Cell: ({ row }) => (
                 <Button variant="warning" onClick={() => handleModificar(row.original.id_trabajador)}

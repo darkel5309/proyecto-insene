@@ -10,6 +10,7 @@ import useDocumentTitle from '../components/Titulo';
 import { erroresSweetAlert2 } from '../utils/erroresSweetAlert2';
 import CamposFormulario from '../components/CamposFormulario';
 import { useDatosTrabajador } from '../hooks/useDatosTrabajador';
+import dayjs from 'dayjs';
 
 export default function ModificarTrabajador() {
     useDocumentTitle("Modificación de Trabajador");
@@ -18,9 +19,15 @@ export default function ModificarTrabajador() {
     const trabajador = useDatosTrabajador(id);
     const navigate = useNavigate();
 
+    const formatFechaDatetimeLocal = (fecha) => {
+        if (!fecha) return "";
+        return dayjs(fecha).format('YYYY-MM-DDTHH:mm');
+    };
+
     const initialValues = useMemo(() => ({
         nombre: trabajador.nombre || "", contrasena: "", telefono: trabajador.telefono || "", rol: trabajador.rol || "",
-        equipo: trabajador.equipo || "", subequipo: trabajador.subequipo || "",
+        equipo: trabajador.equipo || "", subequipo: trabajador.subequipo || "", fechaAlta: formatFechaDatetimeLocal(trabajador.fecha_alta),
+        fechaBaja: formatFechaDatetimeLocal(trabajador.fecha_baja)
     }), [trabajador]);
 
     const validationSchema = Yup.object({
@@ -30,12 +37,15 @@ export default function ModificarTrabajador() {
         rol: Yup.string().required("Este campo es obligatorio"),
         equipo: Yup.string().required("Este campo es obligatorio"),
         subequipo: Yup.string().required("Este campo es obligatorio"),
+        fechaAlta:Yup.date().required("Este campo es obligatorio"),
+        fechaBaja:Yup.date().optional()
     });
 
     const onSubmit = useCallback(async (values, { setSubmitting }) => {
         try {
             const trabajadorActualizado = { ...values };
             if (!values.contrasena) delete trabajadorActualizado.contrasena;
+            if (!values.fechaBaja) { trabajadorActualizado.fechaBaja = null; }
 
             await Axios.put(`/trabajadores/${id}`, trabajadorActualizado);
             Swal.fire({
@@ -119,6 +129,16 @@ export default function ModificarTrabajador() {
                                     <option value="Recursos_Humanos">Recursos Humanos</option>
                                     <option value="Tramitador">Tramitador</option>
                                 </CamposFormulario>
+                            </Col>
+                        </Row>
+                        <Row className="mb-3">
+                            <Col xs={12} md={6}>
+                                <CamposFormulario label="Nueva fecha de alta *" name="fechaAlta" type="datetime-local"
+                                    tooltip="Introduce la nueva fecha de alta del trabajador" errors={errors} touched={touched} />
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <CamposFormulario label="Nueva fecha de baja" name="fechaBaja" type="datetime-local"
+                                    tooltip="Introduce la nueva fecha de baja del trabajador" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 
