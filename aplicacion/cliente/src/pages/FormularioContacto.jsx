@@ -34,7 +34,7 @@ export default function FormularioCliente() {
 
     const onSubmit = useCallback(async (values, { setSubmitting, resetForm }) => {
         try {
-            const response = await Axios.post("/registrarCliente", values);
+            const response = await Axios.post("/clientes", values);
 
             Swal.fire({
                 icon: "success",

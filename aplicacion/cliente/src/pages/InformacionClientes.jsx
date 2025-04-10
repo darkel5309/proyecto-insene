@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import Axios from "../axiosConfig";
 import { MaterialReactTable } from "material-react-table";
 import { Container, Row, Col, Form, Button, Card, Alert } from "react-bootstrap";
@@ -7,7 +8,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import dayjs from "dayjs";
 
 export default function InformacionClientes() {
-    useDocumentTitle("Panel de Administrador");
+    useDocumentTitle("Panel de Clientes");
 
     const [clientes, setClientes] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -16,19 +17,39 @@ export default function InformacionClientes() {
     const [idCliente, setIdCliente] = useState("");
     const [datosCliente, setDatosCliente] = useState(null);
     const [actualizaciones, setActualizaciones] = useState([]);
+    const navigate = useNavigate();
+    const formatFecha = (fecha) => fecha ? dayjs(fecha).format("DD/MM/YYYY HH:mm") : "-";
+
+    const handleModificar = (id_cliente) => {
+        navigate(`/administradores/modificarCliente/${id_cliente}`);
+    };
 
     const columns = useMemo(() => [
         { accessorKey: "id_cliente", header: "ID", size: 60 },
         { accessorKey: "nombre", header: "CLIENTE", size: 150 },
         { accessorKey: "telefono", header: "TELÉFONO", size: 130 },
+        { accessorKey: "correo", header: "CORREO", size: 130 },
+        { accessorKey: "dni", header: "DNI", size: 130 },
+        { accessorKey: "iban", header: "IBAN", size: 130 },
+        { accessorKey: "modo_captacion", header: "MODO DE CAPTACIÓN", size: 130 },
+        { accessorKey: "observaciones_cliente", header: "OBSERVACIONES", size: 130 },
+        { accessorKey: "fecha_alta", header: "FECHA DE ALTA", size: 130, Cell: ({ cell }) => formatFecha(cell.getValue()) },
+        { accessorKey: "direccion", header: "DIRECCIÓN", size: 130 },
         { accessorKey: "localidad", header: "LOCALIDAD", size: 130 },
         { accessorKey: "provincia", header: "PROVINCIA", size: 130 },
+        {
+            id: 'opciones', header: 'OPCIONES', size: 100, Cell: ({ row }) => (
+                <Button variant="warning" onClick={() => handleModificar(row.original.id_cliente)}
+                    aria-label={`Modificar cliente ${row.original.nombre}`}> Modificar
+                </Button>
+            ),
+        },
     ], []);
 
     useEffect(() => {
         const fetchClientes = async () => {
             try {
-                const { data } = await Axios.get("/obtenerTodosClientes");
+                const { data } = await Axios.get("/clientes");
                 setClientes([...data].reverse());
             } catch {
                 setError("No se pudo cargar la lista de clientes.");
@@ -48,7 +69,7 @@ export default function InformacionClientes() {
 
         try {
             const [cliente, actualizaciones] = await Promise.all([
-                Axios.get(`/obtenerInformacionCliente/${id}`),
+                Axios.get(`/clientes/${id}`),
                 Axios.get(`/mostrarActualizaciones/${id}`),
             ]);
             setDatosCliente(cliente.data);
@@ -72,27 +93,33 @@ export default function InformacionClientes() {
 
     const renderClienteData = () => {
         const sections = [
-            { title: "Datos del Cliente", fields: [
-                { label: "ID", value: datosCliente?.id_cliente },
-                { label: "Nombre", value: datosCliente?.nombre },
-                { label: "Teléfono", value: datosCliente?.telefono },
-                { label: "DNI", value: datosCliente?.dni },
-                { label: "IBAN", value: datosCliente?.iban },
-                { label: "Correo", value: datosCliente?.correo },
-                { label: "Modo de Captación", value: datosCliente?.modo_captacion },
-                { label: "Observaciones", value: datosCliente?.observaciones_cliente }
-            ]},
-            { title: "Domicilio", fields: [
-                { label: "Dirección", value: datosCliente?.direccion },
-                { label: "Localidad", value: datosCliente?.localidad },
-                { label: "Provincia", value: datosCliente?.provincia }
-            ]},
-            { title: "Venta", fields: [
-                { label: "Estado de Venta", value: datosCliente?.estado_venta },
-                { label: "ID Trabajador", value: datosCliente?.id_trabajador },
-                { label: "Fecha de Firma", value: datosCliente?.fecha_firma ? dayjs(datosCliente.fecha_firma).format("DD/MM/YYYY HH:mm:ss") : null },
-                { label: "Forma de Pago", value: datosCliente?.forma_pago }
-            ]},
+            {
+                title: "Datos del Cliente", fields: [
+                    { label: "ID", value: datosCliente?.id_cliente },
+                    { label: "Nombre", value: datosCliente?.nombre },
+                    { label: "Teléfono", value: datosCliente?.telefono },
+                    { label: "Correo", value: datosCliente?.correo },
+                    { label: "DNI", value: datosCliente?.dni },
+                    { label: "IBAN", value: datosCliente?.iban },
+                    { label: "Modo de Captación", value: datosCliente?.modo_captacion },
+                    { label: "Observaciones", value: datosCliente?.observaciones_cliente }
+                ]
+            },
+            {
+                title: "Domicilio", fields: [
+                    { label: "Dirección", value: datosCliente?.direccion },
+                    { label: "Localidad", value: datosCliente?.localidad },
+                    { label: "Provincia", value: datosCliente?.provincia }
+                ]
+            },
+            {
+                title: "Venta", fields: [
+                    { label: "Estado de Venta", value: datosCliente?.estado_venta },
+                    { label: "ID Trabajador", value: datosCliente?.id_trabajador },
+                    { label: "Fecha de Firma", value: datosCliente?.fecha_firma ? dayjs(datosCliente.fecha_firma).format("DD/MM/YYYY HH:mm:ss") : null },
+                    { label: "Forma de Pago", value: datosCliente?.forma_pago }
+                ]
+            },
 
         ];
 
@@ -104,7 +131,11 @@ export default function InformacionClientes() {
                             <Card.Header as="h5">{title}</Card.Header>
                             <Card.Body>
                                 <Card.Text>
-                                    {fields.map(({ label, value }) => renderDetalle(label, value))}
+                                    {fields.map(({ label, value }, i) => (
+                                        <React.Fragment key={i}>
+                                            <strong>{label}:</strong> {value || ""} <br />
+                                        </React.Fragment>
+                                    ))}
                                 </Card.Text>
                             </Card.Body>
                         </Card>
@@ -203,7 +234,6 @@ export default function InformacionClientes() {
                             </Card>
                         </Col>
                     </Row>
-
                     {renderClienteData()}
                 </>
             )}

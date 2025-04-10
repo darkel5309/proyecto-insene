@@ -23,7 +23,7 @@ export default function PanelComercial() {
         const obtenerClientes = async () => {
             try {
                 setLoading(true);
-                const { data } = await Axios.get("/obtenerClientesSimplificado");
+                const { data } = await Axios.get("/clientes");
                 setData([...data].reverse());
             } finally {
                 setLoading(false);

@@ -69,10 +69,19 @@ export const eliminar = async (id) => {
         throw new Error('El trabajador no existe');
     }
 
+    const eliminarVentas = 'DELETE FROM venta WHERE id_trabajador = ?';
+    await query(eliminarVentas, [id]);
+
+    const eliminarInstalaciones = 'DELETE FROM instalacion WHERE id_trabajador = ?';
+    await query(eliminarInstalaciones, [id]);
+
+    const eliminarVisitas = 'DELETE FROM visita WHERE id_trabajador = ?';
+    await query(eliminarVisitas, [id]);
+
     const eliminarTrabajador = 'DELETE FROM trabajador WHERE id_trabajador = ?';
     await query(eliminarTrabajador, [id]);
 
-    return { message: "Trabajador eliminado correctamente" };
+    return { message: "Trabajador y todos los datos relacionados eliminados correctamente" };
 };
 
 export const obtenerTodos = async () => {

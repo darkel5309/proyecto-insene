@@ -1,50 +1,18 @@
 import * as clienteService from '../services/clienteService.js';
 
-export const registrarCliente = async (req, res) => {
+export const crear = async (req, res) => {
     try {
-        const resultado = await clienteService.registrarCliente(req.body);
+        const resultado = await clienteService.crear(req.body);
         res.status(200).json(resultado);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 };
 
-export const recuperarCliente = async (req, res) => {
+export const obtenerPorId = async (req, res) => {
+    const { id } = req.params;
     try {
-        const cliente = await clienteService.recuperarCliente(req.params.idCliente);
-        res.status(200).json(cliente);
-    } catch (error) {
-        res.status(404).json({ error: error.message });
-    }
-};
-
-export const obtenerClientesSimplificado = async (_req, res) => {
-    try {
-        const clientes = await clienteService.obtenerClientesSimplificado();
-        res.status(200).json(clientes);
-    } catch (error) {
-        res.status(404).json({ error: error.message });
-    }
-};
-
-export const obtenerTodosClientes = async (__req, res) => {
-    try {
-        const resultado = await clienteService.obtenerTodosClientes();
-
-        if (resultado.length === 0) {
-            return res.status(404).json({ error: "No hay clientes registrados" });
-        }
-
-        res.status(200).json(resultado);
-    } catch {
-        res.status(500).json({ error: "Error interno del servidor" });
-    }
-};
-
-export const obtenerInformacionCliente = async (req, res) => {
-    const { idCliente } = req.params;
-    try {
-        const clienteResultado = await clienteService.obtenerInformacionCliente(idCliente);
+        const clienteResultado = await clienteService.obtenerPorId(id);
 
         if (clienteResultado.length === 0) {
             return res.status(404).json({ error: "Cliente no encontrado" });
@@ -56,14 +24,57 @@ export const obtenerInformacionCliente = async (req, res) => {
     }
 };
 
-export const mostrarActualizaciones = async (req, res) => {
-    const { idCliente } = req.params;
+export const obtenerTodos = async (__req, res) => {
     try {
-        if (!idCliente || isNaN(idCliente)) {
+        const resultado = await clienteService.obtenerTodos();
+
+        if (resultado.length === 0) {
+            return res.status(404).json({ error: "No hay clientes registrados" });
+        }
+
+        res.status(200).json(resultado);
+    } catch {
+        res.status(500).json({ error: "Error interno del servidor" });
+    }
+};
+
+export const actualizar = async (req, res) => {
+    const { id } = req.params;
+    const cliente = req.body;
+
+    try {
+        const resultado = await clienteService.actualizar(id, cliente);
+        res.status(200).json(resultado);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+export const eliminar = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const clienteExistente = await clienteService.obtenerPorId(id);
+        if (clienteExistente.length === 0) {
+            return res.status(404).json({ error: "Cliente no encontrado" });
+        }
+
+        const resultado = await clienteService.eliminar(id);
+
+        res.status(200).json({ message: resultado.message });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+export const mostrarActualizaciones = async (req, res) => {
+    const { id } = req.params;
+    try {
+        if (!id || isNaN(id)) {
             return res.status(400).json({ error: "El ID del cliente debe ser un número válido" });
         }
 
-        const actualizaciones = await clienteService.mostrarActualizaciones(idCliente);
+        const actualizaciones = await clienteService.mostrarActualizaciones(id);
 
         if (actualizaciones.length === 0) {
             return res.status(200).json({ message: "No hay actualizaciones para este cliente", actualizaciones: [] });

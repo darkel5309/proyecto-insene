@@ -1,14 +1,15 @@
 import express from "express";
-import { registrarCliente, recuperarCliente, obtenerClientesSimplificado, obtenerTodosClientes, obtenerInformacionCliente, mostrarActualizaciones } from "../controllers/clienteController.js";
+import { crear, obtenerPorId, obtenerTodos, actualizar, eliminar, mostrarActualizaciones } from "../controllers/clienteController.js";
 import { validarDatosCliente } from "../middlewares/validarDatosCliente.js";
 
 const router = express.Router();
 
-router.post("/registrarCliente", validarDatosCliente, registrarCliente);
-router.get("/recuperarCliente/:idCliente", recuperarCliente);
-router.get("/obtenerClientesSimplificado", obtenerClientesSimplificado);
-router.get('/obtenerTodosClientes', obtenerTodosClientes);
-router.get('/obtenerInformacionCliente/:idCliente', obtenerInformacionCliente);
-router.get('/mostrarActualizaciones/:idCliente', mostrarActualizaciones);
+router.post("/clientes", validarDatosCliente, crear);
+router.get('/clientes/:id', obtenerPorId);
+router.get('/clientes', obtenerTodos);
+router.put("/clientes/:id", actualizar);
+router.delete('/clientes/:id', eliminar);
+
+router.get('/mostrarActualizaciones/:id', mostrarActualizaciones);
 
 export default router;
