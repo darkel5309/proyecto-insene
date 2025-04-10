@@ -8,6 +8,7 @@ import clienteRoutes from "./routes/clienteRoutes.js";
 import visitaRoutes from "./routes/visitaRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
 import trabajadorRoutes from "./routes/trabajadorRoutes.js";
+import fechaRoutes from "./routes/fechaRoutes.js";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use("/api", clienteRoutes);
 app.use("/api", visitaRoutes);
 app.use("/api", feedbackRoutes);
 app.use("/api", trabajadorRoutes);
+app.use("/api", fechaRoutes);
 
 app.use((__err, __req, res) => {
   res.status(500).send("Algo salió mal");

@@ -70,7 +70,7 @@ export default function InformacionClientes() {
         try {
             const [cliente, actualizaciones] = await Promise.all([
                 Axios.get(`/clientes/${id}`),
-                Axios.get(`/mostrarActualizaciones/${id}`),
+                Axios.get(`/fechas/${id}`),
             ]);
             setDatosCliente(cliente.data);
             setActualizaciones(actualizaciones.data);
@@ -86,10 +86,6 @@ export default function InformacionClientes() {
         setIdCliente(id);
         fetchClienteData(id);
     };
-
-    const renderDetalle = (label, value) => (
-        <><strong>{label}:</strong> {value || ""} <br /></>
-    );
 
     const renderClienteData = () => {
         const sections = [
