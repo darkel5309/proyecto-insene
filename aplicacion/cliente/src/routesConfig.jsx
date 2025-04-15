@@ -7,7 +7,8 @@ import FormularioVisita from "./pages/FormularioVisita";
 import FormularioFeedback from "./pages/FormularioFeedback";
 import InformacionClientes from "./pages/InformacionClientes";
 import FormularioModificarTrabajador from "./pages/FormularioModificarTrabajador";
-import FormularioModificarCliente from "./pages/FormularioModificarCliente"
+import FormularioModificarCliente from "./pages/FormularioModificarCliente";
+import Agenda from "./pages/Agenda";
 
 const routes = [
     {
@@ -34,6 +35,11 @@ const routes = [
         path: "/administradores/modificarCliente/:id",
         element: <FormularioModificarCliente />,
         roles: ["Administrador"],
+    },
+    {
+        path: "/coordinadores",
+        element: <Agenda />,
+        roles: ["Captador", "Administrador"],
     },
     {
         path: "/captadores",

@@ -208,12 +208,13 @@ CREATE TABLE agenda (
     id_vivienda INT NOT NULL,
     motivo VARCHAR(255),
     estado ENUM('Pendiente', 'Completada', 'Cancelada') DEFAULT 'Pendiente',
+    descripcion TEXT,  -- Agregar columna 'descripcion'
+    titulo VARCHAR(255),  -- Agregar columna 'titulo' para el título del evento
     fecha_asignacion DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_agenda_id_trabajador FOREIGN KEY (id_trabajador) REFERENCES trabajador(id_trabajador),
     CONSTRAINT fk_agenda_id_vivienda FOREIGN KEY (id_vivienda) REFERENCES vivienda(id_vivienda)
 );
-
 
 -- INSERTS
 
@@ -401,6 +402,12 @@ INSERT INTO caida (id_venta, motivo_caida, tramitador_financiera, financiera, me
 (10, 'No_se_puede_instalar', 'Pedro Sánchez', 'Financiera J', 'Marzo');
 
 SELECT * FROM caida;
+
+INSERT INTO agenda (fecha_inicio_agenda, fecha_fin_agenda, id_trabajador, id_vivienda, motivo) VALUES 
+('2025-04-16 10:00:00', '2025-04-16 11:00:00',  1, 1, 'Primera visita al cliente');
+
+SELECT * FROM agenda;
+
 
 -- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 -- FLUSH PRIVILEGES;

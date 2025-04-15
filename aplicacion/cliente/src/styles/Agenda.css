@@ -1,0 +1,9 @@
+.fc {
+    font-family: 'Inter', sans-serif;
+}
+
+.fc-daygrid-event {
+    padding: 4px 6px;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+}
