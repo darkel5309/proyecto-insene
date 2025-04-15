@@ -200,19 +200,34 @@ CREATE TABLE caida (
 
 DESCRIBE caida;
 
+CREATE TABLE agenda (
+    id_agenda INT PRIMARY KEY AUTO_INCREMENT,
+    fecha_inicio_agenda DATETIME NOT NULL,
+    fecha_fin_agenda DATETIME NOT NULL,
+    id_trabajador INT NOT NULL,
+    id_vivienda INT NOT NULL,
+    motivo VARCHAR(255),
+    estado ENUM('Pendiente', 'Completada', 'Cancelada') DEFAULT 'Pendiente',
+    fecha_asignacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_agenda_id_trabajador FOREIGN KEY (id_trabajador) REFERENCES trabajador(id_trabajador),
+    CONSTRAINT fk_agenda_id_vivienda FOREIGN KEY (id_vivienda) REFERENCES vivienda(id_vivienda)
+);
+
+
 -- INSERTS
 
 INSERT INTO trabajador (nombre, contrasena, telefono, rol, equipo, subequipo) VALUES
-('Juan Pérez', 'contraseña123', '600123456', 'Comercial', 'Equipo A', 'Subequipo X'),
-('Ana Gómez', 'contraseña456', '600123457', 'Captador', 'Equipo B', 'Subequipo Y'),
-('Luis Martínez', 'contraseña789', '600123458', 'Instalador', 'Equipo C', 'Subequipo Z'),
-('Pedro Sánchez', 'contraseña101', '600123459', 'Coordinador', 'Equipo D', 'Subequipo W'),
-('Marta Rodríguez', 'contraseña112', '600123460', 'Administrador', 'Equipo E', 'Subequipo V'),
-('Carlos Torres', 'contraseña113', '600123461', 'Recursos_Humanos', 'Equipo F', 'Subequipo U'),
-('Isabel Díaz', 'contraseña114', '600123462', 'Tramitador', 'Equipo G', 'Subequipo T'),
-('José Pérez', 'contraseña115', '600123463', 'Comercial', 'Equipo H', 'Subequipo S'),
-('Laura López', 'contraseña116', '600123464', 'Instalador', 'Equipo I', 'Subequipo R'),
-('Raúl González', 'contraseña117', '600123465', 'Captador', 'Equipo J', 'Subequipo Q');
+('Ángel Domínguez Rodríguez', '$2b$10$lE.pJalVEqJY/DSoz3JJ5.xSYJfL8j.kAo1DZk6cmOLIlLc8n66jq', '600123456', 'Administrador', 'Administradores', 'Administradores'),
+('Marga', '$2b$10$CeEelXZmSL0lnsW.IknTmeQ.uBzpOqO/Bryud6xIaPJEQqT4IkD52', '600123457', 'Administrador', 'Equipo B', 'Subequipo Y'),
+('Luis Martínez', '$2b$10$8Dif/bogeC9Vjq/EvJtD1OF8dzcQnujObXHhQqJl/rsg3ORfhr9bO', '635987898', 'Instalador', 'Equipo C', 'Subequipo Z'),
+('Manuel Sánchez', '$2b$10$xL..Tlf6tFFvLB/bODL06uPzxOaX7Bd6aGhqEHIdk5p7GlIcyNDQG', '600123459', 'Coordinador', 'Equipo D', 'Subequipo W'),
+('Marta Rodríguez', '$2b$10$80T56A271ZxKVmDtfFT3K.nnQJd1PEHkIjxkdQ6y5pPJ7mjq1xWiW', '600123460', 'Administrador', 'Equipo E', 'Subequipo V'),
+('Carlos Torres', '$2b$10$8geOtrV/i/XLd0ZiMKWR1OwbJdvN1yqhkrJuW9tLn6neWq8m2e2yi', '600123461', 'Recursos_Humanos', 'Equipo F', 'Subequipo U'),
+('Isabel Díaz', '$2b$10$FSWMzFXdudlB40l64g7K0eRKWRuXkGDt8d/I51./qoBW58XMkOnZ.', '600123462', 'Tramitador', 'Equipo G', 'Subequipo T'),
+('José Pérez', '$2b$10$w1nuLXy8LIGOA/8xqcMyeegN.hm4KSJX35RRjqpeDBIyUIgXcLcXu', '600123463', 'Comercial', 'Equipo H', 'Subequipo S'),
+('Laura López', '$2b$10$6.1.3mtu7EmUZoVrem0fauv7uAAGqlKX0ftVYly3Pw.jK3Z1CJdPy', '600123464', 'Instalador', 'Equipo I', 'Subequipo R'),
+('Javier González', '$2b$10$GC.hWE/pwi7etgEYGqXz7OB77XBJ5WixsvFh5weVqseFiyvD4daRe', '600123465', 'Captador', 'Equipo J', 'Subequipo Q');
 
 SELECT * FROM trabajador;
 
