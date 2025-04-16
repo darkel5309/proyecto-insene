@@ -52,28 +52,38 @@ export default function PanelAdministrador() {
     }, []);
 
     const BotonesNavegacion = () => (
-        <Row className="g-3 justify-content-center">
-            <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                <Button as={Link} to="/administradores/registroTrabajador" variant="primary" className="custom-button" aria-label="Crear un nuevo trabajador">
-                    Registrar Trabajador
-                </Button>
-            </Col>
-            <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                <Button as={Link} to="/captadores" variant="primary" className="custom-button" aria-label="Ir al panel de captadores">
-                    Panel de Captadores
-                </Button>
-            </Col>
-            <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                <Button as={Link} to="/comerciales" variant="primary" className="custom-button" aria-label="Ir al panel de comerciales">
-                    Panel de Comerciales
-                </Button>
-            </Col>
-            <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                <Button as={Link} to="/administradores/InformacionClientes" variant="primary" className="custom-button" aria-label="Ver información de los clientes">
-                    Información de Clientes
-                </Button>
-            </Col>
-        </Row>
+        <>
+            <Row className="g-3 justify-content-center">
+                <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                    <Button as={Link} to="/administradores/registroTrabajador" variant="primary" className="custom-button" aria-label="Crear un nuevo trabajador">
+                        Registrar Trabajador
+                    </Button>
+                </Col>
+                <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                    <Button as={Link} to="/captadores" variant="primary" className="custom-button" aria-label="Ir al panel de captadores">
+                        Panel de Captadores
+                    </Button>
+                </Col>
+                <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                    <Button as={Link} to="/comerciales" variant="primary" className="custom-button" aria-label="Ir al panel de comerciales">
+                        Panel de Comerciales
+                    </Button>
+                </Col>
+                <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                    <Button as={Link} to="/administradores/InformacionClientes" variant="primary" className="custom-button" aria-label="Ver información de los clientes">
+                        Información de Clientes
+                    </Button>
+                </Col>
+            </Row>
+
+            <Row className="g-3 justify-content-center mt-1">
+                <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                    <Button as={Link} to="/coordinadores" variant="primary" className="custom-button" aria-label="Ir al panel de coordinadores">
+                        Panel de Coordinadores
+                    </Button>
+                </Col>
+            </Row>
+        </>
     );
 
     const TrabajadoresTable = () => (

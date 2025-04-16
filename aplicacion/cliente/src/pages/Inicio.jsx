@@ -41,9 +41,12 @@ export default function Inicio() {
                 navigate('/comerciales');
             } else if (tipoTrabajador === 'Administrador') {
                 navigate('/administradores');
+            } else if (tipoTrabajador === 'Coordinador') {
+                navigate('/coordinadores');
             } else {
                 navigate('/');
             }
+
         } catch (error) {
             erroresSweetAlert2(error);
         } finally {
