@@ -52,3 +52,8 @@ PRODUCTO(id_producto, id_venta, producto_principal, otro_producto, modelo_placas
 CAIDA(id_caida, id_venta, motivo_caida, tramitador_financiera, financiera, mes_firma)
     PK(id_caida)
     FK(id_venta -> VENTA)
+
+AGENDA(id_agenda, fecha_inicio_agenda, fecha_fin_agenda, id_trabajador, id_vivienda, motivo, estado, descripcion, titulo, fecha_asignacion)
+    PK(id_agenda)
+    FK(id_trabajador -> TRABAJADOR)
+    FK(id_vivienda -> VIVIENDA)
