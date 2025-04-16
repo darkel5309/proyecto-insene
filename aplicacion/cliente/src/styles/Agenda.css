@@ -1,9 +1,54 @@
-.fc {
-    font-family: 'Inter', sans-serif;
+.fc-toolbar-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #003059;
 }
 
-.fc-daygrid-event {
-    padding: 4px 6px;
-    border-radius: 0.5rem;
+.fc-button {
+    background-color: #003059 !important;
+    border: none;
+    color: white !important;
+    border-radius: 0.375rem;
+    padding: 6px 12px;
+}
+
+.fc-button:hover {
+    background-color: #003059 !important;
+}
+
+.fc-event {
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.fc-daygrid-day {
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.calendar-container {
+    position: relative;
+    padding: 0.5rem;
+}
+
+.event-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    .fc .fc-toolbar.fc-header-toolbar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 1.2rem;
+    }
 }

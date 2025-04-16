@@ -15,11 +15,6 @@ CREATE TABLE trabajador(
     fecha_baja DATETIME
 );
 
--- ALTER TABLE trabajador 
--- MODIFY COLUMN rol ENUM(
---     'Administrador', 'Captador', 'Comercial', 'Coordinador', 
---     'Instalador', 'Recursos_Humanos', 'Tramitador', 'Supervisor'
--- );
 DESCRIBE trabajador;
 
 CREATE TABLE cliente(
@@ -202,14 +197,13 @@ DESCRIBE caida;
 
 CREATE TABLE agenda (
     id_agenda INT PRIMARY KEY AUTO_INCREMENT,
+	titulo VARCHAR(255),
+	descripcion VARCHAR(255),
     fecha_inicio_agenda DATETIME NOT NULL,
     fecha_fin_agenda DATETIME NOT NULL,
     id_trabajador INT NOT NULL,
     id_vivienda INT NOT NULL,
-    motivo VARCHAR(255),
     estado ENUM('Pendiente', 'Completada', 'Cancelada') DEFAULT 'Pendiente',
-    descripcion TEXT,  -- Agregar columna 'descripcion'
-    titulo VARCHAR(255),  -- Agregar columna 'titulo' para el título del evento
     fecha_asignacion DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_agenda_id_trabajador FOREIGN KEY (id_trabajador) REFERENCES trabajador(id_trabajador),
@@ -403,8 +397,8 @@ INSERT INTO caida (id_venta, motivo_caida, tramitador_financiera, financiera, me
 
 SELECT * FROM caida;
 
-INSERT INTO agenda (fecha_inicio_agenda, fecha_fin_agenda, id_trabajador, id_vivienda, motivo) VALUES 
-('2025-04-16 10:00:00', '2025-04-16 11:00:00',  1, 1, 'Primera visita al cliente');
+INSERT INTO agenda (titulo, descripcion, fecha_inicio_agenda, fecha_fin_agenda, id_trabajador, id_vivienda) VALUES 
+('Primera visita', 'Realizar la primera visita para ver el estado de la casa', '2025-04-16 10:00:00', '2025-04-16 12:00:00',  1, 1);
 
 SELECT * FROM agenda;
 

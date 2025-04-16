@@ -1,14 +1,14 @@
 import { query } from '../models/db.js';
 
 export const crear = async (agenda) => {
-    const { fechaInicio, fechaFin, idTrabajador, idVivienda, motivo, estado = 'Pendiente', descripcion = '', fechaAsignacion = new Date() } = agenda;
+    const { titulo, descripcion, fechaInicio, fechaFin, idTrabajador, idVivienda, estado = 'Pendiente', fechaAsignacion = new Date() } = agenda;
 
     const insertar = `
-        INSERT INTO agenda (fecha_inicio_agenda, fecha_fin_agenda, id_trabajador, id_vivienda, motivo, estado, descripcion, fecha_asignacion) 
+        INSERT INTO agenda (titulo, descripcion, fecha_inicio_agenda, fecha_fin_agenda, id_trabajador, id_vivienda, estado, fecha_asignacion) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    const resultado = await query(insertar, [fechaInicio, fechaFin, idTrabajador, idVivienda, motivo, estado, descripcion, fechaAsignacion]);
+    const resultado = await query(insertar, [titulo, descripcion, fechaInicio, fechaFin, idTrabajador, idVivienda, estado, fechaAsignacion]);
     return {
         message: "Entrada en agenda creada correctamente",
         idAgenda: resultado.insertId
