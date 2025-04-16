@@ -15,11 +15,6 @@ CREATE TABLE trabajador(
     fecha_baja DATETIME
 );
 
--- ALTER TABLE trabajador 
--- MODIFY COLUMN rol ENUM(
---     'Administrador', 'Captador', 'Comercial', 'Coordinador', 
---     'Instalador', 'Recursos_Humanos', 'Tramitador', 'Supervisor'
--- );
 DESCRIBE trabajador;
 
 CREATE TABLE cliente(
