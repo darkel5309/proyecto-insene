@@ -207,8 +207,11 @@ const Agenda = () => {
 
                 <Card.Body className="p-3">
                     <Row className="mb-3">
-                        <Col md={4}>
-                            <Form.Select value={filtroTrabajador} onChange={(e) => setFiltroTrabajador(e.target.value)}>
+                        <Col xs={12} md={4}>
+                            <Form.Select
+                                value={filtroTrabajador}
+                                onChange={(e) => setFiltroTrabajador(e.target.value)}
+                                className="mb-2 mb-md-0">
                                 <option value="todos">Todos los comerciales</option>
                                 {trabajadores.filter(t => t.rol === 'Comercial').map(t => (
                                     <option key={t.id_trabajador} value={t.id_trabajador}>{t.nombre}</option>
@@ -232,7 +235,7 @@ const Agenda = () => {
                                 center: 'title',
                                 right: 'prev,next today'
                             }}
-                            dayMaxEvents={3}
+                            dayMaxEvents={window.innerWidth < 768 ? 1 : 3}
                             eventTimeFormat={{
                                 hour: '2-digit',
                                 minute: '2-digit',
@@ -252,10 +255,11 @@ const Agenda = () => {
                                         width: "100%",
                                         whiteSpace: "normal",
                                         minHeight: "100%",
-                                        textOverflow: "ellipsis"
+                                        textOverflow: "ellipsis",
+                                        fontSize: window.innerWidth < 768 ? '0.75rem' : '0.9rem'
                                     }}>
-                                        <span className="event-title">
-                                            {dayjs(eventInfo.event.start).format('HH:mm')} - {eventInfo.event.title}
+                                        <span className="event-title text-truncate">
+                                            {dayjs(eventInfo.event.start).format('HH:mm')}-{eventInfo.event.title}
                                         </span>
                                     </div>
                                 );
@@ -264,17 +268,17 @@ const Agenda = () => {
                     </div>
                 </Card.Body>
 
-                <Card.Footer className="bg-light p-3 border-0">
+                <Card.Footer className="bg-light p-2 p-md-3 border-0">
                     <Row className="g-2 align-items-center">
-                        <Col>
-                            <small className="text-muted">
-                                <Badge bg="warning" className="me-2">Pendiente</Badge>
-                                <Badge bg="success" className="me-2">Completada</Badge>
-                                <Badge bg="danger" className="me-2">Cancelada</Badge>
-                                {eventosFiltrados.length} eventos en total
+                        <Col xs={12} md={true} className="mb-2 mb-md-0">
+                            <small className="text-muted d-flex flex-wrap gap-1">
+                                <Badge bg="warning" className="me-1">Pendiente</Badge>
+                                <Badge bg="success" className="me-1">Completada</Badge>
+                                <Badge bg="danger" className="me-1">Cancelada</Badge>
+                                <span>{eventosFiltrados.length} eventos</span>
                             </small>
                         </Col>
-                        <Col xs="auto">
+                        <Col xs={12} md="auto">
                             <div className="d-flex align-items-center">
                                 <small className="text-muted me-2">Vista: </small>
                                 <Badge bg="primary">{

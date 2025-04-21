@@ -1,4 +1,4 @@
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Row, Col } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import dayjs from 'dayjs';
 import CamposFormulario from './CamposFormulario';
@@ -34,11 +34,17 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
     };
 
     return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
+        <Modal 
+            show={show} 
+            onHide={onHide}
+            size="lg" 
+            centered
+            fullscreen="sm-down" // Hace que el modal sea pantalla completa en dispositivos pequeños
+        >
+            <Modal.Header closeButton className="bg-primary text-white">
                 <Modal.Title>{evento?.id ? 'Editar Evento' : 'Crear Evento'}</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body className="px-3 py-4">
                 <Formik initialValues={initialValues} enableReinitialize={true} onSubmit={handleSubmit} validationSchema={validacionEvento}>
                     {({ errors, touched }) => (
                         <Form>
@@ -47,29 +53,46 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                             </div>
                             <div className="mb-3">
                                 <CamposFormulario label="Descripción *" name="descripcion" placeholder="Descripción del evento" as="textarea"
-                                    rows="4" errors={errors} touched={touched} />
+                                    rows="3" errors={errors} touched={touched} />
                             </div>
-                            <div className="mb-3">
-                                <CamposFormulario label="Fecha Inicio *" name="start" type="datetime-local" errors={errors} touched={touched} />
-                            </div>
-                            <div className="mb-3">
-                                <CamposFormulario label="Fecha Fin *" name="end" type="datetime-local" errors={errors} touched={touched} />
-                            </div>
-                            <div className="mb-3">
-                                <CamposFormulario label="Comercial a asignar*" name="id_trabajador" as="select" errors={errors} touched={touched}>
-                                    <option value="">Selecciona a un comercial</option>
-                                    {trabajadores
-                                        .filter(trabajador => trabajador.rol === 'Comercial')
-                                        .map(trabajador => (
-                                            <option key={trabajador.id_trabajador} value={trabajador.id_trabajador}>
-                                                {trabajador.nombre}
-                                            </option>
-                                        ))}
-                                </CamposFormulario>
-                            </div>
-                            <div className="mb-3">
-                                <CamposFormulario label="ID Vivienda *" name="id_vivienda" type="number" errors={errors} touched={touched} />
-                            </div>
+                            
+                            {/* Agrupar fechas en dos columnas en pantallas más grandes */}
+                            <Row>
+                                <Col xs={12} md={6}>
+                                    <div className="mb-3">
+                                        <CamposFormulario label="Fecha Inicio *" name="start" type="datetime-local" errors={errors} touched={touched} />
+                                    </div>
+                                </Col>
+                                <Col xs={12} md={6}>
+                                    <div className="mb-3">
+                                        <CamposFormulario label="Fecha Fin *" name="end" type="datetime-local" errors={errors} touched={touched} />
+                                    </div>
+                                </Col>
+                            </Row>
+                            
+                            {/* Agrupar datos de asignación en dos columnas */}
+                            <Row>
+                                <Col xs={12} md={6}>
+                                    <div className="mb-3">
+                                        <CamposFormulario label="Comercial a asignar *" name="id_trabajador" as="select" errors={errors} touched={touched}>
+                                            <option value="">Selecciona a un comercial</option>
+                                            {trabajadores
+                                                .filter(trabajador => trabajador.rol === 'Comercial')
+                                                .map(trabajador => (
+                                                    <option key={trabajador.id_trabajador} value={trabajador.id_trabajador}>
+                                                        {trabajador.nombre}
+                                                    </option>
+                                                ))}
+                                        </CamposFormulario>
+                                    </div>
+                                </Col>
+                                <Col xs={12} md={6}>
+                                    <div className="mb-3">
+                                        <CamposFormulario label="ID Vivienda *" name="id_vivienda" type="number" errors={errors} touched={touched} />
+                                    </div>
+                                </Col>
+                            </Row>
+                            
                             <div className="mb-3">
                                 <CamposFormulario label="Estado *" name="estado" as="select" errors={errors} touched={touched}>
                                     <option value="Pendiente">Pendiente</option>
@@ -78,32 +101,39 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                                 </CamposFormulario>
                             </div>
 
-                            <div className="d-flex justify-content-between mt-3">
-                                <Button variant="primary" type="submit">
+                            <div className="d-flex flex-column flex-md-row justify-content-between mt-4 gap-2">
+                                <Button 
+                                    variant="primary" 
+                                    type="submit" 
+                                    className="order-2 order-md-1"
+                                    size="lg"
+                                >
                                     {evento?.id ? 'Guardar Cambios' : 'Crear Evento'}
                                 </Button>
 
                                 {evento?.id && (
-                                    <>
-                                        <Button variant="danger" type="button"
-                                            onClick={() => {
-                                                Swal.fire({
-                                                    title: '¿Estás seguro?',
-                                                    text: "¡Este evento será eliminado permanentemente!",
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonText: 'Sí, eliminar',
-                                                    cancelButtonText: 'Cancelar',
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        onEliminar(evento.id);
-                                                        onHide();
-                                                    }
-                                                });
-                                            }}
-                                        > Eliminar
-                                        </Button>
-                                    </>
+                                    <Button 
+                                        variant="outline-danger" 
+                                        type="button"
+                                        className="order-1 order-md-2"
+                                        onClick={() => {
+                                            Swal.fire({
+                                                title: '¿Estás seguro?',
+                                                text: "¡Este evento será eliminado permanentemente!",
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                confirmButtonText: 'Sí, eliminar',
+                                                cancelButtonText: 'Cancelar',
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    onEliminar(evento.id);
+                                                    onHide();
+                                                }
+                                            });
+                                        }}
+                                    >
+                                        <i className="bi bi-trash me-1"></i> Eliminar
+                                    </Button>
                                 )}
                             </div>
                         </Form>

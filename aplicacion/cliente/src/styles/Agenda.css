@@ -32,9 +32,10 @@
 }
 
 .calendar-container {
-    position: relative;
-    padding: 0.5rem;
-}
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
 .event-content {
     overflow: hidden;
@@ -49,13 +50,35 @@
   }
   
 
-@media (max-width: 768px) {
-    .fc .fc-toolbar.fc-header-toolbar {
-        flex-direction: column;
-        gap: 1rem;
+  @media (max-width: 767px) {
+    .fc .fc-toolbar {
+      flex-direction: column;
+      gap: 0.5rem;
     }
-
+    
     .fc .fc-toolbar-title {
-        font-size: 1.2rem;
+      font-size: 1.2rem;
     }
-}
+    
+    .fc .fc-button {
+      padding: 0.2rem 0.5rem;
+      font-size: 0.8rem;
+    }
+    
+    .fc-event {
+      font-size: 0.7rem;
+    }
+    
+    .calendar-container {
+      font-size: 0.8rem;
+    }
+    
+    .fc-day-header {
+      padding: 2px !important;
+    }
+    
+    .fc td, .fc th {
+      padding: 1px !important;
+    }
+  }
+  
