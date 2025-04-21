@@ -1,6 +1,6 @@
 import '../styles/Agenda.css';
 import '../styles/Formularios.css';
-import { Card, Container, Row, Col, Badge, Button } from 'react-bootstrap';
+import { Card, Container, Row, Col, Badge, Button, Form } from 'react-bootstrap';
 import React, { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -18,35 +18,76 @@ const Agenda = () => {
     useDocumentTitle("Panel de Coordinadores");
 
     const [eventos, setEventos] = useState([]);
+    const [eventosFiltrados, setEventosFiltrados] = useState([]);
     const [mostrarModal, setMostrarModal] = useState(false);
     const [eventoSeleccionado, setEventoSeleccionado] = useState(null);
     const [modoEdicion, setModoEdicion] = useState(false);
     const [vistaActual, setVistaActual] = useState('dayGridMonth');
+    const [trabajadores, setTrabajadores] = useState([]);
+    const [filtroTrabajador, setFiltroTrabajador] = useState("todos");
+
+    const obtenerColoresPorEstado = (estado) => {
+        switch (estado) {
+            case "Pendiente":
+                return {
+                    backgroundColor: "#facc15",
+                    borderColor: "#eab308"
+                };
+            case "Completada":
+                return {
+                    backgroundColor: "#4ade80",
+                    borderColor: "#22c55e"
+                };
+            case "Cancelada":
+                return {
+                    backgroundColor: "#f87171",
+                    borderColor: "#dc2626"
+                };
+            default:
+                return {
+                    backgroundColor: "#d1d5db",
+                    borderColor: "#9ca3af"
+                };
+        }
+    };
+
+    const cargarEventos = async () => {
+        const [agendaRes, trabajadoresRes] = await Promise.all([
+            axios.get("/agenda"),
+            axios.get("/trabajadores")
+        ]);
+
+        const eventosTransformados = agendaRes.data.map(item => ({
+            id: item.id_agenda,
+            title: item.titulo,
+            descripcion: item.descripcion,
+            start: item.fecha_inicio_agenda,
+            end: item.fecha_fin_agenda,
+            estado: item.estado,
+            id_trabajador: Number(item.id_trabajador),
+            id_vivienda: item.id_vivienda,
+            ...obtenerColoresPorEstado(item.estado),
+        }));
+
+        setEventos(eventosTransformados);
+        setEventosFiltrados(filtroTrabajador === "todos"
+            ? eventosTransformados
+            : eventosTransformados.filter(e => e.id_trabajador === parseInt(filtroTrabajador))
+        );
+        setTrabajadores(trabajadoresRes.data);
+    };
 
     useEffect(() => {
-        const obtenerEventos = async () => {
-            try {
-                const response = await axios.get("/agenda");
-                const eventosTransformados = response.data.map(item => ({
-                    id: item.id_agenda,
-                    title: item.titulo,
-                    descripcion: item.descripcion,
-                    start: item.fecha_inicio_agenda,
-                    end: item.fecha_fin_agenda,
-                    estado: item.estado,
-                    id_trabajador: item.id_trabajador,
-                    id_vivienda: item.id_vivienda,
-                    backgroundColor: item.estado === "Pendiente" ? "#facc15" : "#4ade80",
-                    borderColor: "#000",
-                }));
-                setEventos(eventosTransformados);
-            } catch (error) {
-                console.error("Error al cargar la agenda:", error);
-            }
-        };
-
-        obtenerEventos();
+        cargarEventos();
     }, []);
+
+    useEffect(() => {
+        setEventosFiltrados(
+            filtroTrabajador === "todos"
+                ? eventos
+                : eventos.filter(e => e.id_trabajador === parseInt(filtroTrabajador))
+        );
+    }, [filtroTrabajador, eventos]);
 
     const manejarClickEvento = (info) => {
         const evento = {
@@ -91,47 +132,13 @@ const Agenda = () => {
                 estado: eventoModificado.estado
             };
 
-            let nuevoEventoFormateado = null;
-
             if (modoEdicion) {
                 await axios.put(`/agenda/${eventoSeleccionado.id}`, eventoConFechasFormateadas);
-
-                nuevoEventoFormateado = {
-                    id: eventoSeleccionado.id,
-                    title: eventoConFechasFormateadas.titulo,
-                    descripcion: eventoConFechasFormateadas.descripcion,
-                    start: eventoConFechasFormateadas.fechaInicio,
-                    end: eventoConFechasFormateadas.fechaFin,
-                    estado: eventoConFechasFormateadas.estado,
-                    id_trabajador: eventoConFechasFormateadas.idTrabajador,
-                    id_vivienda: eventoConFechasFormateadas.idVivienda,
-                    backgroundColor: eventoConFechasFormateadas.estado === "Pendiente" ? "#facc15" : "#4ade80",
-                    borderColor: "#000",
-                };
-
-                setEventos(prevEventos =>
-                    prevEventos.map(evento =>
-                        evento.id === eventoSeleccionado.id ? nuevoEventoFormateado : evento
-                    )
-                );
             } else {
-                const response = await axios.post('/agenda', eventoConFechasFormateadas);
-
-                nuevoEventoFormateado = {
-                    id: response.data.idAgenda,
-                    title: eventoConFechasFormateadas.titulo,
-                    descripcion: eventoConFechasFormateadas.descripcion,
-                    start: eventoConFechasFormateadas.fechaInicio,
-                    end: eventoConFechasFormateadas.fechaFin,
-                    estado: eventoConFechasFormateadas.estado,
-                    id_trabajador: eventoConFechasFormateadas.idTrabajador,
-                    id_vivienda: eventoConFechasFormateadas.idVivienda,
-                    backgroundColor: eventoConFechasFormateadas.estado === "Pendiente" ? "#facc15" : "#4ade80",
-                    borderColor: "#000",
-                };
-
-                setEventos(prevEventos => [...prevEventos, nuevoEventoFormateado]);
+                await axios.post('/agenda', eventoConFechasFormateadas);
             }
+
+            await cargarEventos();
 
             Swal.fire({
                 icon: "success",
@@ -150,21 +157,7 @@ const Agenda = () => {
         try {
             const respuesta = await axios.delete(`/agenda/${eventoId}`);
             if (respuesta.status === 200) {
-                const response = await axios.get("/agenda");
-                const eventosTransformados = response.data.map(item => ({
-                    id: item.id_agenda,
-                    title: item.titulo,
-                    descripcion: item.descripcion,
-                    start: item.fecha_inicio_agenda,
-                    end: item.fecha_fin_agenda,
-                    estado: item.estado,
-                    id_trabajador: item.id_trabajador,
-                    id_vivienda: item.id_vivienda,
-                    backgroundColor: item.estado === "Pendiente" ? "#facc15" : "#4ade80",
-                    borderColor: "#000",
-                }));
-
-                setEventos(eventosTransformados);
+                await cargarEventos();
 
                 Swal.fire({
                     icon: 'success',
@@ -189,33 +182,43 @@ const Agenda = () => {
                             </h4>
                         </Col>
                         <Col xs="auto">
-                            <Button variant="outline-light" size="sm"
-                                onClick={() => {
-                                    const evento = {
-                                        title: '',
-                                        descripcion: '',
-                                        start: dayjs().format('YYYY-MM-DD'),
-                                        end: dayjs().format('YYYY-MM-DD'),
-                                        estado: 'Pendiente',
-                                        id_trabajador: '',
-                                        id_vivienda: ''
-                                    };
-                                    setEventoSeleccionado(evento);
-                                    setModoEdicion(false);
-                                    setMostrarModal(true);
-                                }}
-                            >
+                            <Button variant="outline-light" size="sm" onClick={() => {
+                                const evento = {
+                                    title: '',
+                                    descripcion: '',
+                                    start: dayjs().format('YYYY-MM-DD'),
+                                    end: dayjs().format('YYYY-MM-DD'),
+                                    estado: 'Pendiente',
+                                    id_trabajador: '',
+                                    id_vivienda: ''
+                                };
+                                setEventoSeleccionado(evento);
+                                setModoEdicion(false);
+                                setMostrarModal(true);
+                            }}>
                                 <i className="bi bi-plus-circle me-1"></i> Nuevo Evento
                             </Button>
                         </Col>
                     </Row>
                 </Card.Header>
-                <Card.Body className="p-0 p-md-3">
+
+                <Card.Body className="p-3">
+                    <Row className="mb-3">
+                        <Col md={4}>
+                            <Form.Select value={filtroTrabajador} onChange={(e) => setFiltroTrabajador(e.target.value)}>
+                                <option value="todos">Todos los comerciales</option>
+                                {trabajadores.filter(t => t.rol === 'Comercial').map(t => (
+                                    <option key={t.id_trabajador} value={t.id_trabajador}>{t.nombre}</option>
+                                ))}
+                            </Form.Select>
+                        </Col>
+                    </Row>
+
                     <div className="calendar-container">
                         <FullCalendar
                             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                             initialView="dayGridMonth"
-                            events={eventos}
+                            events={eventosFiltrados}
                             locales={[esLocale]}
                             locale="es"
                             eventClick={manejarClickEvento}
@@ -235,20 +238,18 @@ const Agenda = () => {
                             editable={true}
                             viewDidMount={(info) => setVistaActual(info.view.type)}
                             eventContent={(eventInfo) => {
-                                const bgColor = eventInfo.event.extendedProps.estado === "Pendiente" ?
-                                    "rgba(250, 204, 21, 0.85)" :
-                                    "rgba(74, 222, 128, 0.85)";
+                                const estado = eventInfo.event.extendedProps.estado;
+                                const colores = obtenerColoresPorEstado(estado);
 
                                 return (
-                                    <div className="event-content p-1 rounded d-flex align-items-center"
-                                        style={{
-                                            backgroundColor: bgColor,
-                                            color: "#333",
-                                            borderLeft: "3px solid " + (eventInfo.event.extendedProps.estado === "Pendiente" ? "#e9b800" : "#2fb062"),
-                                            width: "100%"
-                                        }}>
+                                    <div className="event-content p-1 rounded d-flex align-items-center" style={{
+                                        backgroundColor: colores.backgroundColor,
+                                        color: "#333",
+                                        borderLeft: `3px solid ${colores.borderColor}`,
+                                        width: "100%"
+                                    }}>
                                         <span className="event-title">
-                                            {eventInfo.event.title}
+                                            {dayjs(eventInfo.event.start).format('HH:mm')} - {eventInfo.event.title}
                                         </span>
                                     </div>
                                 );
@@ -256,13 +257,15 @@ const Agenda = () => {
                         />
                     </div>
                 </Card.Body>
+
                 <Card.Footer className="bg-light p-3 border-0">
                     <Row className="g-2 align-items-center">
                         <Col>
                             <small className="text-muted">
                                 <Badge bg="warning" className="me-2">Pendiente</Badge>
-                                <Badge bg="success" className="me-2">Completado</Badge>
-                                {eventos.length} eventos en total
+                                <Badge bg="success" className="me-2">Completada</Badge>
+                                <Badge bg="danger" className="me-2">Cancelada</Badge>
+                                {eventosFiltrados.length} eventos en total
                             </small>
                         </Col>
                         <Col xs="auto">
@@ -270,7 +273,7 @@ const Agenda = () => {
                                 <small className="text-muted me-2">Vista: </small>
                                 <Badge bg="primary">{
                                     vistaActual === 'dayGridMonth' ? 'Mes' :
-                                        vistaActual === 'timeGridWeek' ? 'Semana' : 'Día'
+                                    vistaActual === 'timeGridWeek' ? 'Semana' : 'Día'
                                 }</Badge>
                             </div>
                         </Col>
@@ -278,7 +281,14 @@ const Agenda = () => {
                 </Card.Footer>
             </Card>
 
-            <EventoModal show={mostrarModal} onHide={() => setMostrarModal(false)} evento={eventoSeleccionado} onGuardar={manejarGuardarEvento} onEliminar={manejarEliminarEvento} />
+            <EventoModal
+                show={mostrarModal}
+                onHide={() => setMostrarModal(false)}
+                evento={eventoSeleccionado}
+                onGuardar={manejarGuardarEvento}
+                onEliminar={manejarEliminarEvento}
+                trabajadores={trabajadores}
+            />
         </Container>
     );
 };

@@ -5,7 +5,7 @@ import CamposFormulario from './CamposFormulario';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
 
-const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar }) => {
+const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores }) => {
     const validacionEvento = Yup.object().shape({
         title: Yup.string().required('Este campo es obligatorio'),
         descripcion: Yup.string().required('Este campo es obligatorio'),
@@ -42,17 +42,40 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar }) => {
                 <Formik initialValues={initialValues} enableReinitialize={true} onSubmit={handleSubmit} validationSchema={validacionEvento}>
                     {({ errors, touched }) => (
                         <Form>
-                            <CamposFormulario label="Título *" name="title" placeholder="Título del evento" errors={errors} touched={touched} />
-                            <CamposFormulario label="Descripción *" name="descripcion" placeholder="Descripción del evento" errors={errors} touched={touched} />
-                            <CamposFormulario label="Fecha Inicio *" name="start" type="datetime-local" errors={errors} touched={touched} />
-                            <CamposFormulario label="Fecha Fin *" name="end" type="datetime-local" errors={errors} touched={touched} />
-                            <CamposFormulario label="ID Trabajador *" name="id_trabajador" type="number" errors={errors} touched={touched} />
-                            <CamposFormulario label="ID Vivienda *" name="id_vivienda" type="number" errors={errors} touched={touched} />
-                            <CamposFormulario label="Estado *" name="estado" as="select" errors={errors} touched={touched}>
-                                <option value="Pendiente">Pendiente</option>
-                                <option value="Completada">Completada</option>
-                                <option value="Cancelada">Cancelada</option>
-                            </CamposFormulario>
+                            <div className="mb-3">
+                                <CamposFormulario label="Título *" name="title" placeholder="Título del evento" errors={errors} touched={touched} />
+                            </div>
+                            <div className="mb-3">
+                                <CamposFormulario label="Descripción *" name="descripcion" placeholder="Descripción del evento" errors={errors} touched={touched} />
+                            </div>
+                            <div className="mb-3">
+                                <CamposFormulario label="Fecha Inicio *" name="start" type="datetime-local" errors={errors} touched={touched} />
+                            </div>
+                            <div className="mb-3">
+                                <CamposFormulario label="Fecha Fin *" name="end" type="datetime-local" errors={errors} touched={touched} />
+                            </div>
+                            <div className="mb-3">
+                                <CamposFormulario label="Comercial a asignar*" name="id_trabajador" as="select" errors={errors} touched={touched}>
+                                    <option value="">Selecciona a un comercial</option>
+                                    {trabajadores
+                                        .filter(trabajador => trabajador.rol === 'Comercial')
+                                        .map(trabajador => (
+                                            <option key={trabajador.id_trabajador} value={trabajador.id_trabajador}>
+                                                {trabajador.nombre}
+                                            </option>
+                                        ))}
+                                </CamposFormulario>
+                            </div>
+                            <div className="mb-3">
+                                <CamposFormulario label="ID Vivienda *" name="id_vivienda" type="number" errors={errors} touched={touched} />
+                            </div>
+                            <div className="mb-3">
+                                <CamposFormulario label="Estado *" name="estado" as="select" errors={errors} touched={touched}>
+                                    <option value="Pendiente">Pendiente</option>
+                                    <option value="Completada">Completada</option>
+                                    <option value="Cancelada">Cancelada</option>
+                                </CamposFormulario>
+                            </div>
 
                             <div className="d-flex justify-content-between mt-3">
                                 <Button variant="primary" type="submit">
