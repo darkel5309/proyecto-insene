@@ -26,8 +26,9 @@
     box-sizing: border-box;
 }
 
-a {
+.calendar-container a {
     text-decoration: none !important;
+    color: #003059 !important;
 }
 
 .calendar-container {
@@ -41,6 +42,12 @@ a {
     white-space: nowrap;
     font-size: 0.85rem;
 }
+
+.fc-day-other {
+    background-color: #f8f9fa;
+    opacity: 0.7;
+  }
+  
 
 @media (max-width: 768px) {
     .fc .fc-toolbar.fc-header-toolbar {

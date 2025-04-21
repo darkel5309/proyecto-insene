@@ -46,7 +46,8 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                                 <CamposFormulario label="Título *" name="title" placeholder="Título del evento" errors={errors} touched={touched} />
                             </div>
                             <div className="mb-3">
-                                <CamposFormulario label="Descripción *" name="descripcion" placeholder="Descripción del evento" errors={errors} touched={touched} />
+                                <CamposFormulario label="Descripción *" name="descripcion" placeholder="Descripción del evento" as="textarea"
+                                    rows="4" errors={errors} touched={touched} />
                             </div>
                             <div className="mb-3">
                                 <CamposFormulario label="Fecha Inicio *" name="start" type="datetime-local" errors={errors} touched={touched} />

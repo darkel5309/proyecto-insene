@@ -32,10 +32,21 @@ export const obtenerPorId = async (id) => {
     return resultado;
 };
 
-export const actualizar = async (id, estado) => {
-    const sql = `UPDATE agenda SET estado = ? WHERE id_agenda = ?`;
-    await query(sql, [estado, id]);
-    return { message: "Estado actualizado correctamente" };
+export const actualizar = async (id, datosEvento) => {
+    const { titulo, descripcion, fechaInicio, fechaFin, idTrabajador, idVivienda, estado } = datosEvento;
+
+    const sql = `UPDATE agenda 
+               SET titulo = ?, 
+                   descripcion = ?, 
+                   fecha_inicio_agenda = ?, 
+                   fecha_fin_agenda = ?, 
+                   id_trabajador = ?, 
+                   id_vivienda = ?, 
+                   estado = ? 
+               WHERE id_agenda = ?`;
+               
+    await query(sql, [titulo, descripcion, fechaInicio, fechaFin, idTrabajador, idVivienda, estado, id]);
+    return { message: "Agenda actualizada correctamente" };
 };
 
 export const eliminar = async (id) => {

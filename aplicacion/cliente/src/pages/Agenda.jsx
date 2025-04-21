@@ -94,8 +94,8 @@ const Agenda = () => {
             id: info.event.id,
             title: info.event.title,
             descripcion: info.event.extendedProps.descripcion,
-            start: info.event.startStr,
-            end: info.event.endStr,
+            start: dayjs(info.event.start).format('YYYY-MM-DDTHH:mm'),
+            end: dayjs(info.event.end).format('YYYY-MM-DDTHH:mm'),
             estado: info.event.extendedProps.estado,
             id_trabajador: info.event.extendedProps.id_trabajador,
             id_vivienda: info.event.extendedProps.id_vivienda
@@ -133,7 +133,10 @@ const Agenda = () => {
             };
 
             if (modoEdicion) {
-                await axios.put(`/agenda/${eventoSeleccionado.id}`, eventoConFechasFormateadas);
+                await axios.put(`/agenda/${eventoSeleccionado.id}`, {
+                    ...eventoConFechasFormateadas,
+                    id: parseInt(eventoSeleccionado.id)
+                });
             } else {
                 await axios.post('/agenda', eventoConFechasFormateadas);
             }
@@ -246,7 +249,10 @@ const Agenda = () => {
                                         backgroundColor: colores.backgroundColor,
                                         color: "#333",
                                         borderLeft: `3px solid ${colores.borderColor}`,
-                                        width: "100%"
+                                        width: "100%",
+                                        whiteSpace: "normal",
+                                        minHeight: "100%",
+                                        textOverflow: "ellipsis"
                                     }}>
                                         <span className="event-title">
                                             {dayjs(eventInfo.event.start).format('HH:mm')} - {eventInfo.event.title}
@@ -273,7 +279,7 @@ const Agenda = () => {
                                 <small className="text-muted me-2">Vista: </small>
                                 <Badge bg="primary">{
                                     vistaActual === 'dayGridMonth' ? 'Mes' :
-                                    vistaActual === 'timeGridWeek' ? 'Semana' : 'Día'
+                                        vistaActual === 'timeGridWeek' ? 'Semana' : 'Día'
                                 }</Badge>
                             </div>
                         </Col>

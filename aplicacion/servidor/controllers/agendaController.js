@@ -40,10 +40,9 @@ export const obtenerTodos = async (__req, res) => {
 
 export const actualizar = async (req, res) => {
     const { id } = req.params;
-    const { estado } = req.body;
-
+    
     try {
-        const resultado = await agendaService.actualizar(id, estado);
+        const resultado = await agendaService.actualizar(id, req.body);
         res.status(200).json(resultado);
     } catch (error) {
         res.status(500).json({ error: error.message });
