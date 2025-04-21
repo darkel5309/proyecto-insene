@@ -228,9 +228,9 @@ const Agenda = () => {
                             dateClick={manejarClicDia}
                             height="auto"
                             headerToolbar={{
-                                left: 'prev,next today',
+                                left: 'dayGridMonth,timeGridWeek,timeGridDay',
                                 center: 'title',
-                                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                                right: 'prev,next today'
                             }}
                             dayMaxEvents={3}
                             eventTimeFormat={{
