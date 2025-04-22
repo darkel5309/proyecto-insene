@@ -34,12 +34,12 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
     };
 
     return (
-        <Modal 
-            show={show} 
+        <Modal
+            show={show}
             onHide={onHide}
-            size="lg" 
+            size="lg"
             centered
-            fullscreen="sm-down" // Hace que el modal sea pantalla completa en dispositivos pequeños
+            fullscreen="sm-down"
         >
             <Modal.Header closeButton className="bg-primary text-white">
                 <Modal.Title>{evento?.id ? 'Editar Evento' : 'Crear Evento'}</Modal.Title>
@@ -55,8 +55,7 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                                 <CamposFormulario label="Descripción *" name="descripcion" placeholder="Descripción del evento" as="textarea"
                                     rows="3" errors={errors} touched={touched} />
                             </div>
-                            
-                            {/* Agrupar fechas en dos columnas en pantallas más grandes */}
+
                             <Row>
                                 <Col xs={12} md={6}>
                                     <div className="mb-3">
@@ -69,8 +68,7 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                                     </div>
                                 </Col>
                             </Row>
-                            
-                            {/* Agrupar datos de asignación en dos columnas */}
+
                             <Row>
                                 <Col xs={12} md={6}>
                                     <div className="mb-3">
@@ -92,7 +90,7 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                                     </div>
                                 </Col>
                             </Row>
-                            
+
                             <div className="mb-3">
                                 <CamposFormulario label="Estado *" name="estado" as="select" errors={errors} touched={touched}>
                                     <option value="Pendiente">Pendiente</option>
@@ -102,9 +100,9 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                             </div>
 
                             <div className="d-flex flex-column flex-md-row justify-content-between mt-4 gap-2">
-                                <Button 
-                                    variant="primary" 
-                                    type="submit" 
+                                <Button
+                                    variant="primary"
+                                    type="submit"
                                     className="order-2 order-md-1"
                                     size="lg"
                                 >
@@ -112,8 +110,8 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                                 </Button>
 
                                 {evento?.id && (
-                                    <Button 
-                                        variant="outline-danger" 
+                                    <Button
+                                        variant="outline-danger"
                                         type="button"
                                         className="order-1 order-md-2"
                                         onClick={() => {
