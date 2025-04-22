@@ -8,7 +8,7 @@ import FormularioFeedback from "./pages/FormularioFeedback";
 import InformacionClientes from "./pages/InformacionClientes";
 import FormularioModificarTrabajador from "./pages/FormularioModificarTrabajador";
 import FormularioModificarCliente from "./pages/FormularioModificarCliente";
-import Agenda from "./pages/Agenda";
+import PanelCoordinador from "./pages/PanelCoordinador";
 
 const routes = [
     {
@@ -38,8 +38,8 @@ const routes = [
     },
     {
         path: "/coordinadores",
-        element: <Agenda />,
-        roles: ["Captador", "Administrador"],
+        element: <PanelCoordinador />,
+        roles: ["Coordinador", "Administrador"],
     },
     {
         path: "/captadores",

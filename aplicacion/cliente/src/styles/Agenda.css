@@ -1,84 +1,83 @@
 .fc-toolbar-title {
-    font-size: 1.6rem;
-    font-weight: bold;
-    color: #003059;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #003059;
 }
 
 .fc-button {
-    background-color: #003059 !important;
-    border: none;
-    color: white !important;
-    border-radius: 0.375rem;
-    padding: 6px 12px;
+  background-color: #003059 !important;
+  border: none;
+  color: white !important;
+  border-radius: 0.375rem;
+  padding: 6px 12px;
 }
 
 .fc-button:hover {
-    background-color: #003059 !important;
+  background-color: #003059 !important;
 }
 
 .fc-event {
-    border-radius: 6px;
-    font-weight: 500;
+  border-radius: 6px;
+  font-weight: 500;
 }
 
 .fc-daygrid-day {
-    padding: 5px;
-    box-sizing: border-box;
+  padding: 5px;
+  box-sizing: border-box;
 }
 
 .calendar-container a {
-    text-decoration: none !important;
-    color: #003059 !important;
+  text-decoration: none !important;
+  color: #003059 !important;
 }
 
 .calendar-container {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
 
 .event-content {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.85rem;
 }
 
 .fc-day-other {
-    background-color: #f8f9fa;
-    opacity: 0.7;
-  }
-  
+  background-color: #f8f9fa;
+  opacity: 0.7;
+}
 
-  @media (max-width: 767px) {
-    .fc .fc-toolbar {
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    
-    .fc .fc-toolbar-title {
-      font-size: 1.2rem;
-    }
-    
-    .fc .fc-button {
-      padding: 0.2rem 0.5rem;
-      font-size: 0.8rem;
-    }
-    
-    .fc-event {
-      font-size: 0.7rem;
-    }
-    
-    .calendar-container {
-      font-size: 0.8rem;
-    }
-    
-    .fc-day-header {
-      padding: 2px !important;
-    }
-    
-    .fc td, .fc th {
-      padding: 1px !important;
-    }
+@media (max-width: 767px) {
+  .fc .fc-toolbar {
+    flex-direction: column;
+    gap: 0.5rem;
   }
-  
+
+  .fc .fc-toolbar-title {
+    font-size: 1.2rem;
+  }
+
+  .fc .fc-button {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .fc-event {
+    font-size: 0.7rem;
+  }
+
+  .calendar-container {
+    font-size: 0.8rem;
+  }
+
+  .fc-day-header {
+    padding: 2px !important;
+  }
+
+  .fc td,
+  .fc th {
+    padding: 1px !important;
+  }
+}

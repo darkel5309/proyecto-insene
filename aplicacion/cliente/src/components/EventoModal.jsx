@@ -34,13 +34,7 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
     };
 
     return (
-        <Modal
-            show={show}
-            onHide={onHide}
-            size="lg"
-            centered
-            fullscreen="sm-down"
-        >
+        <Modal show={show} onHide={onHide} size="lg" centered fullscreen="sm-down" >
             <Modal.Header closeButton className="bg-primary text-white">
                 <Modal.Title>{evento?.id ? 'Editar Evento' : 'Crear Evento'}</Modal.Title>
             </Modal.Header>
@@ -86,7 +80,7 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                                 </Col>
                                 <Col xs={12} md={6}>
                                     <div className="mb-3">
-                                        <CamposFormulario label="ID Vivienda *" name="id_vivienda" type="number" errors={errors} touched={touched} />
+                                        <CamposFormulario label="ID Vivienda *" name="id_vivienda" type="number" placeholder="Ej: 12" errors={errors} touched={touched} />
                                     </div>
                                 </Col>
                             </Row>
@@ -100,35 +94,26 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                             </div>
 
                             <div className="d-flex flex-column flex-md-row justify-content-between mt-4 gap-2">
-                                <Button
-                                    variant="primary"
-                                    type="submit"
-                                    className="order-2 order-md-1"
-                                    size="lg"
-                                >
+                                <Button variant="primary" type="submit" className="order-2 order-md-1" size="lg" >
                                     {evento?.id ? 'Guardar Cambios' : 'Crear Evento'}
                                 </Button>
 
                                 {evento?.id && (
-                                    <Button
-                                        variant="outline-danger"
-                                        type="button"
-                                        className="order-1 order-md-2"
-                                        onClick={() => {
-                                            Swal.fire({
-                                                title: '¿Estás seguro?',
-                                                text: "¡Este evento será eliminado permanentemente!",
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonText: 'Sí, eliminar',
-                                                cancelButtonText: 'Cancelar',
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    onEliminar(evento.id);
-                                                    onHide();
-                                                }
-                                            });
-                                        }}
+                                    <Button variant="outline-danger" type="button" className="order-1 order-md-2" onClick={() => {
+                                        Swal.fire({
+                                            title: '¿Estás seguro?',
+                                            text: "¡Este evento será eliminado permanentemente!",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Sí, eliminar',
+                                            cancelButtonText: 'Cancelar',
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                onEliminar(evento.id);
+                                                onHide();
+                                            }
+                                        });
+                                    }}
                                     >
                                         <i className="bi bi-trash me-1"></i> Eliminar
                                     </Button>

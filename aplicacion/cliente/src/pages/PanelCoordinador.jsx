@@ -14,7 +14,7 @@ import useDocumentTitle from '../components/Titulo';
 import EventoModal from "../components/EventoModal";
 import dayjs from 'dayjs';
 
-const Agenda = () => {
+const PanelCoordinador = () => {
     useDocumentTitle("Panel de Coordinadores");
 
     const [eventos, setEventos] = useState([]);
@@ -175,13 +175,15 @@ const Agenda = () => {
 
     return (
         <Container fluid className="my-4 px-4">
+            <h1 className="text-center mb-4">Panel de Coordinadores</h1>
+
             <Card className="shadow border-0 rounded-3">
                 <Card.Header className="bg-primary bg-gradient text-white py-3">
                     <Row className="align-items-center">
                         <Col>
                             <h4 className="mb-0 d-flex align-items-center">
                                 <i className="bi bi-calendar-week me-2 fs-3"></i>
-                                Agenda de Comerciales
+                                Agenda
                             </h4>
                         </Col>
                         <Col xs="auto">
@@ -303,4 +305,4 @@ const Agenda = () => {
     );
 };
 
-export default Agenda;
+export default PanelCoordinador;
