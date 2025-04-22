@@ -17,6 +17,10 @@ export default function PanelComercial() {
         { accessorKey: "id_cliente", header: "ID", size: 70 },
         { accessorKey: "nombre", header: "CLIENTE", size: 150 },
         { accessorKey: "telefono", header: "TELÉFONO", size: 130 },
+        { accessorKey: "correo", header: "CORREO", size: 130 },
+        { accessorKey: "direccion", header: "DIRECCIÓN", size: 130 },
+        { accessorKey: "localidad", header: "LOCALIDAD", size: 130 },
+        { accessorKey: "provincia", header: "PROVINCIA", size: 130 },
     ], []);
 
     useEffect(() => {
