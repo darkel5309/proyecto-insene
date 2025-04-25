@@ -1,0 +1,55 @@
+services:
+  cliente:
+    build:
+      context: ./aplicacion/cliente
+      dockerfile: Dockerfile
+    volumes:
+      - ./aplicacion/cliente:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      servidor:
+        condition: service_started
+
+  servidor:
+    build:
+      context: ./aplicacion/servidor
+      dockerfile: Dockerfile
+    volumes:
+      - ./aplicacion/servidor:/app
+      - /app/node_modules
+    ports:
+      - "5174:5174"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_DATABASE=insene
+
+  db:
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: insene
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./insene.sql:/docker-entrypoint-initdb.d/insene.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
+
