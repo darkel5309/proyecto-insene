@@ -1,0 +1,60 @@
+name: CI/CD Docker Workflow
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Paso 1: Checkout del código
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Paso 2: Configurar Docker Buildx
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # Paso 3: Login en DockerHub
+    - name: Log in to DockerHub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    # Paso 4: Determinar la versión de la imagen
+    - name: Extract version
+      id: vars
+      run: |
+        if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref_type }}" = "tag" ]; then
+          echo "version=${{ github.ref_name }}" >> $GITHUB_ENV
+        else
+          echo "version=latest" >> $GITHUB_ENV
+        fi
+
+    # Paso 5: Construir y etiquetar imágenes
+    - name: Build and push Docker images
+      run: |
+        docker build -t angel3103/proyecto-insene-cliente:${{ env.version }} ./aplicacion/cliente
+        docker push angel3103/proyecto-insene-cliente:${{ env.version }}
+
+        docker build -t angel3103/proyecto-insene-servidor:${{ env.version }} ./aplicacion/servidor
+        docker push angel3103/proyecto-insene-servidor:${{ env.version }}
+
+        docker build -t angel3103/proyecto-insene-db:${{ env.version }} ./mysql
+        docker push angel3103/proyecto-insene-db:${{ env.version }}
+
+    # Paso 6: Etiquetar como 'latest' si la versión no es 'latest'
+    - name: Tag with 'latest'
+      if: env.version != 'latest'
+      run: |
+        docker tag angel3103/proyecto-insene-cliente:${{ env.version }} angel3103/proyecto-insene-cliente:latest
+        docker push angel3103/proyecto-insene-cliente:latest
+
+        docker tag angel3103/proyecto-insene-servidor:${{ env.version }} angel3103/proyecto-insene-servidor:latest
+        docker push angel3103/proyecto-insene-servidor:latest
+
+        docker tag angel3103/proyecto-insene-db:${{ env.version }} angel3103/proyecto-insene-db:latest
+        docker push angel3103/proyecto-insene-db:latest
