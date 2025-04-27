@@ -24,7 +24,8 @@ services:
     ports:
       - "3307:3306"
     env_file:
-      - ./aplicacion/servidor/.env
+      - ./.env
+    volumes:
       - db_data:/var/lib/mysql
       - ./insene.sql:/docker-entrypoint-initdb.d/insene.sql
     healthcheck:
