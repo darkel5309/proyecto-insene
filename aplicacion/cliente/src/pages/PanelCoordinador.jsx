@@ -15,7 +15,7 @@ import EventoModal from "../components/EventoModal";
 import dayjs from 'dayjs';
 
 const PanelCoordinador = () => {
-    useDocumentTitle("Panel de Coordinadores");
+    useDocumentTitle("Panel Rutas");
 
     const [eventos, setEventos] = useState([]);
     const [eventosFiltrados, setEventosFiltrados] = useState([]);
@@ -175,7 +175,7 @@ const PanelCoordinador = () => {
 
     return (
         <Container fluid className="my-4 px-4">
-            <h1 className="text-center mb-4">Panel de Coordinadores</h1>
+            <h1 className="text-center mb-4">Panel Ruta</h1>
 
             <Card className="shadow border-0 rounded-3">
                 <Card.Header className="bg-primary bg-gradient text-white py-3">
