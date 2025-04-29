@@ -36,6 +36,12 @@ body {
   align-items: center;
 }
 
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .cerrar-sesion {
   padding: 3px !important;
 }
