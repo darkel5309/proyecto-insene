@@ -1,0 +1,44 @@
+services:
+  cliente:
+    build: ./aplicacion/cliente
+    ports:
+      - "5173:5173"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - ./aplicacion/cliente:/app
+      - /app/node_modules
+    depends_on:
+      servidor:
+        condition: service_started
+
+  servidor:
+    build: ./aplicacion/servidor
+    ports:
+      - "5174:5174"
+    volumes:
+      - ./aplicacion/servidor:/app
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - ./aplicacion/servidor/.env
+
+  db:
+    image: angel3103/proyecto-insene-db:latest
+    ports:
+      - "3307:3306"
+    env_file:
+      - ./.env
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./insene.sql:/docker-entrypoint-initdb.d/insene.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
