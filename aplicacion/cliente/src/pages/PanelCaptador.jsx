@@ -11,9 +11,6 @@ export default function PanelCaptador() {
             <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
                 <Button as={Link} to="/captadores/contacto" variant="primary" className="custom-button" aria-label="Registrar un nuevo contacto" > Registrar Contacto </Button>
             </Col>
-            <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                <Button as={Link} to="/captadores/visita" variant="primary" className="custom-button" aria-label="Registrar una nueva visita" > Registrar Visita </Button>
-            </Col>
         </Row>
     );
 
