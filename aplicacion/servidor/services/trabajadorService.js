@@ -62,26 +62,34 @@ export const actualizar = async (id, trabajador) => {
 };
 
 export const eliminar = async (id) => {
-    const comprobarTrabajador = 'SELECT 1 FROM trabajador WHERE id_trabajador = ?';
-    const resultadoTrabajador = await query(comprobarTrabajador, [id]);
+    await query('START TRANSACTION');
 
-    if (resultadoTrabajador.length === 0) {
-        throw new Error('El trabajador no existe');
+    try {
+        const comprobarTrabajador = 'SELECT 1 FROM trabajador WHERE id_trabajador = ?';
+        const resultadoTrabajador = await query(comprobarTrabajador, [id]);
+
+        if (resultadoTrabajador.length === 0) {
+            throw new Error('El trabajador no existe');
+        }
+
+        const eliminarInstalaciones = 'DELETE FROM instalacion WHERE id_trabajador = ?';
+        await query(eliminarInstalaciones, [id]);
+
+        const eliminarVentas = 'DELETE FROM venta WHERE id_trabajador = ?';
+        await query(eliminarVentas, [id]);
+
+        const eliminarVisitas = 'DELETE FROM visita WHERE id_trabajador = ?';
+        await query(eliminarVisitas, [id]);
+
+        const eliminarTrabajador = 'DELETE FROM trabajador WHERE id_trabajador = ?';
+        await query(eliminarTrabajador, [id]);
+
+        await query('COMMIT');
+        return { message: "Trabajador y todos los datos relacionados eliminados correctamente" };
+    } catch (err) {
+        await query('ROLLBACK');
+        throw err;
     }
-
-    const eliminarVentas = 'DELETE FROM venta WHERE id_trabajador = ?';
-    await query(eliminarVentas, [id]);
-
-    const eliminarInstalaciones = 'DELETE FROM instalacion WHERE id_trabajador = ?';
-    await query(eliminarInstalaciones, [id]);
-
-    const eliminarVisitas = 'DELETE FROM visita WHERE id_trabajador = ?';
-    await query(eliminarVisitas, [id]);
-
-    const eliminarTrabajador = 'DELETE FROM trabajador WHERE id_trabajador = ?';
-    await query(eliminarTrabajador, [id]);
-
-    return { message: "Trabajador y todos los datos relacionados eliminados correctamente" };
 };
 
 export const obtenerTodos = async () => {
