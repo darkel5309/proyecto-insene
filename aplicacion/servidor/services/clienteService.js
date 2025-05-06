@@ -52,7 +52,7 @@ export const obtenerPorId = async (idCliente) => {
         WHERE 
             c.id_cliente = ?`;
     const resultado = await query(infoCliente, [idCliente]);
-    return resultado;
+    return resultado[0];
 };
 
 export const obtenerTodos = async () => {
@@ -62,7 +62,7 @@ export const obtenerTodos = async () => {
 };
 
 export const actualizar = async (idCliente, cliente) => {
-    const {nombre, telefono, correo, dni, iban, modoCaptacion, observaciones, fechaAlta, direccion, localidad, provincia } = cliente;
+    const { nombre, telefono, correo, dni, iban, modoCaptacion, observaciones, fechaAlta, direccion, localidad, provincia } = cliente;
 
     const comprobarCliente = 'SELECT 1 FROM cliente WHERE id_cliente = ?';
     const resultadoCliente = await query(comprobarCliente, [idCliente]);
@@ -99,7 +99,7 @@ export const actualizar = async (idCliente, cliente) => {
 
 export const eliminar = async (idCliente) => {
     await query('START TRANSACTION');
-    
+
     try {
         const existeCliente = await query('SELECT 1 FROM cliente WHERE id_cliente = ?', [idCliente]);
         if (existeCliente.length === 0) {

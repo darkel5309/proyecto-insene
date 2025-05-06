@@ -9,6 +9,7 @@ import InformacionClientes from "./pages/InformacionClientes";
 import FormularioModificarTrabajador from "./pages/FormularioModificarTrabajador";
 import FormularioModificarCliente from "./pages/FormularioModificarCliente";
 import PanelCoordinador from "./pages/PanelCoordinador";
+import InformacionAuditoria from "./pages/InformacionAuditoria";
 
 const routes = [
     {
@@ -34,6 +35,11 @@ const routes = [
     {
         path: "/administradores/modificarCliente/:id",
         element: <FormularioModificarCliente />,
+        roles: ["Administrador"],
+    },
+    {
+        path: "/administradores/auditoria",
+        element: <InformacionAuditoria />,
         roles: ["Administrador"],
     },
     {

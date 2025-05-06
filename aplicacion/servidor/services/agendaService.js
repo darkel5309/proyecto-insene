@@ -29,7 +29,7 @@ export const obtenerTodas = async () => {
 export const obtenerPorId = async (id) => {
     const sql = `SELECT * FROM agenda WHERE id_agenda = ?`;
     const resultado = await query(sql, [id]);
-    return resultado;
+    return resultado.length > 0 ? resultado[0] : null;
 };
 
 export const actualizar = async (id, datosEvento) => {

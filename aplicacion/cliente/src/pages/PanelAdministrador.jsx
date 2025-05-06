@@ -70,16 +70,21 @@ export default function PanelAdministrador() {
                     </Button>
                 </Col>
                 <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                    <Button as={Link} to="/administradores/InformacionClientes" variant="primary" className="custom-button" aria-label="Ver información de los clientes">
-                        Información de Clientes
+                    <Button as={Link} to="/coordinadores" variant="primary" className="custom-button" aria-label="Ir al panel de rutas">
+                        Panel Ruta
                     </Button>
                 </Col>
             </Row>
 
             <Row className="g-3 justify-content-center mt-1">
                 <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                    <Button as={Link} to="/coordinadores" variant="primary" className="custom-button" aria-label="Ir al panel de rutas">
-                        Panel Rutas
+                    <Button as={Link} to="/administradores/InformacionClientes" variant="primary" className="custom-button" aria-label="Ver información de los clientes">
+                        Información de Clientes
+                    </Button>
+                </Col>
+                <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                    <Button as={Link} to="/administradores/auditoria" variant="primary" className="custom-button" aria-label="Ver información de auditoría">
+                        Información de Auditoría
                     </Button>
                 </Col>
             </Row>

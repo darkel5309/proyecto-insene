@@ -18,7 +18,7 @@ export const obtenerPorId = async (req, res) => {
             return res.status(404).json({ error: "Cliente no encontrado" });
         }
 
-        res.status(200).json(clienteResultado[0]);
+        res.status(200).json(clienteResultado);
     } catch {
         res.status(500).json({ error: "Error interno del servidor" });
     }

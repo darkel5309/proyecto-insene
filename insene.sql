@@ -15,8 +15,6 @@ CREATE TABLE trabajador(
     fecha_baja DATETIME
 );
 
-DESCRIBE trabajador;
-
 CREATE TABLE cliente(
 	id_cliente INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50),
@@ -29,8 +27,6 @@ CREATE TABLE cliente(
     fecha_alta DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-DESCRIBE cliente;
-
 CREATE TABLE domicilio (
 	id_domicilio INT PRIMARY KEY AUTO_INCREMENT,
     direccion VARCHAR(100) NOT NULL,
@@ -40,8 +36,6 @@ CREATE TABLE domicilio (
     
     CONSTRAINT fk_domicilio_id_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
 );
-
-DESCRIBE domicilio;
 
 CREATE TABLE financiacion(
 	id_financiacion INT PRIMARY KEY AUTO_INCREMENT,
@@ -54,8 +48,6 @@ CREATE TABLE financiacion(
     CONSTRAINT fk_financiacion_id_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente) ON DELETE CASCADE
 );
 
-DESCRIBE financiacion;
-
 CREATE TABLE subvencion(
 	id_subvencion INT PRIMARY KEY AUTO_INCREMENT,
     fecha_subvencion DATE, 
@@ -66,8 +58,6 @@ CREATE TABLE subvencion(
     
     CONSTRAINT fk_subvencion_id_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente) ON DELETE CASCADE
 );
-
-DESCRIBE subvencion;
 
 CREATE TABLE vivienda (
     id_vivienda INT PRIMARY KEY AUTO_INCREMENT,
@@ -85,8 +75,6 @@ CREATE TABLE vivienda (
     CONSTRAINT fk_vivienda_id_domicilio FOREIGN KEY (id_domicilio) REFERENCES domicilio(id_domicilio) ON DELETE CASCADE
 );
 
-DESCRIBE vivienda;
-
 CREATE TABLE venta (
     id_venta INT PRIMARY KEY AUTO_INCREMENT,
     id_trabajador INT NOT NULL,
@@ -103,8 +91,6 @@ CREATE TABLE venta (
     CONSTRAINT fk_venta_id_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
     CHECK (gestion_legalizacion = "No" OR fecha_legalizacion IS NOT NULL)
 );
-
-DESCRIBE venta;
 
 CREATE TABLE instalacion (
     id_instalacion INT PRIMARY KEY AUTO_INCREMENT,
@@ -127,8 +113,6 @@ CREATE TABLE instalacion (
     CHECK (grua = 'no' OR importe_grua IS NOT NULL)
 );
 
-DESCRIBE instalacion;
-
 CREATE TABLE visita (
 	id_visita INT PRIMARY KEY AUTO_INCREMENT,
 	fecha DATE NOT NULL,
@@ -144,8 +128,6 @@ CREATE TABLE visita (
     CONSTRAINT fk_visita_id_trabajador FOREIGN KEY (id_trabajador) REFERENCES trabajador(id_trabajador)
 );
 
-DESCRIBE visita;
-
 CREATE TABLE factura (
     id_factura INT PRIMARY KEY AUTO_INCREMENT,
     numero_factura VARCHAR(50) NOT NULL UNIQUE,
@@ -156,8 +138,6 @@ CREATE TABLE factura (
     CONSTRAINT fk_factura_id_venta FOREIGN KEY (id_venta) REFERENCES venta(id_venta) ON DELETE CASCADE
 );
 
-DESCRIBE factura;
-
 CREATE TABLE recibo(
 	id_recibo INT PRIMARY KEY AUTO_INCREMENT,
     importe_luz DECIMAL(6,2),
@@ -166,8 +146,6 @@ CREATE TABLE recibo(
     
     CONSTRAINT fk_recibo_id_vivienda FOREIGN KEY (id_vivienda) REFERENCES vivienda(id_vivienda)
 );
-
-DESCRIBE recibo; 
 
 CREATE TABLE producto (
     id_producto INT PRIMARY KEY AUTO_INCREMENT,
@@ -180,8 +158,6 @@ CREATE TABLE producto (
     CONSTRAINT fk_producto_id_venta FOREIGN KEY (id_venta) REFERENCES venta(id_venta) ON DELETE CASCADE
 );
 
-DESCRIBE producto;
-
 CREATE TABLE caida (
     id_caida INT PRIMARY KEY AUTO_INCREMENT,
     id_venta INT NOT NULL,
@@ -192,8 +168,6 @@ CREATE TABLE caida (
 
     CONSTRAINT fk_informe_caida_id_venta FOREIGN KEY (id_venta) REFERENCES venta(id_venta) ON DELETE CASCADE
 );
-
-DESCRIBE caida;
 
 CREATE TABLE agenda (
     id_agenda INT PRIMARY KEY AUTO_INCREMENT,
@@ -208,6 +182,13 @@ CREATE TABLE agenda (
 
     CONSTRAINT fk_agenda_id_trabajador FOREIGN KEY (id_trabajador) REFERENCES trabajador(id_trabajador),
     CONSTRAINT fk_agenda_id_vivienda FOREIGN KEY (id_vivienda) REFERENCES vivienda(id_vivienda)
+);
+
+CREATE TABLE auditoria (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  id_trabajador INT,
+  descripcion VARCHAR(255) NOT NULL,
+  fecha DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- INSERTS
@@ -402,6 +383,7 @@ INSERT INTO agenda (titulo, descripcion, fecha_inicio_agenda, fecha_fin_agenda, 
 
 SELECT * FROM agenda;
 
+SELECT * FROM auditoria;
 
 -- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 -- FLUSH PRIVILEGES;
