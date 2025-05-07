@@ -35,7 +35,7 @@ app.use("/api", fechaRoutes);
 app.use("/api", agendaRoutes);
 app.use('/api', registroRoutes);
 
-app.use((__err, __req, res) => {
+app.use((_err, _req, res, _next) => {
   res.status(500).send("Algo salió mal");
 });
 

@@ -15,7 +15,6 @@ export const extraerIdTrabajador = (req, res, next) => {
     req.idTrabajador = decodificado.id;
     next();
   } catch (error) {
-    console.error('Error al verificar token:', error);
     return res.status(401).json({ mensaje: 'Token inválido' });
   }
 };

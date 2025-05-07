@@ -1,7 +1,7 @@
 import * as registroService from '../services/registroService.js';
 
 export const registrarOperacion = (obtenerDescripcion) => {
-  return async (req, res, next) => {
+  return async (req, _res, next) => {
     try {
       const idTrabajador = req.idTrabajador;
       const descripcion =

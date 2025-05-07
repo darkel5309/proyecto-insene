@@ -1,6 +1,6 @@
 import * as registroService from '../services/registroService.js';
 
-export const obtenerTodos = async (req, res) => {
+export const obtenerTodos = async (_req, res) => {
   try {
     const registros = await registroService.obtenerTodos();
     res.status(200).json(registros);
