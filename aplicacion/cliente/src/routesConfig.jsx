@@ -3,7 +3,6 @@ import PanelCaptador from "./pages/PanelCaptador";
 import PanelComercial from "./pages/PanelComercial";
 import FormularioTrabajador from "./pages/FormularioTrabajador";
 import FormularioContacto from "./pages/FormularioContacto";
-import FormularioVisita from "./pages/FormularioVisita";
 import FormularioFeedback from "./pages/FormularioFeedback";
 import InformacionClientes from "./pages/InformacionClientes";
 import FormularioModificarTrabajador from "./pages/FormularioModificarTrabajador";
@@ -55,11 +54,6 @@ const routes = [
     {
         path: "/captadores/contacto",
         element: <FormularioContacto />,
-        roles: ["Captador", "Administrador"],
-    },
-    {
-        path: "/captadores/visita",
-        element: <FormularioVisita />,
         roles: ["Captador", "Administrador"],
     },
     {
