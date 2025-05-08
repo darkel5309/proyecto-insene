@@ -11,8 +11,8 @@ export function AuthProvider({ children }) {
   const verificarSesion = async () => {
     setLoading(true);
     try {
-      const response = await Axios.get("/verificarSesion");
-      setAuthData(response.data);
+      const { data } = await Axios.get("/verificarSesion");
+      setAuthData(data);
     } catch {
       setAuthData(null);
     } finally {
@@ -29,12 +29,16 @@ export function AuthProvider({ children }) {
   };
 
   const cerrarSesion = async () => {
-    await Axios.post("/cerrarSesion");
-    setAuthData(null);
+    try {
+      await Axios.post("/cerrarSesion");
+    } finally {
+      setAuthData(null);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ authData, iniciarSesion, cerrarSesion, loading, verificarSesion }}>
+    <AuthContext.Provider
+      value={{ authData, iniciarSesion, cerrarSesion, loading, verificarSesion }}>
       {children}
     </AuthContext.Provider>
   );

@@ -8,9 +8,14 @@ const PrivateRoute = ({ allowedRoles }) => {
   const { authData, loading } = useContext(AuthContext);
   const outlet = useOutlet();
 
-  if (loading) return <LoadingSpinner message="Cargando..." />;
+  if (loading) {
+    return <LoadingSpinner message="Cargando..." />;
+  }
 
-  if (!authData || (allowedRoles && !allowedRoles.includes(authData.tipoTrabajador))) {
+  const noAutenticado = !authData;
+  const noAutorizado = allowedRoles?.length && !allowedRoles.includes(authData?.tipoTrabajador);
+
+  if (noAutenticado || noAutorizado) {
     return <Navigate to="/" replace />;
   }
 

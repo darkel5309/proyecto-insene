@@ -17,7 +17,6 @@ export default function PanelCaptador() {
     return (
         <Container fluid="md" className="captador">
             <h1 className="text-center mb-4">Panel de Captadores</h1>
-
             <BotonesNavegacion />
         </Container>
     );

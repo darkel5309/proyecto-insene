@@ -1,18 +1,19 @@
 import axios from "axios";
 
 const Axios = axios.create({
-  baseURL: "http://localhost:5174/api",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5174/api",
   withCredentials: true,
 });
 
 Axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error?.response?.status === 401) {
-      if (window.location.pathname !== '/') {
-        window.location.href = '/';
-      }
+    const status = error?.response?.status;
+
+    if (status === 401 && window.location.pathname !== '/') {
+      window.location.href = '/';
     }
+
     return Promise.reject(error);
   }
 );

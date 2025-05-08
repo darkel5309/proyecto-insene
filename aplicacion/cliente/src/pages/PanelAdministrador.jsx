@@ -6,7 +6,6 @@ import Axios from "../axiosConfig";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import useDocumentTitle from '../components/Titulo';
 import LoadingSpinner from "../components/LoadingSpinner";
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 
 export default function PanelAdministrador() {
@@ -15,11 +14,8 @@ export default function PanelAdministrador() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const formatFecha = (fecha) => fecha ? dayjs(fecha).format("DD/MM/YYYY HH:mm") : "-";
 
-    const handleModificar = (id_trabajador) => {
-        navigate(`/administradores/modificarTrabajador/${id_trabajador}`);
-    };
+    const formatFecha = (fecha) => fecha ? dayjs(fecha).format("DD/MM/YYYY HH:mm") : "-";
 
     const columns = useMemo(() => [
         { accessorKey: 'id_trabajador', header: 'ID', size: 70 },
@@ -31,19 +27,19 @@ export default function PanelAdministrador() {
         { accessorKey: 'fecha_baja', header: 'FECHA DE BAJA', size: 130, Cell: ({ cell }) => formatFecha(cell.getValue()) },
         {
             id: 'modificar', header: '', size: 100, Cell: ({ row }) => (
-                <Button variant="warning" onClick={() => handleModificar(row.original.id_trabajador)}
-                    aria-label={`Modificar trabajador ${row.original.nombre}`}> Modificar
+                <Button variant="warning" onClick={() => navigate(`/administradores/modificarTrabajador/${row.original.id_trabajador}`)} aria-label={`Modificar trabajador ${row.original.nombre}`} >
+                    Modificar
                 </Button>
             ),
         },
-    ], [handleModificar]);
+    ], []);
 
     useEffect(() => {
         const obtenerTrabajadores = async () => {
             try {
                 setLoading(true);
                 const { data } = await Axios.get("/trabajadores");
-                setData([...data].reverse());
+                setData(data.reverse());
             } finally {
                 setLoading(false);
             }
@@ -55,7 +51,7 @@ export default function PanelAdministrador() {
         <>
             <Row className="g-3 justify-content-center">
                 <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                    <Button as={Link} to="/administradores/registroTrabajador" variant="primary" className="custom-button" aria-label="Crear un nuevo trabajador">
+                    <Button as={Link} to="/administradores/registroTrabajador" variant="primary" className="custom-button" aria-label="Registrar un nuevo trabajador">
                         Registrar Trabajador
                     </Button>
                 </Col>
@@ -127,14 +123,3 @@ export default function PanelAdministrador() {
         </Container>
     );
 }
-
-PanelAdministrador.propTypes = {
-    row: PropTypes.shape({
-        original: PropTypes.shape({
-            id_trabajador: PropTypes.number.isRequired,
-            nombre: PropTypes.string.isRequired,
-            rol: PropTypes.string.isRequired,
-            telefono: PropTypes.string.isRequired,
-        }).isRequired,
-    }),
-};

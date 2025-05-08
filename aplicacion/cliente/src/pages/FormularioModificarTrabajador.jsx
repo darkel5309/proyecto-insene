@@ -16,18 +16,15 @@ export default function ModificarTrabajador() {
     useDocumentTitle("Modificación de Trabajador");
 
     const { id } = useParams();
-    const trabajador = useDatosTrabajador(id);
+    const { trabajador, cargando } = useDatosTrabajador(id);
     const navigate = useNavigate();
 
-    const formatFechaDatetimeLocal = (fecha) => {
-        if (!fecha) return "";
-        return dayjs(fecha).format('YYYY-MM-DDTHH:mm');
-    };
+    const formatFechaDatetimeLocal = (fecha) => fecha ? dayjs(fecha).format('YYYY-MM-DDTHH:mm') : "";
 
     const initialValues = useMemo(() => ({
-        nombre: trabajador.nombre || "", contrasena: "", telefono: trabajador.telefono || "", rol: trabajador.rol || "",
-        equipo: trabajador.equipo || "", subequipo: trabajador.subequipo || "", fechaAlta: formatFechaDatetimeLocal(trabajador.fecha_alta),
-        fechaBaja: formatFechaDatetimeLocal(trabajador.fecha_baja)
+        nombre: trabajador?.nombre || "", contrasena: "", telefono: trabajador?.telefono || "", rol: trabajador?.rol || "",
+        equipo: trabajador?.equipo || "", subequipo: trabajador?.subequipo || "", fechaAlta: formatFechaDatetimeLocal(trabajador?.fecha_alta),
+        fechaBaja: formatFechaDatetimeLocal(trabajador?.fecha_baja)
     }), [trabajador]);
 
     const validationSchema = Yup.object({
@@ -37,22 +34,19 @@ export default function ModificarTrabajador() {
         rol: Yup.string().required("Este campo es obligatorio"),
         equipo: Yup.string().required("Este campo es obligatorio"),
         subequipo: Yup.string().required("Este campo es obligatorio"),
-        fechaAlta:Yup.date().required("Este campo es obligatorio"),
-        fechaBaja:Yup.date().optional()
+        fechaAlta: Yup.date().required("Este campo es obligatorio"),
+        fechaBaja: Yup.date().optional()
     });
 
     const onSubmit = useCallback(async (values, { setSubmitting }) => {
         try {
             const trabajadorActualizado = { ...values };
             if (!values.contrasena) delete trabajadorActualizado.contrasena;
-            if (!values.fechaBaja) { trabajadorActualizado.fechaBaja = null; }
+            trabajadorActualizado.fechaBaja = values.fechaBaja || null;
 
             await Axios.put(`/trabajadores/${id}`, trabajadorActualizado);
-            Swal.fire({
-                icon: "success",
-                title: "Trabajador actualizado correctamente",
-                confirmButtonText: "Vale",
-            }).then(() => navigate("/administradores"));
+            Swal.fire({ icon: "success", title: "Trabajador actualizado correctamente", confirmButtonText: "Vale" })
+                .then(() => navigate("/administradores"));
         } catch (error) {
             erroresSweetAlert2(error);
         } finally {
@@ -83,38 +77,45 @@ export default function ModificarTrabajador() {
         }
     }, [id, navigate]);
 
+    if (cargando) {
+        return <p className="text-center">Cargando datos del trabajador...</p>;
+    }
+
+    if (!trabajador) {
+        return <p className="text-center">No se encontró el trabajador.</p>;
+    }
+
     return (
         <Container fluid="md" className="trabajador">
             <h1 className="text-center mb-4">Modificar Trabajador</h1>
-            <Formik initialValues={{ ...initialValues, ...trabajador, contrasena: "", }}
-                validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize >
+            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize >
                 {({ errors, touched, isSubmitting, isValid }) => (
                     <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light">
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Nuevo nombre del trabajador *" name="nombre" type="text" placeholder="Ej: Carlos Martínez Gómez"
+                                <CamposFormulario label="Nuevo nombre del trabajador *" name="nombre" type="text"
                                     tooltip="Introduce el nuevo nombre y apellidos del trabajador" errors={errors} touched={touched} />
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Nueva contraseña para el trabajador" name="contrasena" type="text"
+                                <CamposFormulario label="Nueva contraseña para el trabajador" name="contrasena" type="password"
                                     tooltip="Introduce la nueva contraseña que tendrá el trabajador" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Nuevo teléfono del trabajador *" name="telefono" type="tel" placeholder="Ej: 600000000"
-                                    tooltip="Introduce el nuevo número de teléfono del trabajador (9 dígitos)" errors={errors} touched={touched} />
+                                <CamposFormulario label="Nuevo teléfono del trabajador *" name="telefono" type="tel"
+                                    tooltip="Introduce el nuevo número de teléfono del trabajador" errors={errors} touched={touched} />
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Nuevo equipo del trabajador *" name="equipo" type="text" placeholder="Ej: Equipo 1"
+                                <CamposFormulario label="Nuevo equipo del trabajador *" name="equipo" type="text"
                                     tooltip="Introduce el nuevo equipo al que pertenecerá el trabajador" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Nuevo subequipo del trabajador *" name="subequipo" type="text" placeholder="Ej: Subequipo 1"
+                                <CamposFormulario label="Nuevo subequipo del trabajador *" name="subequipo" type="text"
                                     tooltip="Introduce el nuevo subequipo al que pertenecerá el trabajador" errors={errors} touched={touched} />
                             </Col>
                             <Col xs={12} md={6}>
@@ -131,6 +132,7 @@ export default function ModificarTrabajador() {
                                 </CamposFormulario>
                             </Col>
                         </Row>
+
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
                                 <CamposFormulario label="Nueva fecha de alta *" name="fechaAlta" type="datetime-local"
@@ -143,13 +145,13 @@ export default function ModificarTrabajador() {
                         </Row>
 
                         <div className="d-flex justify-content-center">
-                            <Button type="submit" className="mt-3" disabled={isSubmitting || !isValid} aria-label="Modificar trabajador" >
+                            <Button type="submit" className="mt-3" disabled={isSubmitting || !isValid}>
                                 {isSubmitting ? "Modificando..." : "Modificar trabajador"}
                             </Button>
                         </div>
 
                         <div className="d-flex justify-content-center mt-3">
-                            <Button variant="danger" onClick={onDelete} className="mt-3" aria-label="Eliminar trabajador" >
+                            <Button variant="danger" onClick={onDelete} className="mt-3">
                                 Eliminar Trabajador
                             </Button>
                         </div>

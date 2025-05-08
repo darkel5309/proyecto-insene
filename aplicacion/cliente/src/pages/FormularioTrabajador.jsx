@@ -31,13 +31,12 @@ export default function FormularioTrabajador() {
     const onSubmit = useCallback(async (values, { setSubmitting, resetForm }) => {
         try {
             const response = await Axios.post("/trabajadores", values);
-
             Swal.fire({
                 icon: "success",
                 title: `El ID de trabajador de ${response.data.nombreTrabajador} es: ${response.data.idTrabajador}`,
                 text: "Datos registrados correctamente",
                 confirmButtonText: "Vale"
-            }).then(() => navigate(-1));
+            }).then(() => navigate("/administradores"));
             resetForm();
         } catch (error) {
             erroresSweetAlert2(error);

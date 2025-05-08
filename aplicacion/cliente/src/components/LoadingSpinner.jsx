@@ -1,24 +1,24 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Container } from 'react-bootstrap';
 
 const LoadingSpinner = ({ message = "Cargando...", height = "50vh", fullWidth = true }) => {
     return (
-        <Container className={`d-flex justify-content-center align-items-center ${fullWidth ? 'w-100' : ''}`} style={{ height }}>
-            <div className="text-center" role="status" aria-live="polite">
-                <div className="spinner-border" role="status">
+        <Container className={`d-flex justify-content-center align-items-center ${fullWidth ? 'w-100' : ''}`}
+            style={{ height }} role="status" aria-live="polite" >
+            <div className="text-center">
+                <div className="spinner-border text-primary" role="status">
                     <span className="visually-hidden">Cargando...</span>
                 </div>
-                <p className="mt-3">{message}</p>
+                {message && <p className="mt-3 mb-0">{message}</p>}
             </div>
         </Container>
     );
 };
 
 LoadingSpinner.propTypes = {
-  message: PropTypes.string,
-  height: PropTypes.string,
-  fullWidth: PropTypes.bool,
+    message: PropTypes.string,
+    height: PropTypes.string,
+    fullWidth: PropTypes.bool,
 };
 
 export default LoadingSpinner;

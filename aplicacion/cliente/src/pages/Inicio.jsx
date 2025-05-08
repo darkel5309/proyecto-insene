@@ -1,10 +1,9 @@
 import '../styles/Formularios.css';
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useContext } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form as BootstrapForm, Button } from 'react-bootstrap';
-import { useContext } from 'react';
 import { AuthContext } from "../context/AuthProvider";
 import Axios from "../axiosConfig";
 import useDocumentTitle from '../components/Titulo';
@@ -28,31 +27,24 @@ export default function Inicio() {
 
     const onSubmit = useCallback(async (values, { setSubmitting, resetForm }) => {
         try {
-            const response = await Axios.post("/iniciarSesion", values, { withCredentials: true });
+            const { data } = await Axios.post("/iniciarSesion", values, { withCredentials: true });
 
-            iniciarSesionContext(response.data);
+            iniciarSesionContext(data);
             resetForm();
 
-            const tipoTrabajador = response.data.tipoTrabajador;
-
-            if (tipoTrabajador === 'Captador') {
-                navigate('/captadores');
-            } else if (tipoTrabajador === 'Comercial') {
-                navigate('/comerciales');
-            } else if (tipoTrabajador === 'Administrador') {
-                navigate('/administradores');
-            } else if (tipoTrabajador === 'Coordinador') {
-                navigate('/coordinadores');
-            } else {
-                navigate('/');
-            }
-
+            const rutas = {
+                Captador: "/captadores",
+                Comercial: "/comerciales",
+                Administrador: "/administradores",
+                Coordinador: "/coordinadores",
+            };
+            navigate(rutas[data.tipoTrabajador] || "/");
         } catch (error) {
             erroresSweetAlert2(error);
         } finally {
             setSubmitting(false);
         }
-    }, [navigate]);
+    }, [navigate, iniciarSesionContext]);
 
     return (
         <Container fluid="md" className="inicioSesion">
@@ -62,17 +54,15 @@ export default function Inicio() {
                     <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light">
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="ID de Trabajador *" name="idTrabajador" type="number" placeholder="Ej: 5"
-                                    tooltip="Introduce tu código único de trabajador" errors={errors} touched={touched} />
+                                <CamposFormulario label="ID de trabajador *" name="idTrabajador" type="number" placeholder="Ej: 5" tooltip="Introduce tu código único de trabajador" errors={errors} touched={touched} autoComplete="username" />
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Contraseña *" name="contrasena" type="password"
-                                    tooltip="Introduce tu contraseña" errors={errors} touched={touched} />
+                                <CamposFormulario label="Contraseña *" name="contrasena" type="password" tooltip="Introduce tu contraseña" errors={errors} touched={touched} autoComplete="current-password" />
                             </Col>
                         </Row>
 
                         <div className="d-flex justify-content-center">
-                            <Button type="submit" className="mt-3" disabled={isSubmitting || !isValid} aria-label="Registrar feedback" >
+                            <Button type="submit" className="mt-3" disabled={isSubmitting || !isValid} aria-label="Botón de inicio de sesión" >
                                 {isSubmitting ? "Iniciando sesión..." : "Iniciar Sesión"}
                             </Button>
                         </div>

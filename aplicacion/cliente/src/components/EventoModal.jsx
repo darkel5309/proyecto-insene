@@ -53,12 +53,12 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                             <Row>
                                 <Col xs={12} md={6}>
                                     <div className="mb-3">
-                                        <CamposFormulario label="Fecha Inicio *" name="start" type="datetime-local" errors={errors} touched={touched} />
+                                        <CamposFormulario label="Fecha inicio *" name="start" type="datetime-local" errors={errors} touched={touched} />
                                     </div>
                                 </Col>
                                 <Col xs={12} md={6}>
                                     <div className="mb-3">
-                                        <CamposFormulario label="Fecha Fin *" name="end" type="datetime-local" errors={errors} touched={touched} />
+                                        <CamposFormulario label="Fecha fin *" name="end" type="datetime-local" errors={errors} touched={touched} />
                                     </div>
                                 </Col>
                             </Row>
@@ -80,7 +80,7 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                                 </Col>
                                 <Col xs={12} md={6}>
                                     <div className="mb-3">
-                                        <CamposFormulario label="ID Vivienda *" name="id_vivienda" type="number" placeholder="Ej: 12" errors={errors} touched={touched} />
+                                        <CamposFormulario label="ID vivienda *" name="id_vivienda" type="number" placeholder="Ej: 12" errors={errors} touched={touched} />
                                     </div>
                                 </Col>
                             </Row>

@@ -16,19 +16,18 @@ export default function FormularioModificarCliente() {
     useDocumentTitle("Modificación de Cliente");
 
     const { id } = useParams();
-    const cliente = useDatosCliente(id);
+    const { cliente, cargando } = useDatosCliente(id);
     const navigate = useNavigate();
 
     const formatFechaDatetimeLocal = (fecha) => {
-        if (!fecha) return "";
-        return dayjs(fecha).format('YYYY-MM-DDTHH:mm');
+        return fecha ? dayjs(fecha).format('YYYY-MM-DDTHH:mm') : "";
     };
 
     const initialValues = useMemo(() => ({
-        nombre: cliente.nombre || "", telefono: cliente.telefono || "", correo: cliente.correo || "", dni: cliente.dni || "",
-        iban: cliente.iban || "", modoCaptacion : cliente.modo_captacion || "", observaciones: cliente.observaciones || "",
-        fechaAlta: formatFechaDatetimeLocal(cliente.fecha_alta), direccion: cliente.direccion || "", localidad: cliente.localidad || "",
-        provincia: cliente.provincia || "",
+        nombre: cliente?.nombre || "", telefono: cliente?.telefono || "", correo: cliente?.correo || "",
+        dni: cliente?.dni || "", iban: cliente?.iban || "", modoCaptacion: cliente?.modo_captacion || "",
+        observaciones: cliente?.observaciones || "", fechaAlta: formatFechaDatetimeLocal(cliente?.fecha_alta),
+        direccion: cliente?.direccion || "", localidad: cliente?.localidad || "", provincia: cliente?.provincia || "",
     }), [cliente]);
 
     const validationSchema = Yup.object({
@@ -46,9 +45,7 @@ export default function FormularioModificarCliente() {
 
     const onSubmit = useCallback(async (values, { setSubmitting }) => {
         try {
-            const clienteActualizado = { ...values };
-
-            await Axios.put(`/clientes/${id}`, clienteActualizado);
+            await Axios.put(`/clientes/${id}`, values);
             Swal.fire({
                 icon: "success",
                 title: "Cliente actualizado correctamente",
@@ -84,6 +81,14 @@ export default function FormularioModificarCliente() {
         }
     }, [id, navigate]);
 
+    if (cargando) {
+        return <p className="text-center">Cargando datos del cliente...</p>;
+    }
+
+    if (!cliente) {
+        return <p className="text-center">No se encontró el cliente.</p>;
+    }
+
     return (
         <Container fluid="md" className="cliente">
             <h1 className="text-center mb-4">Modificar Cliente</h1>
@@ -96,76 +101,41 @@ export default function FormularioModificarCliente() {
                                     tooltip="Introduce la nueva fecha de alta del cliente" errors={errors} touched={touched} />
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Nuevo nombre del cliente *" name="nombre" type="text" placeholder="Ej: Gabriel Ruíz Fernández"
+                                <CamposFormulario label="Nuevo nombre del cliente *" name="nombre" type="text"
                                     tooltip="Introduce el nuevo nombre y apellidos del cliente" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Nueva dirección del cliente *" name="direccion" type="text" placeholder="Ej: Calle Sevilla, 44"
-                                    tooltip="Introduce la nueva dirección del cliente incluyendo número, piso, etc." errors={errors} touched={touched} />
+                                <CamposFormulario label="Nueva dirección del cliente *" name="direccion" type="text"
+                                    tooltip="Introduce la nueva dirección del cliente" errors={errors} touched={touched} />
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Nueva localidad del cliente *" name="localidad" placeholder="Ej: Mairena del Alcor"
+                                <CamposFormulario label="Nueva localidad del cliente *" name="localidad" type="text"
                                     tooltip="Introduce la nueva localidad o municipio del cliente" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Nueva provincia del cliente *" name="provincia" type="text" placeholder="Ej: Sevilla"
-                                    tooltip="Introduce la nueva provincia donde reside el cliente" errors={errors} touched={touched} />
+                                <CamposFormulario label="Nueva provincia del cliente *" name="provincia" type="text"
+                                    tooltip="Introduce la nueva provincia del cliente" errors={errors} touched={touched} />
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Nuevo teléfono del cliente *" name="telefono" type="tel" placeholder="Ej: 600000000"
-                                    tooltip="Introduce el nuevo número de teléfono del cliente (9 dígitos)" errors={errors} touched={touched} />
-                            </Col>
-                        </Row>
-
-                        <Row className="mb-3">
-                            <Col xs={12} md={6}>
-                                <CamposFormulario label="Nuevo DNI del cliente " name="dni" type="text" placeholder="Ej: 11111111A"
-                                    tooltip="Introduce el nuevo DNI del cliente" errors={errors} touched={touched} />
-                            </Col>
-                            <Col xs={12} md={6}>
-                                <CamposFormulario label="Nuevo IBAN del cliente " name="iban" type="text" placeholder="Ej: ES6000491500051234567892	"
-                                    tooltip="Introduce el nuevo IBAN del cliente" errors={errors} touched={touched} />
-                            </Col>
-                        </Row>
-
-                        <Row className="mb-3">
-                            <Col xs={12} md={6}>
-                                <CamposFormulario label="Nuevo correo del cliente *" name="correo" type="email" placeholder="Ej: gabriel@gmail.com"
-                                    tooltip="Introduce el nuevo correo electrónico del cliente" errors={errors} touched={touched} />
-                            </Col>
-                            <Col xs={12} md={6}>
-                                <CamposFormulario label="Nuevo modo de captación *" name="modoCaptacion" as="select"
-                                    tooltip="Selecciona la nueva forma de captación del cliente" errors={errors} touched={touched} >
-                                    <option value="">Selecciona una opción</option>
-                                    <option value="Captador">Captador</option>
-                                    <option value="Telemarketing">Telemarketing</option>
-                                    <option value="Referido">Referido</option>
-                                    <option value="Propia">Captación propia</option>
-                                </CamposFormulario>
-                            </Col>
-                        </Row>
-
-                        <Row className="mb-3">
-                            <Col>
-                                <CamposFormulario label="Nuevas observaciones" name="observaciones" as="textarea" placeholder="Comenta alguna observación"
-                                    tooltip="Añade cualquier nueva información adicional relevante sobre el cliente" errors={errors} touched={touched} />
+                                <CamposFormulario label="Nuevo teléfono del cliente *" name="telefono" type="tel"
+                                    tooltip="Introduce el nuevo número de teléfono del cliente" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 
                         <div className="d-flex justify-content-center">
-                            <Button type="submit" className="mt-3" disabled={isSubmitting || !isValid} aria-label="Modificar cliente" >
+                            <Button type="submit" className="mt-3" disabled={isSubmitting || !isValid}>
                                 {isSubmitting ? "Modificando..." : "Modificar cliente"}
                             </Button>
                         </div>
 
                         <div className="d-flex justify-content-center mt-3">
-                            <Button variant="danger" onClick={onDelete} className="mt-3" aria-label="Eliminar cliente" >
+                            <Button variant="danger" onClick={onDelete} className="mt-3">
                                 Eliminar Cliente
                             </Button>
                         </div>

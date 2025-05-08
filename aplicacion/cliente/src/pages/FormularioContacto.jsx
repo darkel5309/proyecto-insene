@@ -35,14 +35,12 @@ export default function FormularioCliente() {
     const onSubmit = useCallback(async (values, { setSubmitting, resetForm }) => {
         try {
             const response = await Axios.post("/clientes", values);
-
             Swal.fire({
                 icon: "success",
                 title: `Cliente nº ${response.data.idCliente} registrado`,
                 text: "Datos registrados correctamente",
                 confirmButtonText: "Vale"
             }).then(() => navigate(-1));
-
             resetForm();
         } catch (error) {
             erroresSweetAlert2(error);
@@ -63,45 +61,37 @@ export default function FormularioCliente() {
                     <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light" noValidate>
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="ID de Trabajador *" name="idTrabajador" type="number" placeholder="Ej: 5" disabled={true}
-                                    tooltip="Tu código de trabajador" errors={errors} touched={touched} />
+                                <CamposFormulario label="ID de trabajador *" name="idTrabajador" type="number" placeholder="Ej: 5" disabled tooltip="Tu código de trabajador" errors={errors} touched={touched} />
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Nombre completo del cliente *" name="nombre" placeholder="Ej: Gabriel Ruíz Fernández"
-                                    tooltip="Introduce el nombre y apellidos del cliente" errors={errors} touched={touched} />
+                                <CamposFormulario label="Nombre completo del cliente *" name="nombre" placeholder="Ej: Gabriel Ruíz Fernández" tooltip="Introduce el nombre y apellidos del cliente" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Dirección del cliente *" name="direccion" placeholder="Ej: Calle Sevilla, 44"
-                                    tooltip="Introduce la dirección del cliente incluyendo número, piso, etc." errors={errors} touched={touched} />
+                                <CamposFormulario label="Dirección del cliente *" name="direccion" placeholder="Ej: Calle Sevilla, 44" tooltip="Introduce la dirección del cliente incluyendo número, piso, etc." errors={errors} touched={touched} />
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Localidad del cliente *" name="localidad" placeholder="Ej: Mairena del Alcor"
-                                    tooltip="Introduce la localidad o municipio del cliente" errors={errors} touched={touched} />
+                                <CamposFormulario label="Localidad del cliente *" name="localidad" placeholder="Ej: Mairena del Alcor" tooltip="Introduce la localidad o municipio del cliente" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Provincia del cliente *" name="provincia" placeholder="Ej: Sevilla"
-                                    tooltip="Introduce la provincia donde reside el cliente" errors={errors} touched={touched} />
+                                <CamposFormulario label="Provincia del cliente *" name="provincia" placeholder="Ej: Sevilla" tooltip="Introduce la provincia donde reside el cliente" errors={errors} touched={touched} />
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Teléfono del cliente *" name="telefono" type="tel" placeholder="Ej: 600000000"
-                                    tooltip="Introduce el número de teléfono del cliente (9 dígitos)" errors={errors} touched={touched} />
+                                <CamposFormulario label="Teléfono del cliente *" name="telefono" type="tel" placeholder="Ej: 600000000" tooltip="Introduce el número de teléfono del cliente (9 dígitos)" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Correo del cliente *" name="correo" type="email" placeholder="Ej: gabriel@gmail.com"
-                                    tooltip="Introduce el correo electrónico del cliente" errors={errors} touched={touched} />
+                                <CamposFormulario label="Correo del cliente *" name="correo" type="email" placeholder="Ej: gabriel@gmail.com" tooltip="Introduce el correo electrónico del cliente" errors={errors} touched={touched} />
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Modo de captación *" name="modoCaptacion" as="select"
-                                    tooltip="Selecciona la forma de captación del cliente" errors={errors} touched={touched} >
+                                <CamposFormulario label="Modo de captación *" name="modoCaptacion" as="select" tooltip="Selecciona la forma de captación del cliente" errors={errors} touched={touched} >
                                     <option value="">Selecciona una opción</option>
                                     <option value="Captador">Captador</option>
                                     <option value="Telemarketing">Telemarketing</option>
@@ -113,8 +103,7 @@ export default function FormularioCliente() {
 
                         <Row className="mb-3">
                             <Col>
-                                <CamposFormulario label="Observaciones" name="observaciones" as="textarea" placeholder="Comenta alguna observación"
-                                    tooltip="Añade cualquier información adicional relevante sobre el cliente" errors={errors} touched={touched} />
+                                <CamposFormulario label="Observaciones" name="observaciones" as="textarea" placeholder="Comenta alguna observación" tooltip="Añade cualquier información adicional relevante sobre el cliente" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 

@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import Axios from "../axiosConfig";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Alert } from "react-bootstrap";
 import useDocumentTitle from "../components/Titulo";
 import LoadingSpinner from "../components/LoadingSpinner";
 
@@ -12,6 +12,7 @@ export default function PanelComercial() {
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const columns = useMemo(() => [
         { accessorKey: "id_cliente", header: "ID", size: 70 },
@@ -28,7 +29,10 @@ export default function PanelComercial() {
             try {
                 setLoading(true);
                 const { data } = await Axios.get("/clientes");
-                setData([...data].reverse());
+                setData(data.reverse());
+                setError(null);
+            } catch (err) {
+                setError("No se pudo cargar la lista de clientes.");
             } finally {
                 setLoading(false);
             }
@@ -36,52 +40,47 @@ export default function PanelComercial() {
         obtenerClientes();
     }, []);
 
-    const BotonesNavegacion = () => (
-        <Row className="g-3 justify-content-center">
-            <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                <Button as={Link} to="/comerciales/contacto" variant="primary" className="custom-button" aria-label="Registrar un nuevo contacto" >
-                    Registrar Cliente
-                </Button>
-            </Col>
-            <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                <Button as={Link} to="/comerciales/feedback" variant="primary" className="custom-button" aria-label="Registrar un nuevo feedback">
-                    Registrar Feedback
-                </Button>
-            </Col>
-        </Row>
-    );
-
-    const ClientesTable = () => (
-        <Row>
-            <Col>
-                <h4 className="text-center mt-4">Lista de Clientes</h4>
-                <div className="tabla border rounded shadow-sm p-3 bg-light mt-2 mb-4">
-                    <MaterialReactTable
-                        columns={columns}
-                        data={data}
-                        enableColumnFilterModes={true}
-                        enableDensityToggle={false}
-                        enableColumnPinning={true}
-                        initialState={{
-                            density: "compact",
-                            pagination: { pageIndex: 0, pageSize: 25 },
-                            showColumnFilters: true,
-                        }}
-                    />
-                </div>
-            </Col>
-        </Row>
-    );
-
     return (
         <Container fluid="md" className="comercial">
             <h1 className="text-center mb-4">Panel de Comerciales</h1>
-            {loading ? (
-                <LoadingSpinner message="Cargando datos de clientes..." />
-            ) : (
+
+            {loading && <LoadingSpinner message="Cargando datos de clientes..." />}
+            {error && <Alert variant="danger" className="text-center">{error}</Alert>}
+
+            {!loading && !error && (
                 <>
-                    <BotonesNavegacion />
-                    <ClientesTable />
+                    <Row className="g-3 justify-content-center">
+                        <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                            <Button as={Link} to="/comerciales/contacto" variant="primary" className="custom-button" aria-label="Registrar un nuevo contacto">
+                                Registrar Cliente
+                            </Button>
+                        </Col>
+                        <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                            <Button as={Link} to="/comerciales/feedback" variant="primary" className="custom-button" aria-label="Registrar un nuevo feedback">
+                                Registrar Feedback
+                            </Button>
+                        </Col>
+                    </Row>
+
+                    <Row>
+                        <Col>
+                            <h4 className="text-center mt-4">Lista de Clientes</h4>
+                            <div className="tabla border rounded shadow-sm p-3 bg-light mt-2 mb-4">
+                                <MaterialReactTable
+                                    columns={columns}
+                                    data={data}
+                                    enableColumnFilterModes
+                                    enableDensityToggle={false}
+                                    enableColumnPinning
+                                    initialState={{
+                                        density: "compact",
+                                        pagination: { pageIndex: 0, pageSize: 25 },
+                                        showColumnFilters: true,
+                                    }}
+                                />
+                            </div>
+                        </Col>
+                    </Row>
                 </>
             )}
         </Container>

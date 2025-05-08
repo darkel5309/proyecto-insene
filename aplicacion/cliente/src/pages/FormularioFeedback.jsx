@@ -38,19 +38,20 @@ export default function FormularioFeedback() {
 	});
 
 	const onSubmit = useCallback(async (values, { setSubmitting, resetForm }) => {
-		if (values.importeLuz === '') values.importeLuz = 0;
-		if (values.importeGas === '') values.importeGas = 0;
+		const datosNormalizados = {
+			...values,
+			importeLuz: Number(values.importeLuz || 0),
+			importeGas: Number(values.importeGas || 0),
+		};
 
 		try {
-			const response = await Axios.post("/feedbacks", values);
-
+			const { data } = await Axios.post("/feedbacks", datosNormalizados);
 			Swal.fire({
 				icon: "success",
-				title: `El código del feedback es: ${response.data.idVisita}`,
+				title: `El código del feedback es: ${data.idVisita}`,
 				text: "Feedback registrado correctamente",
 				confirmButtonText: "Vale"
 			}).then(() => navigate('/comerciales'));
-
 			resetForm();
 		} catch (error) {
 			erroresSweetAlert2(error);
@@ -98,7 +99,7 @@ export default function FormularioFeedback() {
 
 						<Row className="mb-3">
 							<Col xs={12} md={6}>
-								<CamposFormulario label="Correo del cleinte" name="correo" disabled value={values.correo} errors={errors} touched={touched} />
+								<CamposFormulario label="Correo del cliente" name="correo" disabled value={values.correo} errors={errors} touched={touched} />
 							</Col>
 							<Col xs={12} md={6}>
 								<CamposFormulario label="Dirección del cliente" name="direccion" disabled value={values.direccion} errors={errors} touched={touched} />
@@ -116,54 +117,32 @@ export default function FormularioFeedback() {
 
 						<Row className="mb-3">
 							<Col xs={12} md={6}>
-								<CamposFormulario label="Fecha del feedback *" name="fecha" type="date" errors={errors} touched={touched} />
+								<CamposFormulario label="Fecha de la visita *" name="fecha" type="date" errors={errors} touched={touched} />
 							</Col>
 							<Col xs={12} md={6}>
-								<CamposFormulario label="Hora del feedback *" name="hora" type="time" errors={errors} touched={touched} />
-							</Col>
-						</Row>
-
-						<Row className="mb-3">
-							<Col xs={12} md={6}>
-								<CamposFormulario label="Número de Personas" name="numeroPersonas" type="number" placeholder="Ej: 4" errors={errors} touched={touched} tooltip="Introduce el número de personas que hay en la vivienda" />
-							</Col>
-							<Col xs={12} md={6}>
-								<CamposFormulario label="Número de Decisores *" name="numeroDecisores" type="number" placeholder="Ej: 2" errors={errors} touched={touched} tooltip="Introduce el número de decisores en la vivienda" />
+								<CamposFormulario label="Hora de la visita *" name="hora" type="time" errors={errors} touched={touched} />
 							</Col>
 						</Row>
 
 						<Row className="mb-3">
 							<Col xs={12} md={6}>
-								<CamposFormulario label="¿Tiene bombona?" name="tieneBombona" as="select"
-									tooltip="Selecciona si el cliente tiene bombona" errors={errors} touched={touched} >
+								<CamposFormulario label="Número de personas" name="numeroPersonas" type="number" placeholder="Ej: 4" errors={errors} touched={touched} tooltip="Introduce el número de personas que hay en la vivienda" />
+							</Col>
+							<Col xs={12} md={6}>
+								<CamposFormulario label="Número de decisores *" name="numeroDecisores" type="number" placeholder="Ej: 2" errors={errors} touched={touched} tooltip="Introduce el número de decisores en la vivienda" />
+							</Col>
+						</Row>
+
+						<Row className="mb-3">
+							<Col xs={12} md={6}>
+								<CamposFormulario label="¿Tiene bombona?" name="tieneBombona" as="select" tooltip="Selecciona si el cliente tiene bombona" errors={errors} touched={touched} >
 									<option value="Sin_datos">Sin datos</option>
 									<option value="Si">Si</option>
 									<option value="No">No</option>
 								</CamposFormulario>
 							</Col>
 							<Col xs={12} md={6}>
-								<CamposFormulario label="¿Tiene gas?" name="tieneGas" as="select"
-									tooltip="Selecciona si el cliente tiene gas" errors={errors} touched={touched} >
-									<option value="Sin_datos">Sin datos</option>
-									<option value="Si">Si</option>
-									<option value="No">No</option>
-								</CamposFormulario>
-							</Col>
-						</Row>
-
-						<Row className="mb-3">
-							<Col xs={12} md={6}>
-								<CamposFormulario label="¿Tiene termo?" name="tieneTermo" as="select"
-									tooltip="Selecciona si el cliente tiene termo" errors={errors} touched={touched} >
-									<option value="Sin_datos">Sin datos</option>
-									<option value="Si">Si</option>
-									<option value="No">No</option>
-								</CamposFormulario>
-							</Col>
-
-							<Col xs={12} md={6}>
-								<CamposFormulario label="¿Tiene placas?" name="tienePlacas" as="select"
-									tooltip="Selecciona si el cliente tiene placas" errors={errors} touched={touched} >
+								<CamposFormulario label="¿Tiene gas?" name="tieneGas" as="select" tooltip="Selecciona si el cliente tiene gas" errors={errors} touched={touched} >
 									<option value="Sin_datos">Sin datos</option>
 									<option value="Si">Si</option>
 									<option value="No">No</option>
@@ -173,10 +152,27 @@ export default function FormularioFeedback() {
 
 						<Row className="mb-3">
 							<Col xs={12} md={6}>
-								<CamposFormulario label="Importe Luz (€)" name="importeLuz" type="number" placeholder="Ej: 30,99" errors={errors} touched={touched} tooltip="Introduce el importe de luz de la última factura del cliente" />
+								<CamposFormulario label="¿Tiene termo?" name="tieneTermo" as="select" tooltip="Selecciona si el cliente tiene termo" errors={errors} touched={touched} >
+									<option value="Sin_datos">Sin datos</option>
+									<option value="Si">Si</option>
+									<option value="No">No</option>
+								</CamposFormulario>
 							</Col>
 							<Col xs={12} md={6}>
-								<CamposFormulario label="Importe Gas (€)" name="importeGas" type="number" placeholder="Ej: 20,99" errors={errors} touched={touched} tooltip="Introduce el importe de gas de la última factura del cliente" />
+								<CamposFormulario label="¿Tiene placas?" name="tienePlacas" as="select" tooltip="Selecciona si el cliente tiene placas" errors={errors} touched={touched} >
+									<option value="Sin_datos">Sin datos</option>
+									<option value="Si">Si</option>
+									<option value="No">No</option>
+								</CamposFormulario>
+							</Col>
+						</Row>
+
+						<Row className="mb-3">
+							<Col xs={12} md={6}>
+								<CamposFormulario label="Importe luz (€)" name="importeLuz" type="number" placeholder="Ej: 30,99" errors={errors} touched={touched} tooltip="Introduce el importe de luz de la última factura del cliente" />
+							</Col>
+							<Col xs={12} md={6}>
+								<CamposFormulario label="Importe gas (€)" name="importeGas" type="number" placeholder="Ej: 20,99" errors={errors} touched={touched} tooltip="Introduce el importe de gas de la última factura del cliente" />
 							</Col>
 						</Row>
 
@@ -185,10 +181,8 @@ export default function FormularioFeedback() {
 							<Col xs={12} md={6}>
 								<CamposFormulario label="Oferta" name="oferta" type="text" errors={errors} touched={touched} />
 							</Col>
-
 							<Col xs={12} md={6}>
-								<CamposFormulario label="Resultado *" name="resultado" as="select"
-									tooltip="Selecciona cuál ha sido el resultado del feedback" errors={errors} touched={touched} >
+								<CamposFormulario label="Resultado *" name="resultado" as="select" tooltip="Selecciona cuál ha sido el resultado del feedback" errors={errors} touched={touched} >
 									<option value="">Selecciona una opción</option>
 									<option value="Visitado_pdte_contestación">Visitado pendiente de contestación</option>
 									<option value="Visitado_no_hacen_nada">Visitado pero no hacen nada</option>

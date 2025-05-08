@@ -12,6 +12,7 @@ export default function InformacionAuditoria() {
 
     const [registros, setRegistros] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const formatFecha = (fecha) => fecha ? dayjs(fecha).format("DD/MM/YYYY HH:mm:ss") : "-";
 
@@ -27,22 +28,29 @@ export default function InformacionAuditoria() {
                 setLoading(true);
                 const { data } = await Axios.get('/registros');
                 setRegistros(data);
+                setError(null);
             } catch (error) {
-                console.error('Error al cargar registros:', error);
+                setError("Error al cargar los registros de auditoría.");
             } finally {
                 setLoading(false);
             }
         };
-
         cargarRegistros();
     }, []);
 
     return (
         <Container fluid="md" className="administrador">
             <h1 className="text-center mb-4">Información de Auditoría</h1>
-            {loading ? (
-                <LoadingSpinner message="Cargando información de Auditoria..." />
-            ) : (
+
+            {loading && <LoadingSpinner message="Cargando información de Auditoría..." />}
+
+            {error && (
+                <Alert variant="danger" className="text-center">
+                    {error}
+                </Alert>
+            )}
+
+            {!loading && !error && (
                 <Row>
                     <Col>
                         <div className="tabla border rounded shadow-sm p-3 bg-light mt-2 mb-4">
@@ -65,3 +73,4 @@ export default function InformacionAuditoria() {
         </Container>
     );
 }
+
