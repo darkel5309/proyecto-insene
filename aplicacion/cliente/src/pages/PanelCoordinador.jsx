@@ -13,7 +13,6 @@ import { erroresSweetAlert2 } from '../utils/erroresSweetAlert2';
 import useDocumentTitle from '../components/Titulo';
 import EventoModal from "../components/EventoModal";
 import dayjs from "dayjs";
-import { formatToUTC, formatToLocalDateTime } from '../utils/dateUtils';
 
 const PanelCoordinador = () => {
     useDocumentTitle("Panel Rutas");
@@ -95,8 +94,8 @@ const PanelCoordinador = () => {
             id: info.event.id,
             title: info.event.title,
             descripcion: info.event.extendedProps.descripcion,
-            start: formatToLocalDateTime(info.event.start),
-            end: formatToLocalDateTime(info.event.end),
+            start: dayjs(info.event.start).format('YYYY-MM-DDTHH:mm'),
+            end: dayjs(info.event.end).format('YYYY-MM-DDTHH:mm'),
             estado: info.event.extendedProps.estado,
             id_trabajador: info.event.extendedProps.id_trabajador,
             id_vivienda: info.event.extendedProps.id_vivienda
@@ -110,8 +109,8 @@ const PanelCoordinador = () => {
         const evento = {
             title: '',
             descripcion: '',
-            start: formatToLocalDateTime(info.dateStr),
-            end: formatToLocalDateTime(info.dateStr),
+            start: dayjs(info.dateStr).format('YYYY-MM-DDTHH:mm'),
+            end: dayjs(info.dateStr).format('YYYY-MM-DDTHH:mm'),
             estado: 'Pendiente',
             id_trabajador: '',
             id_vivienda: '',
@@ -126,8 +125,8 @@ const PanelCoordinador = () => {
             const eventoConFechasFormateadas = {
                 titulo: eventoModificado.title || '',
                 descripcion: eventoModificado.descripcion || '',
-                fechaInicio: formatToUTC(eventoModificado.start),
-                fechaFin: formatToUTC(eventoModificado.end),
+                fechaInicio: dayjs(eventoModificado.start).format('YYYY-MM-DD HH:mm:ss'),
+                fechaFin: dayjs(eventoModificado.end).format('YYYY-MM-DD HH:mm:ss'),
                 idTrabajador: parseInt(eventoModificado.id_trabajador),
                 idVivienda: parseInt(eventoModificado.id_vivienda),
                 estado: eventoModificado.estado

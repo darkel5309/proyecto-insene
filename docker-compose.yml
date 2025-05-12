@@ -5,6 +5,7 @@ services:
       - "5173:5173"
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - TZ=Europe/Madrid
     depends_on:
       servidor:
         condition: service_started
@@ -13,6 +14,8 @@ services:
     image: angel3103/proyecto-insene-servidor:latest
     ports:
       - "5174:5174"
+    environment:
+      - TZ=Europe/Madrid
     depends_on:
       db:
         condition: service_healthy
@@ -25,6 +28,8 @@ services:
       - "3307:3306"
     env_file:
       - ./.env
+    environment:
+      - TZ=Europe/Madrid
     volumes:
       - db_data:/var/lib/mysql
       - ./insene.sql:/docker-entrypoint-initdb.d/insene.sql

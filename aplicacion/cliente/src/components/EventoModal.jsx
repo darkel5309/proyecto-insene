@@ -1,7 +1,6 @@
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import { Formik, Form } from 'formik';
 import dayjs from "dayjs";
-import { formatToLocalDateTime } from '../utils/dateUtils';
 import CamposFormulario from './CamposFormulario';
 import Swal from 'sweetalert2';
 import * as Yup from 'yup';
@@ -23,8 +22,8 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
     const initialValues = {
         title: evento?.title || '',
         descripcion: evento?.descripcion || '',
-        start: evento?.start ? formatToLocalDateTime(evento.start) : '',
-        end: evento?.end ? formatToLocalDateTime(evento.end) : '',
+        start: evento?.start ? dayjs(evento.start).format('YYYY-MM-DDTHH:mm') : '',
+        end: evento?.end ? dayjs(evento.end).format('YYYY-MM-DDTHH:mm') : '',
         estado: evento?.estado || 'Pendiente',
         id_trabajador: evento?.id_trabajador || '',
         id_vivienda: evento?.id_vivienda || ''

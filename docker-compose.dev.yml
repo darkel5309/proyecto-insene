@@ -5,6 +5,7 @@ services:
       - "5173:5173"
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - TZ=Europe/Madrid
     volumes:
       - ./aplicacion/cliente:/app
       - /app/node_modules
@@ -16,6 +17,8 @@ services:
     build: ./aplicacion/servidor
     ports:
       - "5174:5174"
+    environment:
+      - TZ=Europe/Madrid
     volumes:
       - ./aplicacion/servidor:/app
       - /app/node_modules
@@ -31,6 +34,8 @@ services:
       - "3307:3306"
     env_file:
       - ./.env
+    environment:
+      - TZ=Europe/Madrid
     volumes:
       - db_data:/var/lib/mysql
       - ./insene.sql:/docker-entrypoint-initdb.d/insene.sql
