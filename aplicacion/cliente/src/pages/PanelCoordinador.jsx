@@ -1,7 +1,7 @@
 import '../styles/Agenda.css';
 import '../styles/Formularios.css';
 import { Card, Container, Row, Col, Badge, Button, Form } from 'react-bootstrap';
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -12,7 +12,8 @@ import Swal from 'sweetalert2';
 import { erroresSweetAlert2 } from '../utils/erroresSweetAlert2';
 import useDocumentTitle from '../components/Titulo';
 import EventoModal from "../components/EventoModal";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
+import { formatToUTC, formatToLocalDateTime } from '../utils/dateUtils';
 
 const PanelCoordinador = () => {
     useDocumentTitle("Panel Rutas");
@@ -94,8 +95,8 @@ const PanelCoordinador = () => {
             id: info.event.id,
             title: info.event.title,
             descripcion: info.event.extendedProps.descripcion,
-            start: dayjs(info.event.start).format('YYYY-MM-DDTHH:mm'),
-            end: dayjs(info.event.end).format('YYYY-MM-DDTHH:mm'),
+            start: formatToLocalDateTime(info.event.start),
+            end: formatToLocalDateTime(info.event.end),
             estado: info.event.extendedProps.estado,
             id_trabajador: info.event.extendedProps.id_trabajador,
             id_vivienda: info.event.extendedProps.id_vivienda
@@ -109,8 +110,8 @@ const PanelCoordinador = () => {
         const evento = {
             title: '',
             descripcion: '',
-            start: info.dateStr,
-            end: info.dateStr,
+            start: formatToLocalDateTime(info.dateStr),
+            end: formatToLocalDateTime(info.dateStr),
             estado: 'Pendiente',
             id_trabajador: '',
             id_vivienda: '',
@@ -125,8 +126,8 @@ const PanelCoordinador = () => {
             const eventoConFechasFormateadas = {
                 titulo: eventoModificado.title || '',
                 descripcion: eventoModificado.descripcion || '',
-                fechaInicio: dayjs(eventoModificado.start).format('YYYY-MM-DD HH:mm:ss'),
-                fechaFin: dayjs(eventoModificado.end).format('YYYY-MM-DD HH:mm:ss'),
+                fechaInicio: formatToUTC(eventoModificado.start),
+                fechaFin: formatToUTC(eventoModificado.end),
                 idTrabajador: parseInt(eventoModificado.id_trabajador),
                 idVivienda: parseInt(eventoModificado.id_vivienda),
                 estado: eventoModificado.estado
@@ -224,6 +225,7 @@ const PanelCoordinador = () => {
 
                     <div className="calendar-container">
                         <FullCalendar
+                            timezone="local"
                             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                             initialView="dayGridMonth"
                             events={eventosFiltrados}
@@ -243,7 +245,15 @@ const PanelCoordinador = () => {
                                 minute: '2-digit',
                                 hour12: false,
                             }}
-                            editable={true}
+                            editable={false}
+                            nowIndicator={true}
+                            businessHours={{
+                                daysOfWeek: [1, 2, 3, 4, 5],
+                                startTime: '8:00',
+                                endTime: '20:00',
+                            }}
+                            fixedWeekCount={false}
+                            navLinks={true}
                             viewDidMount={(info) => setVistaActual(info.view.type)}
                             eventContent={(eventInfo) => {
                                 const estado = eventInfo.event.extendedProps.estado;
