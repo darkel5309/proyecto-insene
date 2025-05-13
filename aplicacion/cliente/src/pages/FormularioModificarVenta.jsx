@@ -111,22 +111,22 @@ export default function ModificarVenta() {
                     <Form as={BootstrapForm} className="p-4 border rounded bg-light">
                         <Row className="mb-3">
                             <Col md={6}>
-                                <CamposFormulario name="id_trabajador" type="number" label="Nuevo ID trabajador *"
+                                <CamposFormulario label="Nuevo ID del trabajador *" name="id_trabajador" type="number"
                                     tooltip="Introduce el nuevo id de trabajador" errors={errors} touched={touched} />
                             </Col>
                             <Col md={6}>
-                                <CamposFormulario name="id_cliente" type="number" label="Nuevo ID cliente *"
+                                <CamposFormulario label="Nuevo ID del cliente *" name="id_cliente" type="number"
                                     tooltip="Introduce el nuevo id de cliente" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 
                         <Row className="mb-3">
                             <Col md={6}>
-                                <CamposFormulario name="fecha_firma" type="date" label="Nueva fecha firma *"
+                                <CamposFormulario label="Nueva fecha de firma *" name="fecha_firma" type="date"
                                     tooltip="Introduce la nueva fecha de firma" errors={errors} touched={touched} />
                             </Col>
                             <Col md={6}>
-                                <CamposFormulario name="forma_pago" as="select" label="Nueva forma de pago *"
+                                <CamposFormulario label="Nueva forma de pago *" name="forma_pago" as="select"
                                     tooltip="Selecciona la nueva forma de pago" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="Financiado">Financiado</option>
@@ -138,7 +138,7 @@ export default function ModificarVenta() {
 
                         <Row className="mb-3">
                             <Col md={6}>
-                                <CamposFormulario name="certificado_energetico" as="select" label="Nuevo certificado energético"
+                                <CamposFormulario label="Nuevo certificado energético *" name="certificado_energetico" as="select"
                                     tooltip="Selecciona el nuevo certificado energético" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="En_cuotas">En cuotas</option>
@@ -147,7 +147,7 @@ export default function ModificarVenta() {
                                 </CamposFormulario>
                             </Col>
                             <Col md={6}>
-                                <CamposFormulario name="gestion_subvencion" as="select" label="¿Gestión de subvención?"
+                                <CamposFormulario label="¿Gestión de subvención? *" name="gestion_subvencion" as="select"
                                     tooltip="Selecciona si existe gestión de subvención" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="Si">Sí</option>
@@ -158,7 +158,7 @@ export default function ModificarVenta() {
 
                         <Row className="mb-3">
                             <Col md={6}>
-                                <CamposFormulario name="gestion_legalizacion" as="select" label="¿Gestión de legalización?"
+                                <CamposFormulario label="¿Gestión de legalización? *" name="gestion_legalizacion" as="select"
                                     tooltip="Selecciona si existe gestión de legalización" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="Si">Sí</option>
@@ -166,14 +166,14 @@ export default function ModificarVenta() {
                                 </CamposFormulario>
                             </Col>
                             <Col md={6}>
-                                <CamposFormulario name="fecha_legalizacion" type="date" label="Nueva fecha legalización"
+                                <CamposFormulario label="Nueva fecha de legalización *" name="fecha_legalizacion" type="date"
                                     tooltip="Introduce la nueva fecha de legalización" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 
                         <Row className="mb-3">
                             <Col md={12}>
-                                <CamposFormulario name="estado_venta" as="select" label="Nuevo estado de la venta *"
+                                <CamposFormulario label="Nuevo estado de la venta *" name="estado_venta" as="select"
                                     tooltip="Selecciona el nuevo estado de la venta" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="Instalada">Instalada</option>

@@ -87,7 +87,7 @@ export default function FormularioVenta() {
 
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Certificado energético" name="certificado_energetico" as="select"
+                                <CamposFormulario label="Certificado energético *" name="certificado_energetico" as="select"
                                     tooltip="Selecciona el certificado energético" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="En_cuotas">En cuotas</option>
@@ -96,7 +96,7 @@ export default function FormularioVenta() {
                                 </CamposFormulario>
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Gestión de subvención" name="gestion_subvencion" as="select"
+                                <CamposFormulario label="Gestión de subvención *" name="gestion_subvencion" as="select"
                                     tooltip="Selecciona si existe gestión de subvención" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="Si">Sí</option>
@@ -107,23 +107,23 @@ export default function FormularioVenta() {
 
                         <Row className="mb-3">
                             <Col md={6}>
-                                <CamposFormulario label="Gestión de legalización" name="gestion_legalizacion" as="select" 
-                                tooltip="Selecciona si existe gestión de legalización" errors={errors} touched={touched}>
+                                <CamposFormulario label="Gestión de legalización *" name="gestion_legalizacion" as="select"
+                                    tooltip="Selecciona si existe gestión de legalización" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="Si">Sí</option>
                                     <option value="No">No</option>
                                 </CamposFormulario>
                             </Col>
                             <Col md={6}>
-                                <CamposFormulario label="Fecha de legalización" name="fecha_legalizacion" type="date" 
-                                tooltip="Selecciona la fecha de legalización" errors={errors} touched={touched} />
+                                <CamposFormulario label="Fecha de legalización *" name="fecha_legalizacion" type="date"
+                                    tooltip="Selecciona la fecha de legalización" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 
                         <Row className="mb-3">
                             <Col md={12}>
-                                <CamposFormulario label="Estado de la venta *" name="estado_venta" as="select" 
-                                tooltip="Selecciona el estado de la venta" errors={errors} touched={touched}>
+                                <CamposFormulario label="Estado de la venta *" name="estado_venta" as="select"
+                                    tooltip="Selecciona el estado de la venta" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="Instalada">Instalada</option>
                                     <option value="Caída">Caída</option>
