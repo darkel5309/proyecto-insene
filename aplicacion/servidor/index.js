@@ -10,6 +10,7 @@ import trabajadorRoutes from "./routes/trabajadorRoutes.js";
 import fechaRoutes from "./routes/fechaRoutes.js";
 import agendaRoutes from "./routes/agendaRoutes.js";
 import registroRoutes from './routes/registroRoutes.js';
+import ventaRoutes from "./routes/ventaRoutes.js"
 
 dotenv.config();
 
@@ -32,6 +33,8 @@ app.use("/api", trabajadorRoutes);
 app.use("/api", fechaRoutes);
 app.use("/api", agendaRoutes);
 app.use('/api', registroRoutes);
+app.use("/api", ventaRoutes
+)
 
 app.use((_err, _req, res, _next) => {
   res.status(500).send("Algo salió mal");
