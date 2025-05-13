@@ -50,6 +50,8 @@ export const obtenerPorId = async (id) => {
     const consulta = `
         SELECT
             v.id_venta,
+            v.id_trabajador,
+            v.id_cliente,
             v.fecha_firma,
             v.forma_pago,
             v.certificado_energetico,
@@ -97,7 +99,10 @@ export const actualizar = async (id, venta) => {
 };
 
 export const eliminar = async (id) => {
-    const consulta = `DELETE FROM venta WHERE id_venta = ?`;
-    await query(consulta, [id]);
+
+    await query(`DELETE FROM instalacion WHERE id_venta = ?`, [id]);
+    await query(`DELETE FROM venta WHERE id_venta = ?`, [id]);
+
     return { message: "Venta eliminada correctamente" };
 };
+

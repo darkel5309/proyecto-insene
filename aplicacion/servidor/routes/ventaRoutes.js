@@ -1,5 +1,6 @@
 import express from "express";
-import * as ventaController from "../controllers/ventaController.js";
+import { crear, obtenerPorId, actualizar, obtenerTodos, eliminar } from "../controllers/ventaController.js";
+import { validarDatosVenta } from "../middlewares/validarDatosVenta.js";
 import * as ventaService from "../services/ventaService.js";
 import { extraerIdTrabajador } from "../middlewares/extraerIdTrabajador.js";
 import { registrarOperacion } from "../middlewares/registrarOperacion.js";
@@ -11,18 +12,18 @@ router.post("/ventas", extraerIdTrabajador,
         const idCliente = req.body.id_cliente;
         return `Ha registrado una venta al cliente con ID: ${idCliente}`;
     }),
-    ventaController.crear
+    validarDatosVenta, crear
 );
 
-router.get("/ventas", ventaController.obtenerTodos);
-router.get("/ventas/:id", ventaController.obtenerPorId);
+router.get("/ventas", obtenerTodos);
+router.get("/ventas/:id", obtenerPorId);
 
 router.put("/ventas/:id", extraerIdTrabajador,
     registrarOperacion(async (req) => {
         const venta = await ventaService.obtenerPorId(req.params.id);
         return `Ha actualizado la venta con ID: ${venta?.id_venta}`;
     }),
-    ventaController.actualizar
+    actualizar
 );
 
 router.delete("/ventas/:id", extraerIdTrabajador,
@@ -30,7 +31,7 @@ router.delete("/ventas/:id", extraerIdTrabajador,
         const venta = await ventaService.obtenerPorId(req.params.id);
         return `Ha eliminado la venta con ID: ${venta?.id_venta}`;
     }),
-    ventaController.eliminar
+    eliminar
 );
 
 export default router;

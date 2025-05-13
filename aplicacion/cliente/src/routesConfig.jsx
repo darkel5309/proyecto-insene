@@ -11,7 +11,9 @@ const FormularioModificarTrabajador = lazy(() => import("./pages/FormularioModif
 const FormularioModificarCliente = lazy(() => import("./pages/FormularioModificarCliente"));
 const PanelCoordinador = lazy(() => import("./pages/PanelCoordinador"));
 const InformacionAuditoria = lazy(() => import("./pages/InformacionAuditoria"));
-const InformacionVentas = lazy(() => import("./pages/InformaciónVentas"));
+const InformacionVentas = lazy(() => import("./pages/InformaciónVenta"));
+const FormularioVenta = lazy(() => import("./pages/FormularioVenta"));
+const FormularioModificarVenta = lazy(() => import("./pages/FormularioModificarVenta"));
 
 const routes = [
   {
@@ -52,6 +54,16 @@ const routes = [
   {
     path: "/coordinadores/ventas",
     element: <InformacionVentas />,
+    roles: ["Coordinador", "Administrador"],
+  },
+  {
+    path: "/coordinadores/registroVenta",
+    element: <FormularioVenta />,
+    roles: ["Coordinador", "Administrador"],
+  },
+  {
+    path: "/coordinadores/modificarVenta/:id",
+    element: <FormularioModificarVenta />,
     roles: ["Coordinador", "Administrador"],
   },
   {

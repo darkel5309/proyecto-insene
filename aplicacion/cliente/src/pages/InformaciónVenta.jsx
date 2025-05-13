@@ -1,5 +1,6 @@
 import '../styles/Paneles.css';
 import { useState, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
 import Axios from "../axiosConfig";
@@ -31,7 +32,7 @@ export default function InformacionVentas() {
         { accessorKey: "fecha_legalizacion", header: "FECHA LEGALIZACIÓN", size: 130, Cell: ({ cell }) => formatFecha(cell.getValue()), },
         {
             id: 'modificar', header: '', size: 100, Cell: ({ row }) => (
-                <Button variant="warning" onClick={() => navigate(`/coordinadores/modificarVenta/${row.original.id_venta}`)} aria-label={`Modificar venta ${row.original.nombre}`} >
+                <Button variant="warning" onClick={() => navigate(`/coordinadores/modificarVenta/${row.original.id_venta}`)} aria-label={`Modificar venta ${row.original.id_venta}`} >
                     Modificar
                 </Button>
             ),
@@ -58,13 +59,21 @@ export default function InformacionVentas() {
         <Container fluid="md" className="ventas">
             <h1 className="text-center mb-4">Información de Ventas</h1>
 
+            <Row className="g-3 justify-content-center mb-4">
+                <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                    <Button as={Link} to="/coordinadores/registroVenta" variant="primary" className="custom-button" aria-label="Registrar una nueva venta">
+                        Registrar Venta
+                    </Button>
+                </Col>
+            </Row>
+
             {loading && <LoadingSpinner message="Cargando datos de ventas..." />}
             {error && <Alert variant="danger" className="text-center">{error}</Alert>}
 
             {!loading && !error && (
                 <Row>
                     <Col>
-                        <h4 className="text-center mt-2">Lista de Ventas</h4>
+                        <h4 className="text-center">Lista de Ventas</h4>
                         <div className="tabla border rounded shadow-sm p-3 bg-light mt-2 mb-4">
                             <MaterialReactTable
                                 columns={columns}
