@@ -2,6 +2,7 @@ import '../styles/Paneles.css';
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { MaterialReactTable } from "material-react-table";
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Axios from "../axiosConfig";
 import { Container, Row, Col, Button, Alert } from "react-bootstrap";
 import useDocumentTitle from "../components/Titulo";
@@ -67,6 +68,7 @@ export default function PanelComercial() {
                             <h4 className="text-center mt-4">Lista de Clientes</h4>
                             <div className="tabla border rounded shadow-sm p-3 bg-light mt-2 mb-4">
                                 <MaterialReactTable
+                                    localization={MRT_Localization_ES}
                                     columns={columns}
                                     data={data}
                                     enableColumnFilterModes

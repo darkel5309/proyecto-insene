@@ -7,7 +7,7 @@ export const erroresSweetAlert2 = (error) => {
             icon: "warning",
             title: "Error",
             text: mensajeError,
-            confirmButtonText: "Vale"
+            confirmButtonText: "OK"
         });
     }
 
@@ -16,7 +16,7 @@ export const erroresSweetAlert2 = (error) => {
             icon: "question",
             title: "Error de Conexión",
             text: "Verifica tu conexión a internet e inténtalo de nuevo",
-            confirmButtonText: "Vale"
+            confirmButtonText: "OK"
         });
     }
 
@@ -24,6 +24,6 @@ export const erroresSweetAlert2 = (error) => {
         icon: "error",
         title: "Error",
         text: "Ocurrió un error inesperado. Inténtalo de nuevo",
-        confirmButtonText: "Vale"
+        confirmButtonText: "OK"
     });
 };

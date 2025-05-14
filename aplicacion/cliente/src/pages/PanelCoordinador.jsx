@@ -147,7 +147,7 @@ const PanelCoordinador = () => {
             Swal.fire({
                 icon: "success",
                 title: "Tarea guardada correctamente",
-                confirmButtonText: "Vale"
+                confirmButtonText: "OK"
             });
 
             setMostrarModal(false);
@@ -166,7 +166,7 @@ const PanelCoordinador = () => {
                 Swal.fire({
                     icon: 'success',
                     title: 'Evento eliminado correctamente',
-                    confirmButtonText: 'Aceptar',
+                    confirmButtonText: 'OK',
                 });
             }
         } catch (error) {

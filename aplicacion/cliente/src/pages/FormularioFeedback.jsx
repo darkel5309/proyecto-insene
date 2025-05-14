@@ -50,7 +50,7 @@ export default function FormularioFeedback() {
 				icon: "success",
 				title: `El código del feedback es: ${data.idVisita}`,
 				text: "Feedback registrado correctamente",
-				confirmButtonText: "Vale"
+				confirmButtonText: "OK"
 			}).then(() => navigate('/comerciales'));
 			resetForm();
 		} catch (error) {

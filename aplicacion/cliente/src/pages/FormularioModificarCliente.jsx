@@ -49,7 +49,7 @@ export default function FormularioModificarCliente() {
             Swal.fire({
                 icon: "success",
                 title: "Cliente actualizado correctamente",
-                confirmButtonText: "Vale",
+                confirmButtonText: "OK",
             }).then(() => navigate("/administradores/InformacionClientes"));
         } catch (error) {
             erroresSweetAlert2(error);
@@ -73,7 +73,7 @@ export default function FormularioModificarCliente() {
                 Swal.fire({
                     icon: "success",
                     title: "Cliente eliminado correctamente",
-                    confirmButtonText: "Vale",
+                    confirmButtonText: "OK",
                 }).then(() => navigate("/administradores/InformacionClientes"));
             }
         } catch (error) {

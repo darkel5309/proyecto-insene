@@ -35,7 +35,7 @@ export default function FormularioTrabajador() {
                 icon: "success",
                 title: `El ID de trabajador de ${response.data.nombreTrabajador} es: ${response.data.idTrabajador}`,
                 text: "Datos registrados correctamente",
-                confirmButtonText: "Vale"
+                confirmButtonText: "OK"
             }).then(() => navigate("/administradores"));
             resetForm();
         } catch (error) {

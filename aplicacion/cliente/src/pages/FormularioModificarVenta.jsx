@@ -87,7 +87,7 @@ export default function ModificarVenta() {
                 Swal.fire({
                     icon: "success",
                     title: "Venta eliminada correctamente",
-                    confirmButtonText: "Vale",
+                    confirmButtonText: "OK",
                 }).then(() => navigate("/coordinadores/ventas"));
             }
         } catch (error) {

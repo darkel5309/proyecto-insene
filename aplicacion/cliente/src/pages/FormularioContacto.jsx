@@ -39,7 +39,7 @@ export default function FormularioCliente() {
                 icon: "success",
                 title: `Cliente nº ${response.data.idCliente} registrado`,
                 text: "Datos registrados correctamente",
-                confirmButtonText: "Vale"
+                confirmButtonText: "OK"
             }).then(() => navigate(-1));
             resetForm();
         } catch (error) {

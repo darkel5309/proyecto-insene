@@ -1,6 +1,7 @@
 import '../styles/Paneles.css';
 import { useEffect, useState, useMemo } from "react";
 import { MaterialReactTable } from 'material-react-table';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Axios from "../axiosConfig";
 import { Container, Row, Col } from "react-bootstrap";
 import useDocumentTitle from '../components/Titulo';
@@ -55,6 +56,7 @@ export default function InformacionAuditoria() {
                     <Col>
                         <div className="tabla border rounded shadow-sm p-3 bg-light mt-2 mb-4">
                             <MaterialReactTable
+                                localization={MRT_Localization_ES}
                                 columns={columns}
                                 data={registros}
                                 enableColumnFilterModes={true}

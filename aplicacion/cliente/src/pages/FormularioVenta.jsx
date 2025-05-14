@@ -42,7 +42,7 @@ export default function FormularioVenta() {
             Swal.fire({
                 icon: "success",
                 title: `Venta número ${response.data.id_venta} registrada`,
-                confirmButtonText: "Vale"
+                confirmButtonText: "OK"
             }).then(() => navigate('/coordinadores/ventas'));
             resetForm();
         } catch (error) {

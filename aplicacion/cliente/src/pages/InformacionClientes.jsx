@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "../axiosConfig";
 import { MaterialReactTable } from "material-react-table";
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Container, Row, Col, Form, Button, Card, Alert } from "react-bootstrap";
 import useDocumentTitle from "../components/Titulo";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -161,6 +162,7 @@ export default function InformacionClientes() {
                                 <Card.Header as="h5">Lista de Clientes</Card.Header>
                                 <Card.Body>
                                     <MaterialReactTable
+                                        localization={MRT_Localization_ES}
                                         columns={columns}
                                         data={clientes}
                                         enableColumnFilterModes

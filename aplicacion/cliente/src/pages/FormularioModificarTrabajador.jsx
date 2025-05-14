@@ -45,7 +45,11 @@ export default function ModificarTrabajador() {
             trabajadorActualizado.fechaBaja = values.fechaBaja || null;
 
             await Axios.put(`/trabajadores/${id}`, trabajadorActualizado);
-            Swal.fire({ icon: "success", title: "Trabajador actualizado correctamente", confirmButtonText: "Vale" })
+            Swal.fire({
+                icon: "success",
+                title: "Trabajador actualizado correctamente",
+                confirmButtonText: "OK"
+            })
                 .then(() => navigate("/administradores"));
         } catch (error) {
             erroresSweetAlert2(error);
@@ -69,7 +73,7 @@ export default function ModificarTrabajador() {
                 Swal.fire({
                     icon: "success",
                     title: "Trabajador eliminado correctamente",
-                    confirmButtonText: "Vale",
+                    confirmButtonText: "OK",
                 }).then(() => navigate("/administradores"));
             }
         } catch (error) {

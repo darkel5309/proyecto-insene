@@ -2,6 +2,7 @@ import '../styles/Paneles.css';
 import { useEffect, useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MaterialReactTable } from 'material-react-table';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Axios from "../axiosConfig";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import useDocumentTitle from '../components/Titulo';
@@ -93,6 +94,7 @@ export default function PanelAdministrador() {
                 <h4 className="text-center mt-4">Lista de Trabajadores</h4>
                 <div className="tabla border rounded shadow-sm p-3 bg-light mt-2 mb-4">
                     <MaterialReactTable
+                        localization={MRT_Localization_ES}
                         columns={columns}
                         data={data}
                         enableColumnFilterModes={true}
@@ -102,6 +104,19 @@ export default function PanelAdministrador() {
                             density: "compact",
                             pagination: { pageIndex: 0, pageSize: 25 },
                             showColumnFilters: true,
+                        }}
+                        muiTableBodyRowProps={({ row }) => {
+                            const estado = row.original.fecha_baja;
+
+                            const backgroundColor = {
+                                null: "#daf7a6",
+                            }[estado] || "#f8d7da";
+
+                            return {
+                                sx: {
+                                    backgroundColor: backgroundColor,
+                                }
+                            };
                         }}
                     />
                 </div>
