@@ -149,9 +149,7 @@ const PanelCoordinador = () => {
                 title: "Tarea guardada correctamente",
                 confirmButtonText: "OK"
             });
-
             setMostrarModal(false);
-
         } catch (error) {
             erroresSweetAlert2(error);
         }
@@ -180,7 +178,7 @@ const PanelCoordinador = () => {
 
             <Row className="g-3 justify-content-center mb-4">
                 <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                    <Button as={Link} to="/coordinadores/ventas" variant="primary" className="custom-button" aria-label="Ver información sobre las ventas">
+                    <Button as={Link} to="/coordinadores/ventas" variant="primary" className="boton-menu" aria-label="Ver información sobre las ventas">
                         Información de Ventas
                     </Button>
                 </Col>

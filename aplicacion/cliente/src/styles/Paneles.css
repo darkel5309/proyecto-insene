@@ -1,4 +1,4 @@
-.custom-button {
+.boton-menu {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8,7 +8,18 @@
     background: linear-gradient(to right, #007bff, #003059);
 }
 
-.custom-button:hover {
+.boton-menu:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+}
+
+.boton-modificar {
+    color: white;
+    background: linear-gradient(to right, #4db2ff, #287fdb);
+}
+
+.boton-modificar:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
     transition: 0.2s;

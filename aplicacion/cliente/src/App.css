@@ -44,9 +44,10 @@ body {
 
 .cerrar-sesion {
   padding: 3px !important;
+  background: linear-gradient(to right, #fae401, #fe8701);
 }
 
-h1{
+h1 {
   font-weight: bold !important;
-  color:  #003059 !important;
+  color: #003059 !important;
 }

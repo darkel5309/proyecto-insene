@@ -56,7 +56,14 @@ export const obtenerPorId = async (idCliente) => {
 };
 
 export const obtenerTodos = async () => {
-    const obtenerClientes = `SELECT c.*, d.* FROM cliente c LEFT JOIN domicilio d ON c.id_cliente = d.id_cliente`;
+    const obtenerClientes = `
+        SELECT c.*, d.* 
+        FROM cliente c 
+        LEFT JOIN domicilio d 
+        ON c.id_cliente = d.id_cliente
+        ORDER BY c.id_cliente DESC
+    `;
+
     const resultado = await query(obtenerClientes);
     return resultado;
 };

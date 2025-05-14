@@ -96,6 +96,7 @@ export const obtenerTodos = async () => {
     const obtenerTrabajadores = `
         SELECT id_trabajador, nombre, telefono, rol, equipo, subequipo, fecha_alta, fecha_baja
         FROM trabajador
+        ORDER BY id_trabajador DESC
     `;
     const resultado = await query(obtenerTrabajadores);
     if (resultado.length === 0) {

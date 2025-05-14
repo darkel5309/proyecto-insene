@@ -1,19 +1,17 @@
 import '../styles/Paneles.css';
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { MaterialReactTable } from "material-react-table";
-import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import Axios from "../axiosConfig";
-import { Container, Row, Col, Button, Alert } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import useDocumentTitle from "../components/Titulo";
 import LoadingSpinner from "../components/LoadingSpinner";
+import MRTTabla from "../utils/MRTTabla";
 
 export default function PanelComercial() {
     useDocumentTitle("Panel de Comercial");
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     const columns = useMemo(() => [
         { accessorKey: "id_cliente", header: "ID", size: 70 },
@@ -26,63 +24,51 @@ export default function PanelComercial() {
     ], []);
 
     useEffect(() => {
-        const obtenerClientes = async () => {
+        const cargarClientes = async () => {
             try {
                 setLoading(true);
                 const { data } = await Axios.get("/clientes");
-                setData(data.reverse());
-                setError(null);
-            } catch (err) {
-                setError("No se pudo cargar la lista de clientes.");
+                setData(data);
             } finally {
                 setLoading(false);
             }
         };
-        obtenerClientes();
+        cargarClientes();
     }, []);
+
+    const BotonesNavegacion = useMemo(() => (
+        <>
+            <Row className="g-3 justify-content-center">
+                {[
+                    { path: "/comerciales/contacto", label: "Registrar Cliente" },
+                    { path: "/comerciales/feedback", label: "Registrar Feedback" },
+                ]
+                    .map(({ path, label }) => (
+                        <Col key={path} xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                            <Button as={Link} to={path} variant="primary" className="boton-menu">
+                                {label}
+                            </Button>
+                        </Col>
+                    ))}
+            </Row>
+        </>
+    ), []);
 
     return (
         <Container fluid="md" className="comercial">
             <h1 className="text-center mb-4">Panel de Comerciales</h1>
 
-            {loading && <LoadingSpinner message="Cargando datos de clientes..." />}
-            {error && <Alert variant="danger" className="text-center">{error}</Alert>}
-
-            {!loading && !error && (
+            {loading ? (
+                <LoadingSpinner message="Cargando datos de clientes..." />
+            ) : (
                 <>
-                    <Row className="g-3 justify-content-center">
-                        <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                            <Button as={Link} to="/comerciales/contacto" variant="primary" className="custom-button" aria-label="Registrar un nuevo contacto">
-                                Registrar Cliente
-                            </Button>
-                        </Col>
-                        <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                            <Button as={Link} to="/comerciales/feedback" variant="primary" className="custom-button" aria-label="Registrar un nuevo feedback">
-                                Registrar Feedback
-                            </Button>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            <h4 className="text-center mt-4">Lista de Clientes</h4>
-                            <div className="tabla border rounded shadow-sm p-3 bg-light mt-2 mb-4">
-                                <MaterialReactTable
-                                    localization={MRT_Localization_ES}
-                                    columns={columns}
-                                    data={data}
-                                    enableColumnFilterModes
-                                    enableDensityToggle={false}
-                                    enableColumnPinning
-                                    initialState={{
-                                        density: "compact",
-                                        pagination: { pageIndex: 0, pageSize: 25 },
-                                        showColumnFilters: true,
-                                    }}
-                                />
-                            </div>
-                        </Col>
-                    </Row>
+                    {BotonesNavegacion}
+                    <MRTTabla
+                        title="Lista de clientes"
+                        columns={columns}
+                        data={data}
+                        loading={loading}
+                    />
                 </>
             )}
         </Container>

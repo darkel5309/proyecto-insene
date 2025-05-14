@@ -1,16 +1,14 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "../axiosConfig";
-import { MaterialReactTable } from "material-react-table";
-import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { Container, Row, Col, Form, Button, Card, Alert } from "react-bootstrap";
 import useDocumentTitle from "../components/Titulo";
 import LoadingSpinner from "../components/LoadingSpinner";
 import dayjs from "dayjs";
+import MRTTabla from "../utils/MRTTabla";
 
 export default function InformacionClientes() {
     useDocumentTitle("Panel de Clientes");
-
     const navigate = useNavigate();
 
     const [clientes, setClientes] = useState([]);
@@ -36,14 +34,26 @@ export default function InformacionClientes() {
         { accessorKey: "iban", header: "IBAN", size: 130 },
         { accessorKey: "modo_captacion", header: "MODO DE CAPTACIÓN", size: 130 },
         { accessorKey: "observaciones_cliente", header: "OBSERVACIONES", size: 130 },
-        { accessorKey: "fecha_alta", header: "FECHA DE ALTA", size: 130, Cell: ({ cell }) => formatFecha(cell.getValue()) },
+        {
+            accessorKey: "fecha_alta",
+            header: "FECHA DE ALTA",
+            size: 130,
+            Cell: ({ cell }) => formatFecha(cell.getValue())
+        },
         { accessorKey: "direccion", header: "DIRECCIÓN", size: 130 },
         { accessorKey: "localidad", header: "LOCALIDAD", size: 130 },
         { accessorKey: "provincia", header: "PROVINCIA", size: 130 },
         {
-            id: 'opciones', header: 'OPCIONES', size: 100, Cell: ({ row }) => (
-                <Button variant="warning" onClick={() => handleModificar(row.original.id_cliente)}
-                    aria-label={`Modificar cliente ${row.original.nombre}`}> Modificar
+            id: "opciones",
+            header: "OPCIONES",
+            size: 100,
+            Cell: ({ row }) => (
+                <Button
+                    variant="warning"
+                    onClick={() => handleModificar(row.original.id_cliente)}
+                    aria-label={`Modificar cliente ${row.original.nombre}`}
+                >
+                    Modificar
                 </Button>
             ),
         },
@@ -161,18 +171,11 @@ export default function InformacionClientes() {
                             <Card className="shadow-sm">
                                 <Card.Header as="h5">Lista de Clientes</Card.Header>
                                 <Card.Body>
-                                    <MaterialReactTable
-                                        localization={MRT_Localization_ES}
+                                    <MRTTabla
+                                        title=""
                                         columns={columns}
                                         data={clientes}
-                                        enableColumnFilterModes
-                                        enableColumnPinning
-                                        enableDensityToggle={false}
-                                        initialState={{
-                                            density: "compact",
-                                            pagination: { pageIndex: 0, pageSize: 25 },
-                                            showColumnFilters: true
-                                        }}
+                                        loading={false}
                                         muiTableBodyRowProps={({ row }) => ({
                                             onClick: () => handleRowClick(row.original.id_cliente.toString()),
                                             sx: { cursor: "pointer" }
