@@ -1,6 +1,5 @@
 import { createContext, useState, useEffect } from "react";
 import Axios from "../axiosConfig";
-import PropTypes from 'prop-types';
 
 const AuthContext = createContext();
 
@@ -43,10 +42,6 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
-
-AuthProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export { AuthContext };
 export default AuthProvider;
