@@ -38,7 +38,11 @@ export default function FormularioVenta() {
 
     const onSubmit = useCallback(async (values, { setSubmitting, resetForm }) => {
         try {
-            const response = await Axios.post("/ventas", values);
+            const datos = {
+                ...values,
+                fecha_legalizacion: values.gestion_legalizacion === 'Si' ? values.fecha_legalizacion : null
+            };
+            const response = await Axios.post("/ventas", datos);
             Swal.fire({
                 icon: "success",
                 title: `Venta número ${response.data.id_venta} registrada`,

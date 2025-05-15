@@ -62,7 +62,11 @@ export default function ModificarVenta() {
 
     const onSubmit = useCallback(async (values, { setSubmitting }) => {
         try {
-            await Axios.put(`/ventas/${id}`, values);
+            const datos = {
+                ...values,
+                fecha_legalizacion: values.gestion_legalizacion === 'Si' ? values.fecha_legalizacion : null
+            };
+            await Axios.put(`/ventas/${id}`, datos);
             Swal.fire({ icon: "success", title: "Venta modificada correctamente" })
                 .then(() => navigate("/coordinadores/ventas"));
         } catch (error) {
