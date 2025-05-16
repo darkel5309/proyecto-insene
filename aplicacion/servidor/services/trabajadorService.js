@@ -72,6 +72,9 @@ export const eliminar = async (id) => {
             throw new Error('El trabajador no existe');
         }
 
+        const eliminarAgenda = 'DELETE FROM agenda WHERE id_trabajador = ?';
+        await query(eliminarAgenda, [id]);
+
         const eliminarInstalaciones = 'DELETE FROM instalacion WHERE id_trabajador = ?';
         await query(eliminarInstalaciones, [id]);
 
@@ -91,6 +94,7 @@ export const eliminar = async (id) => {
         throw err;
     }
 };
+
 
 export const obtenerTodos = async () => {
     const obtenerTrabajadores = `
