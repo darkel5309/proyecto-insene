@@ -41,16 +41,16 @@ export default function InformacionVentas() {
 
     const columns = useMemo(() => [
         { accessorKey: "id_venta", header: "ID", size: 80 },
-        { accessorKey: "nombre_cliente", header: "CLIENTE", size: 100 },
-        { accessorKey: "nombre_trabajador", header: "TRABAJADOR", size: 100 },
-        { accessorKey: "estado_venta", header: "ESTADO", size: 100 },
-        { accessorKey: "fecha_firma", header: "FECHA FIRMA", size: 110, Cell: renderFecha },
-        { accessorKey: "forma_pago", header: "FORMA PAGO", size: 130 },
-        { accessorKey: "certificado_energetico", header: "CERT. ENERGÉTICO", size: 140 },
-        { accessorKey: "gestion_subvencion", header: "SUBVENCIÓN", size: 110 },
-        { accessorKey: "gestion_legalizacion", header: "LEGALIZACIÓN", size: 120 },
-        { accessorKey: "fecha_legalizacion", header: "FECHA LEGALIZACIÓN", size: 130, Cell: renderFecha, },
-        { id: "modificar", header: "", size: 100, Cell: renderBotonModificar },
+        { accessorKey: "nombre_cliente", header: "CLIENTE", size: 200 },
+        { accessorKey: "nombre_trabajador", header: "TRABAJADOR", size: 200 },
+        { accessorKey: "estado_venta", header: "ESTADO", size: 130 },
+        { accessorKey: "fecha_firma", header: "F. FIRMA", size: 130, Cell: renderFecha },
+        { accessorKey: "forma_pago", header: "FORMA PAGO", size: 150 },
+        { accessorKey: "certificado_energetico", header: "CERT. ENERGÉTICO", size: 180 },
+        { accessorKey: "gestion_subvencion", header: "SUBVENCIÓN", size: 150 },
+        { accessorKey: "gestion_legalizacion", header: "LEGALIZACIÓN", size: 150 },
+        { accessorKey: "fecha_legalizacion", header: "F. LEGALIZACIÓN", size: 160, Cell: renderFecha, },
+        { id: "modificar", header: "", size: 120, Cell: renderBotonModificar },
     ], [renderFecha, renderBotonModificar]);
 
     useEffect(() => {

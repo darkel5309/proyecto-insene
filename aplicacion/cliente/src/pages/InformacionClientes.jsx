@@ -1,3 +1,4 @@
+import '../styles/Paneles.css';
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "../axiosConfig";
@@ -11,7 +12,7 @@ export default function InformacionClientes() {
     useDocumentTitle("Panel de Clientes");
     const navigate = useNavigate();
 
-    const [clientes, setClientes] = useState([]);
+    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchLoading, setSearchLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -19,53 +20,52 @@ export default function InformacionClientes() {
     const [clienteSeleccionado, setClienteSeleccionado] = useState(null);
     const [actualizaciones, setActualizaciones] = useState([]);
 
-    const formatFecha = (fecha) => fecha ? dayjs(fecha).format("DD/MM/YYYY HH:mm") : "-";
+    const formatFecha = useCallback(
+        (fecha) => fecha ? dayjs(fecha).format("DD/MM/YYYY HH:mm") : "-",
+        []
+    );
 
-    const handleModificar = (id) => {
-        navigate(`/administradores/modificarCliente/${id}`);
-    };
+    const renderFecha = useCallback(
+        ({ cell }) => formatFecha(cell.getValue()),
+        [formatFecha]
+    );
+
+    const renderBotonModificar = useCallback(
+        ({ row }) => (
+            <Button
+                variant="primary"
+                className="boton-modificar"
+                onClick={() => navigate(`/administradores/modificarCliente/${row.original.id_cliente}`)}
+                aria-label={`Modificar cliente ${row.original.nombre}`}
+            >
+                Modificar
+            </Button>
+        ),
+        [navigate]
+    );
 
     const columns = useMemo(() => [
-        { accessorKey: "id_cliente", header: "ID", size: 60 },
-        { accessorKey: "nombre", header: "CLIENTE", size: 150 },
-        { accessorKey: "telefono", header: "TELÉFONO", size: 130 },
-        { accessorKey: "correo", header: "CORREO", size: 130 },
-        { accessorKey: "dni", header: "DNI", size: 130 },
-        { accessorKey: "iban", header: "IBAN", size: 130 },
-        { accessorKey: "modo_captacion", header: "MODO DE CAPTACIÓN", size: 130 },
-        { accessorKey: "observaciones_cliente", header: "OBSERVACIONES", size: 130 },
-        {
-            accessorKey: "fecha_alta",
-            header: "FECHA DE ALTA",
-            size: 130,
-            Cell: ({ cell }) => formatFecha(cell.getValue())
-        },
-        { accessorKey: "direccion", header: "DIRECCIÓN", size: 130 },
-        { accessorKey: "localidad", header: "LOCALIDAD", size: 130 },
-        { accessorKey: "provincia", header: "PROVINCIA", size: 130 },
-        {
-            id: "opciones",
-            header: "OPCIONES",
-            size: 100,
-            Cell: ({ row }) => (
-                <Button
-                    variant="warning"
-                    onClick={() => handleModificar(row.original.id_cliente)}
-                    aria-label={`Modificar cliente ${row.original.nombre}`}
-                >
-                    Modificar
-                </Button>
-            ),
-        },
-    ], []);
+        { accessorKey: "id_cliente", header: "ID", size: 80 },
+        { accessorKey: "nombre", header: "CLIENTE", size: 200 },
+        { accessorKey: "telefono", header: "TELÉFONO", size: 150 },
+        { accessorKey: "correo", header: "CORREO", size: 200 },
+        { accessorKey: "dni", header: "DNI", size: 150 },
+        { accessorKey: "iban", header: "IBAN", size: 220 },
+        { accessorKey: "modo_captacion", header: "CAPTACIÓN", size: 150 },
+        { accessorKey: "observaciones_cliente", header: "OBSERVACIONES", size: 250 },
+        { accessorKey: "fecha_alta", header: "F. ALTA", size: 150, Cell: renderFecha },
+        { accessorKey: "direccion", header: "DIRECCIÓN", size: 250 },
+        { accessorKey: "localidad", header: "LOCALIDAD", size: 200 },
+        { accessorKey: "provincia", header: "PROVINCIA", size: 200 },
+        { id: "modificar", header: "", size: 120, Cell: renderBotonModificar },
+    ], [renderFecha, renderBotonModificar]);
 
     useEffect(() => {
         const cargarClientes = async () => {
             try {
+                setLoading(true);
                 const { data } = await Axios.get("/clientes");
-                setClientes(data.reverse());
-            } catch {
-                setError("No se pudo cargar la lista de clientes.");
+                setData(data);
             } finally {
                 setLoading(false);
             }
@@ -158,82 +158,70 @@ export default function InformacionClientes() {
 
     return (
         <Container fluid="md" className="informacion-clientes">
-            <h1 className="text-center my-4">Información de Clientes</h1>
+            <h1 className="text-center mb-2">Información de Clientes</h1>
 
             {error && <Alert variant="danger" onClose={() => setError(null)} dismissible>{error}</Alert>}
 
             {loading ? (
-                <LoadingSpinner message="Cargando información de clientes..." />
+                <LoadingSpinner message="Cargando datos de clientes..." />
             ) : (
                 <>
                     <Row className="mb-4">
-                        <Col md={6}>
-                            <Card className="shadow-sm">
-                                <Card.Header as="h5">Lista de Clientes</Card.Header>
-                                <Card.Body>
-                                    <MRTTabla
-                                        title=""
-                                        columns={columns}
-                                        data={clientes}
-                                        loading={false}
-                                        muiTableBodyRowProps={({ row }) => ({
-                                            onClick: () => handleRowClick(row.original.id_cliente.toString()),
-                                            sx: { cursor: "pointer" }
-                                        })}
-                                    />
-                                </Card.Body>
-                            </Card>
-                        </Col>
+                        <MRTTabla
+                            title="Lista de clientes"
+                            columns={columns}
+                            data={data}
+                            loading={false}
+                            muiTableBodyRowProps={({ row }) => ({
+                                onClick: () => handleRowClick(row.original.id_cliente.toString()),
+                                sx: { cursor: "pointer" }
+                            })}
+                        />
 
-                        <Col md={6}>
-                            <Form className="d-flex mb-3">
-                                <Form.Control
-                                    type="text"
-                                    value={idCliente}
-                                    onChange={(e) => setIdCliente(e.target.value)}
-                                    placeholder="Introduce el ID del cliente"
-                                    className="me-2"
-                                />
-                                <Button onClick={handleSearch} variant="primary" disabled={searchLoading}>
-                                    {searchLoading ? (
-                                        <>
-                                            <span className="spinner-border spinner-border-sm me-1" role="status" />
-                                            Buscando...
-                                        </>
-                                    ) : "Buscar Cliente"}
-                                </Button>
-                            </Form>
+                        <Form className="d-flex mb-4">
+                            <Form.Control
+                                type="text"
+                                value={idCliente}
+                                onChange={(e) => setIdCliente(e.target.value)}
+                                placeholder="Introduce el ID del cliente"
+                                className="me-2"
+                            />
+                            <Button onClick={handleSearch} variant="primary" disabled={searchLoading}>
+                                {searchLoading ? (
+                                    <>
+                                        <span className="spinner-border spinner-border-sm me-1" role="status" />
+                                        Buscando...
+                                    </>
+                                ) : "Buscar Cliente"}
+                            </Button>
+                        </Form>
 
-                            <Card className="shadow-sm mb-4">
-                                <Card.Header as="h5">Actualizaciones del Cliente</Card.Header>
-                                <Card.Body>
-                                    {actualizaciones.length > 0 ? (
-                                        <div className="table-responsive">
-                                            <table className="table table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Fecha</th>
-                                                        <th>Tipo de Actualización</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {actualizaciones.map((act, idx) => (
-                                                        <tr key={idx}>
-                                                            <td>{act.fecha}</td>
-                                                            <td>{act.ultimas_actualizaciones}</td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    ) : (
-                                        <p className="text-center">Sin actualizaciones</p>
-                                    )}
-                                </Card.Body>
-                            </Card>
-                        </Col>
+                        <Card className="shadow-sm mb-4">
+                            <Card.Header as="h5">Actualizaciones del Cliente</Card.Header>
+                            {actualizaciones.length > 0 ? (
+                                <div className="table-responsive">
+                                    <table className="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Tipo de Actualización</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {actualizaciones.map((act, idx) => (
+                                                <tr key={idx}>
+                                                    <td>{act.fecha}</td>
+                                                    <td>{act.ultimas_actualizaciones}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            ) : (
+                                <p className="text-center">Sin actualizaciones</p>
+                            )}
+                        </Card>
                     </Row>
-
                     {renderTarjetasCliente()}
                 </>
             )}

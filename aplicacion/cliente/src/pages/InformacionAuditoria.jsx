@@ -24,9 +24,9 @@ export default function InformacionAuditoria() {
     );
 
     const columns = useMemo(() => [
-        { accessorKey: 'fecha', header: 'FECHA', size: 150, Cell: renderFecha, },
-        { accessorKey: 'nombre', header: 'AUTOR', size: 150 },
-        { accessorKey: 'descripcion', header: 'SEGUIMIENTO', size: 200, },
+        { accessorKey: 'fecha', header: 'FECHA', size: 160, Cell: renderFecha, },
+        { accessorKey: 'nombre', header: 'AUTOR', size: 220 },
+        { accessorKey: 'descripcion', header: 'SEGUIMIENTO', size: 400 },
     ], [renderFecha]);
 
     useEffect(() => {

@@ -40,13 +40,13 @@ export default function PanelAdministrador() {
     );
 
     const columns = useMemo(() => [
-        { accessorKey: 'id_trabajador', header: 'ID', size: 70 },
-        { accessorKey: 'nombre', header: 'TRABAJADOR', size: 150 },
-        { accessorKey: 'rol', header: 'ROL', size: 130 },
-        { accessorKey: 'equipo', header: 'EQUIPO', size: 130 },
-        { accessorKey: 'subequipo', header: 'SUBEQUIPO', size: 130 },
-        { accessorKey: 'fecha_alta', header: 'FECHA DE ALTA', size: 130, Cell: renderFecha },
-        { accessorKey: 'fecha_baja', header: 'FECHA DE BAJA', size: 130, Cell: renderFecha },
+        { accessorKey: 'id_trabajador', header: 'ID', size: 80 },
+        { accessorKey: 'nombre', header: 'TRABAJADOR', size: 200 },
+        { accessorKey: 'rol', header: 'ROL', size: 150 },
+        { accessorKey: 'equipo', header: 'EQUIPO', size: 150 },
+        { accessorKey: 'subequipo', header: 'SUBEQUIPO', size: 150 },
+        { accessorKey: 'fecha_alta', header: 'F. ALTA', size: 150, Cell: renderFecha },
+        { accessorKey: 'fecha_baja', header: 'F. BAJA', size: 150, Cell: renderFecha },
         { id: 'modificar', header: '', size: 100, Cell: renderBotonModificar },
     ], [renderFecha, renderBotonModificar]);
 

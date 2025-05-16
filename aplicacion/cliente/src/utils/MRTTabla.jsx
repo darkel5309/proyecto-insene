@@ -34,6 +34,9 @@ const MRTTabla = memo(function MRTTabla({
         muiTableBodyRowProps={({ row }) =>
           rowStylesCallback ? rowStylesCallback(row) : {}
         }
+        muiTableBodyCellProps={({ cell }) => ({
+          title: String(cell.getValue()),
+        })}
       />
     </div>
   );
