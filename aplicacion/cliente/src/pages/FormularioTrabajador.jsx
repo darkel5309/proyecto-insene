@@ -16,16 +16,16 @@ export default function FormularioTrabajador() {
     const navigate = useNavigate();
 
     const initialValues = useMemo(() => ({
-        nombre: "", contrasena: "", telefono: "", rol: "", equipo: "", subequipo: "",
+        nombre: "", contrasena: "", telefono: "", puesto: "", departamento: "", equipo: "",
     }), []);
 
     const validationSchema = Yup.object({
         nombre: Yup.string().required("Este campo es obligatorio"),
         contrasena: Yup.string().required("Este campo es obligatorio"),
         telefono: Yup.string().matches(/^\d{9}$/, "El teléfono debe tener 9 dígitos").required("Este campo es obligatorio"),
-        rol: Yup.string().required("Este campo es obligatorio"),
+        puesto: Yup.string().required("Este campo es obligatorio"),
+        departamento: Yup.string().required("Este campo es obligatorio"),
         equipo: Yup.string().required("Este campo es obligatorio"),
-        subequipo: Yup.string().required("Este campo es obligatorio"),
     });
 
     const onSubmit = useCallback(async (values, { setSubmitting, resetForm }) => {
@@ -68,29 +68,41 @@ export default function FormularioTrabajador() {
                                     tooltip="Introduce el número de teléfono del trabajador (9 dígitos)" errors={errors} touched={touched} />
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Equipo del trabajador *" name="equipo" type="text" placeholder="Ej: Equipo 1"
-                                    tooltip="Introduce el equipo al que pertenecerá el trabajador" errors={errors} touched={touched} />
+                                <CamposFormulario label="Puesto del trabajador *" name="puesto" as="select"
+                                    tooltip="Selecciona el puesto que tendrá el trabajador" errors={errors} touched={touched} >
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="Administrador">Administrador/a</option>
+                                    <option value="Administrativo">Administrativo/a</option>
+                                    <option value="Captador">Captador/a</option>
+                                    <option value="CEO">CEO</option>
+                                    <option value="Comercial">Comercial</option>
+                                    <option value="Coordinador">Coordinador/a</option>
+                                    <option value="Ingeniero">Ingeniero/a</option>
+                                    <option value="Instalador">Instalador/a</option>
+                                    <option value="Limpiador">Limpiador/a</option>
+                                    <option value="Mozo_almacen">Mozo/a de almacén</option>
+                                    <option value="RRHH">Recursos Humanos</option>
+                                    <option value="Tramitador">Tramitador/a</option>
+                                </CamposFormulario>
                             </Col>
                         </Row>
 
                         <Row className="mb-3">
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Subequipo del trabajador *" name="subequipo" type="text" placeholder="Ej: Subequipo 1"
-                                    tooltip="Introduce el subequipo al que pertenecerá el trabajador" errors={errors} touched={touched} />
-                            </Col>
-
-                            <Col xs={12} md={6}>
-                                <CamposFormulario label="Rol *" name="rol" as="select"
-                                    tooltip="Selecciona el rol que tendrá el trabajador" errors={errors} touched={touched} >
+                                <CamposFormulario label="Departamento del trabajador *" name="departamento" as="select"
+                                    tooltip="Selecciona el departamento al que pertenecerá el trabajador" errors={errors} touched={touched} >
                                     <option value="">Selecciona una opción</option>
-                                    <option value="Administrador">Administrador</option>
-                                    <option value="Captador">Captador</option>
+                                    <option value="Administracion">Administración</option>
                                     <option value="Comercial">Comercial</option>
-                                    <option value="Coordinador">Coordinador</option>
-                                    <option value="Instalador">Instalador</option>
-                                    <option value="Recursos_Humanos">Recursos Humanos</option>
-                                    <option value="Tramitador">Tramitador</option>
+                                    <option value="Gerencia">Gerencia</option>
+                                    <option value="Instalaciones">Instalaciones</option>
+                                    <option value="Limpieza">Limpieza</option>
+                                    <option value="RRHH">RRHH</option>
                                 </CamposFormulario>
+                            </Col>
+                            <Col xs={12} md={6}>
+                                <CamposFormulario label="Equipo del trabajador *" name="equipo" type="text" placeholder="Ej: Joaquín"
+                                    tooltip="Introduce el equipo al que pertenecerá el trabajador" errors={errors} touched={touched} />
                             </Col>
                         </Row>
 

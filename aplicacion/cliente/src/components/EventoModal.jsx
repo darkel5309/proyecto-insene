@@ -69,7 +69,7 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                                         <CamposFormulario label="Comercial a asignar *" name="id_trabajador" as="select" errors={errors} touched={touched}>
                                             <option value="">Selecciona a un comercial</option>
                                             {trabajadores
-                                                .filter(trabajador => trabajador.rol === 'Comercial')
+                                                .filter(trabajador => trabajador.puesto === 'Comercial')
                                                 .map(trabajador => (
                                                     <option key={trabajador.id_trabajador} value={trabajador.id_trabajador}>
                                                         {trabajador.nombre}

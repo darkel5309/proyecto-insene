@@ -1,5 +1,5 @@
 -- MODELO LÓGICO DE LA BD
-TRABAJADOR(id_trabajador, nombre, contrasena, telefono, rol, equipo, subequipo, fecha_alta, fecha_baja)
+TRABAJADOR(id_trabajador, nombre, contrasena, telefono, puesto, departamento, equipo, fecha_alta, fecha_baja)
     PK(id_trabajador)
 
 CLIENTE(id_cliente, nombre, telefono, correo, dni, iban, modo_captacion, observaciones_cliente, fecha_alta)

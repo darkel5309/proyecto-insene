@@ -10,7 +10,7 @@ export const iniciarSesion = async (req, res) => {
             return res.status(400).json({ error: "Datos incorrectos" });
         }
 
-        const token = sesionService.generarToken(trabajador.id_trabajador, trabajador.rol);
+        const token = sesionService.generarToken(trabajador.id_trabajador, trabajador.puesto);
 
         res.cookie("token", token, {
             httpOnly: true,
@@ -19,7 +19,7 @@ export const iniciarSesion = async (req, res) => {
             expires: new Date(Date.now() + 3600000),
         });
 
-        res.json({ success: true, tipoTrabajador: trabajador.rol });
+        res.json({ success: true, tipoTrabajador: trabajador.puesto });
     } catch {
         res.status(500).json({ error: "Error interno del servidor" });
     }
@@ -36,7 +36,7 @@ export const verificarSesion = (req, res) => {
         if (!decoded) {
             return res.status(401).json({ error: "La sesión no es válida" });
         }
-        res.json({ id: decoded.id, tipoTrabajador: decoded.rol });
+        res.json({ id: decoded.id, tipoTrabajador: decoded.puesto });
     } catch {
         return res.status(401).json({ error: "Error al verificar el token" });
     }

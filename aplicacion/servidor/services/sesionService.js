@@ -18,9 +18,9 @@ export const verificarTrabajadorYContrasena = async (idTrabajador, contrasena) =
     return trabajador[0];
 };
 
-export const generarToken = (idTrabajador, rol) => {
+export const generarToken = (idTrabajador, puesto) => {
     return jwt.sign(
-        { id: idTrabajador, rol },
+        { id: idTrabajador, puesto },
         process.env.JWT_SECRET,
         { expiresIn: "1h" }
     );

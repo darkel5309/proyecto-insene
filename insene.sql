@@ -8,9 +8,9 @@ CREATE TABLE trabajador(
     nombre VARCHAR(50) NOT NULL,
     contrasena VARCHAR(255) NOT NULL,
     telefono CHAR(9),
-    rol ENUM("Administrador", "Captador", "Comercial", "Coordinador", "Instalador", "Recursos_Humanos", "Tramitador"),
-    equipo VARCHAR(30),
-    subequipo VARCHAR(30), 
+    puesto ENUM("Administrador", "Administrativo", "Captador", "CEO", "Comercial", "Coordinador", "Ingeniero", "Instalador", "Limpiador", "Mozo_almacen", "RRHH", "Tramitador"),
+    departamento ENUM("Administracion", "Comercial", "Gerencia", "Instalaciones", "Limpieza", "RRHH"),
+    equipo VARCHAR(30), 
 	fecha_alta DATETIME DEFAULT CURRENT_TIMESTAMP,
     fecha_baja DATETIME
 );
@@ -193,31 +193,31 @@ CREATE TABLE auditoria (
 
 -- INSERTS
 
-INSERT INTO trabajador (nombre, contrasena, telefono, rol, equipo, subequipo) VALUES
-('Ángel Domínguez Rodríguez', '$2b$10$lE.pJalVEqJY/DSoz3JJ5.xSYJfL8j.kAo1DZk6cmOLIlLc8n66jq', '600123456', 'Administrador', 'Administradores', 'Administradores'),
-('Marga', '$2b$10$CeEelXZmSL0lnsW.IknTmeQ.uBzpOqO/Bryud6xIaPJEQqT4IkD52', '600123457', 'Administrador', 'Equipo B', 'Subequipo Y'),
-('Luis Martínez', '$2b$10$8Dif/bogeC9Vjq/EvJtD1OF8dzcQnujObXHhQqJl/rsg3ORfhr9bO', '635987898', 'Instalador', 'Equipo C', 'Subequipo Z'),
-('Manuel Sánchez', '$2b$10$xL..Tlf6tFFvLB/bODL06uPzxOaX7Bd6aGhqEHIdk5p7GlIcyNDQG', '600123459', 'Coordinador', 'Equipo D', 'Subequipo W'),
-('Marta Rodríguez', '$2b$10$80T56A271ZxKVmDtfFT3K.nnQJd1PEHkIjxkdQ6y5pPJ7mjq1xWiW', '600123460', 'Administrador', 'Equipo E', 'Subequipo V'),
-('Carlos Torres', '$2b$10$8geOtrV/i/XLd0ZiMKWR1OwbJdvN1yqhkrJuW9tLn6neWq8m2e2yi', '600123461', 'Recursos_Humanos', 'Equipo F', 'Subequipo U'),
-('Isabel Díaz', '$2b$10$FSWMzFXdudlB40l64g7K0eRKWRuXkGDt8d/I51./qoBW58XMkOnZ.', '600123462', 'Tramitador', 'Equipo G', 'Subequipo T'),
-('José Pérez', '$2b$10$w1nuLXy8LIGOA/8xqcMyeegN.hm4KSJX35RRjqpeDBIyUIgXcLcXu', '600123463', 'Comercial', 'Equipo H', 'Subequipo S'),
-('Laura López', '$2b$10$6.1.3mtu7EmUZoVrem0fauv7uAAGqlKX0ftVYly3Pw.jK3Z1CJdPy', '600123464', 'Instalador', 'Equipo I', 'Subequipo R'),
-('Javier González', '$2b$10$GC.hWE/pwi7etgEYGqXz7OB77XBJ5WixsvFh5weVqseFiyvD4daRe', '600123465', 'Captador', 'Equipo J', 'Subequipo Q');
+INSERT INTO trabajador (nombre, contrasena, telefono, puesto, departamento, equipo) VALUES
+('Ángel Domínguez Rodríguez', '$2b$10$lE.pJalVEqJY/DSoz3JJ5.xSYJfL8j.kAo1DZk6cmOLIlLc8n66jq', '600123456', 'Administrador', 'Administracion', 'Ángel'),
+('Marga', '$2b$10$CeEelXZmSL0lnsW.IknTmeQ.uBzpOqO/Bryud6xIaPJEQqT4IkD52', '600123457', 'Administrador', 'Administracion', 'Margarita'),
+('Luis Martínez', '$2b$10$8Dif/bogeC9Vjq/EvJtD1OF8dzcQnujObXHhQqJl/rsg3ORfhr9bO', '635987898', 'Instalador', 'Instalaciones', 'Luis'),
+('Manuel Sánchez', '$2b$10$xL..Tlf6tFFvLB/bODL06uPzxOaX7Bd6aGhqEHIdk5p7GlIcyNDQG', '600123459', 'Coordinador', 'Comercial', 'Joaquín'),
+('Marta Rodríguez', '$2b$10$80T56A271ZxKVmDtfFT3K.nnQJd1PEHkIjxkdQ6y5pPJ7mjq1xWiW', '600123460', 'Comercial', 'Comercial', 'Marta'),
+('Carlos Torres', '$2b$10$8geOtrV/i/XLd0ZiMKWR1OwbJdvN1yqhkrJuW9tLn6neWq8m2e2yi', '600123461', 'RRHH', 'RRHH', 'Marta'),
+('Isabel Díaz', '$2b$10$FSWMzFXdudlB40l64g7K0eRKWRuXkGDt8d/I51./qoBW58XMkOnZ.', '600123462', 'Tramitador', 'Administracion', 'Luis'),
+('José Pérez', '$2b$10$w1nuLXy8LIGOA/8xqcMyeegN.hm4KSJX35RRjqpeDBIyUIgXcLcXu', '600123463', 'Comercial', 'Comercial', 'Joaquín'),
+('Laura López', '$2b$10$6.1.3mtu7EmUZoVrem0fauv7uAAGqlKX0ftVYly3Pw.jK3Z1CJdPy', '600123464', 'Instalador', 'Instalaciones', 'Joaquín'),
+('Javier González', '$2b$10$GC.hWE/pwi7etgEYGqXz7OB77XBJ5WixsvFh5weVqseFiyvD4daRe', '600123465', 'Captador', 'Comercial', 'Luis');
 
 SELECT * FROM trabajador;
 
 INSERT INTO cliente (nombre, telefono, correo, dni, iban, modo_captacion, observaciones_cliente) VALUES
-('Juan García', '600111111', 'juan@ejemplo.com', '12345678A', 'ES1234567890123456789012', 'Captador', 'Cliente reciente'),
-('Ana Rodríguez', '600111112', 'ana@ejemplo.com', '23456789B', 'ES2234567890123456789012', 'Telemarketing', 'Cliente de larga data'),
-('Luis Fernández', '600111113', 'luis@ejemplo.com', '34567890C', 'ES3234567890123456789012', 'Referido', 'Interés en productos energéticos'),
-('Pedro Sánchez', '600111114', 'pedro@ejemplo.com', '45678901D', 'ES4234567890123456789012', 'Propia', 'Consulta inicial'),
-('Marta López', '600111115', 'marta@ejemplo.com', '56789012E', 'ES5234567890123456789012', 'Captador', 'Solicitó información adicional'),
-('Carlos Jiménez', '600111116', 'carlos@ejemplo.com', '67890123F', 'ES6234567890123456789012', 'Telemarketing', 'Cliente en espera'),
-('Isabel Martínez', '600111117', 'isabel@ejemplo.com', '78901234G', 'ES7234567890123456789012', 'Referido', 'Solicitó presupuesto'),
-('José Pérez', '600111118', 'jose@ejemplo.com', '89012345H', 'ES8234567890123456789012', 'Propia', 'Sin interés por ahora'),
-('Laura Gómez', '600111119', 'laura@ejemplo.com', '90123456I', 'ES9234567890123456789012', 'Captador', 'Recibió llamada informativa'),
-('Raúl López', '600111120', 'raul@ejemplo.com', '01234567J', 'ES0234567890123456789012', 'Telemarketing', 'Posible cliente futuro');
+('Juan García', '600111111', 'juan@gmail.com', '12345678A', 'ES1234567890123456789012', 'Captador', 'Cliente reciente'),
+('Ana Rodríguez', '600111112', 'ana@gmail.com', '23456789B', 'ES2234567890123456789012', 'Telemarketing', 'Cliente de larga data'),
+('Luis Fernández', '600111113', 'luis@gmail.com', '34567890C', 'ES3234567890123456789012', 'Referido', 'Interés en productos energéticos'),
+('Pedro Jiménez', '600111114', 'pedro@hotmail.com', '45678901D', 'ES4234567890123456789012', 'Propia', 'Consulta inicial'),
+('Marta López', '600111115', 'marta@gmail.com', '56789012E', 'ES5234567890123456789012', 'Captador', 'Solicitó información adicional'),
+('Carlos Jiménez', '600111116', 'carlos@gmail.com', '67890123F', 'ES6234567890123456789012', 'Telemarketing', 'Cliente en espera'),
+('Isabel Martínez', '600111117', 'isabel@gmail.com', '78901234G', 'ES7234567890123456789012', 'Referido', 'Solicitó presupuesto'),
+('José Pérez', '600111118', 'jose@hotmail.com', '89012345H', 'ES8234567890123456789012', 'Propia', 'Sin interés por ahora'),
+('Laura Gómez', '600111119', 'laura@hotmail.com', '90123456I', 'ES9234567890123456789012', 'Captador', 'Recibió llamada informativa'),
+('Raúl López', '600111120', 'raul@gmail.com', '01234567J', 'ES0234567890123456789012', 'Telemarketing', 'Posible cliente futuro');
 
 SELECT * FROM cliente;
 

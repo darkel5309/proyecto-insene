@@ -222,7 +222,7 @@ const PanelCoordinador = () => {
                                 onChange={(e) => setFiltroTrabajador(e.target.value)}
                                 className="mb-2 mb-md-0">
                                 <option value="todos">Todos los comerciales</option>
-                                {trabajadores.filter(t => t.rol === 'Comercial').map(t => (
+                                {trabajadores.filter(t => t.puesto === 'Comercial').map(t => (
                                     <option key={t.id_trabajador} value={t.id_trabajador}>{t.nombre}</option>
                                 ))}
                             </Form.Select>
