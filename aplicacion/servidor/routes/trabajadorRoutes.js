@@ -1,5 +1,5 @@
 import express from "express";
-import { crear, obtenerPorId, actualizar, eliminar, obtenerTodos } from "../controllers/trabajadorController.js";
+import { crear, obtenerPorId, actualizar, eliminar, obtenerTodos, obtenerCoordinadoresActivos } from "../controllers/trabajadorController.js";
 import { validarDatosTrabajador } from "../middlewares/validarDatosTrabajador.js";
 import { extraerIdTrabajador } from "../middlewares/extraerIdTrabajador.js";
 import { registrarOperacion } from "../middlewares/registrarOperacion.js";
@@ -35,5 +35,7 @@ router.delete("/trabajadores/:id", extraerIdTrabajador,
     }),
     eliminar
 );
+
+router.get("/coordinadoresActivos", obtenerCoordinadoresActivos);
 
 export default router;

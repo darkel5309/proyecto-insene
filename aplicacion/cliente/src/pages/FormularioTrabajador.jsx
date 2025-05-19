@@ -1,5 +1,5 @@
 import '../styles/Formularios.css';
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useEffect, useState } from "react";
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
@@ -15,6 +15,8 @@ export default function FormularioTrabajador() {
 
     const navigate = useNavigate();
 
+    const [coordinadores, setCoordinadores] = useState([]);
+
     const initialValues = useMemo(() => ({
         nombre: "", contrasena: "", telefono: "", puesto: "", departamento: "", equipo: "",
     }), []);
@@ -25,7 +27,7 @@ export default function FormularioTrabajador() {
         telefono: Yup.string().matches(/^\d{9}$/, "El teléfono debe tener 9 dígitos").required("Este campo es obligatorio"),
         puesto: Yup.string().required("Este campo es obligatorio"),
         departamento: Yup.string().required("Este campo es obligatorio"),
-        equipo: Yup.string().required("Este campo es obligatorio"),
+        equipo: Yup.string(),
     });
 
     const onSubmit = useCallback(async (values, { setSubmitting, resetForm }) => {
@@ -44,6 +46,20 @@ export default function FormularioTrabajador() {
             setSubmitting(false);
         }
     }, [navigate]);
+
+    useEffect(() => {
+        const obtenerCoordinadores = async () => {
+            try {
+                const response = await Axios.get("/coordinadoresActivos");
+                setCoordinadores(response.data);
+            } catch (error) {
+                console.error("Error al cargar coordinadores:", error);
+                erroresSweetAlert2(error);
+            }
+        };
+
+        obtenerCoordinadores();
+    }, []);
 
     return (
         <Container fluid="md" className="trabajador">
@@ -101,8 +117,15 @@ export default function FormularioTrabajador() {
                                 </CamposFormulario>
                             </Col>
                             <Col xs={12} md={6}>
-                                <CamposFormulario label="Equipo del trabajador *" name="equipo" type="text" placeholder="Ej: Joaquín"
-                                    tooltip="Introduce el equipo al que pertenecerá el trabajador" errors={errors} touched={touched} />
+                                <CamposFormulario label="Equipo del trabajador" name="equipo" as="select"
+                                    tooltip="Selecciona el equipo al que pertenecerá el trabajador" errors={errors} touched={touched} >
+                                    <option value="">-</option>
+                                    {coordinadores.map(coord => (
+                                        <option key={coord.id_trabajador} value={coord.nombre}>
+                                            {coord.nombre}
+                                        </option>
+                                    ))}
+                                </CamposFormulario>
                             </Col>
                         </Row>
 

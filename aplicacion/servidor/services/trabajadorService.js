@@ -108,3 +108,15 @@ export const obtenerTodos = async () => {
     }
     return resultado;
 };
+
+export const obtenerCoordinadoresActivos = async () => {
+    const obtenerCoordinadoresActivos = `
+        SELECT id_trabajador, nombre
+        FROM trabajador
+        WHERE puesto = 'Coordinador' AND fecha_baja IS NULL
+        ORDER BY nombre ASC
+    `;
+
+    const resultado = await query(obtenerCoordinadoresActivos);
+    return resultado;
+};

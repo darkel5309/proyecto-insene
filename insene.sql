@@ -10,7 +10,7 @@ CREATE TABLE trabajador(
     telefono CHAR(9),
     puesto ENUM("Administrador", "Administrativo", "Captador", "CEO", "Comercial", "Coordinador", "Ingeniero", "Instalador", "Limpiador", "Mozo_almacen", "RRHH", "Tramitador"),
     departamento ENUM("Administracion", "Comercial", "Gerencia", "Instalaciones", "Limpieza", "RRHH"),
-    equipo VARCHAR(30), 
+    equipo VARCHAR(100) NULL, 
 	fecha_alta DATETIME DEFAULT CURRENT_TIMESTAMP,
     fecha_baja DATETIME
 );
@@ -194,16 +194,17 @@ CREATE TABLE auditoria (
 -- INSERTS
 
 INSERT INTO trabajador (nombre, contrasena, telefono, puesto, departamento, equipo) VALUES
-('Ángel Domínguez Rodríguez', '$2b$10$lE.pJalVEqJY/DSoz3JJ5.xSYJfL8j.kAo1DZk6cmOLIlLc8n66jq', '600123456', 'Administrador', 'Administracion', 'Ángel'),
-('Marga', '$2b$10$CeEelXZmSL0lnsW.IknTmeQ.uBzpOqO/Bryud6xIaPJEQqT4IkD52', '600123457', 'Administrador', 'Administracion', 'Margarita'),
-('Luis Martínez', '$2b$10$8Dif/bogeC9Vjq/EvJtD1OF8dzcQnujObXHhQqJl/rsg3ORfhr9bO', '635987898', 'Instalador', 'Instalaciones', 'Luis'),
-('Manuel Sánchez', '$2b$10$xL..Tlf6tFFvLB/bODL06uPzxOaX7Bd6aGhqEHIdk5p7GlIcyNDQG', '600123459', 'Coordinador', 'Comercial', 'Joaquín'),
-('Marta Rodríguez', '$2b$10$80T56A271ZxKVmDtfFT3K.nnQJd1PEHkIjxkdQ6y5pPJ7mjq1xWiW', '600123460', 'Comercial', 'Comercial', 'Marta'),
-('Carlos Torres', '$2b$10$8geOtrV/i/XLd0ZiMKWR1OwbJdvN1yqhkrJuW9tLn6neWq8m2e2yi', '600123461', 'RRHH', 'RRHH', 'Marta'),
-('Isabel Díaz', '$2b$10$FSWMzFXdudlB40l64g7K0eRKWRuXkGDt8d/I51./qoBW58XMkOnZ.', '600123462', 'Tramitador', 'Administracion', 'Luis'),
-('José Pérez', '$2b$10$w1nuLXy8LIGOA/8xqcMyeegN.hm4KSJX35RRjqpeDBIyUIgXcLcXu', '600123463', 'Comercial', 'Comercial', 'Joaquín'),
-('Laura López', '$2b$10$6.1.3mtu7EmUZoVrem0fauv7uAAGqlKX0ftVYly3Pw.jK3Z1CJdPy', '600123464', 'Instalador', 'Instalaciones', 'Joaquín'),
-('Javier González', '$2b$10$GC.hWE/pwi7etgEYGqXz7OB77XBJ5WixsvFh5weVqseFiyvD4daRe', '600123465', 'Captador', 'Comercial', 'Luis');
+('Ángel Domínguez Rodríguez', '$2b$10$lE.pJalVEqJY/DSoz3JJ5.xSYJfL8j.kAo1DZk6cmOLIlLc8n66jq', '600123456', 'Administrador', 'Administracion', null),
+('Marga', '$2b$10$CeEelXZmSL0lnsW.IknTmeQ.uBzpOqO/Bryud6xIaPJEQqT4IkD52', '600123457', 'Administrador', 'Administracion', null),
+('Luis Martínez', '$2b$10$8Dif/bogeC9Vjq/EvJtD1OF8dzcQnujObXHhQqJl/rsg3ORfhr9bO', '635987898', 'Instalador', 'Instalaciones', null),
+('Manuel Sánchez', '$2b$10$xL..Tlf6tFFvLB/bODL06uPzxOaX7Bd6aGhqEHIdk5p7GlIcyNDQG', '600123459', 'Coordinador', 'Comercial', null),
+('Marta Rodríguez', '$2b$10$80T56A271ZxKVmDtfFT3K.nnQJd1PEHkIjxkdQ6y5pPJ7mjq1xWiW', '600123460', 'Comercial', 'Comercial', 'Manuel Sánchez'),
+('Carlos Torres', '$2b$10$8geOtrV/i/XLd0ZiMKWR1OwbJdvN1yqhkrJuW9tLn6neWq8m2e2yi', '600123461', 'RRHH', 'RRHH', null),
+('Isabel Díaz', '$2b$10$FSWMzFXdudlB40l64g7K0eRKWRuXkGDt8d/I51./qoBW58XMkOnZ.', '600123462', 'Tramitador', 'Administracion', null),
+('José Pérez', '$2b$10$w1nuLXy8LIGOA/8xqcMyeegN.hm4KSJX35RRjqpeDBIyUIgXcLcXu', '600123463', 'Comercial', 'Comercial', 'Manuel Sánchez'),
+('Laura López', '$2b$10$6.1.3mtu7EmUZoVrem0fauv7uAAGqlKX0ftVYly3Pw.jK3Z1CJdPy', '600123464', 'Instalador', 'Instalaciones', null),
+('Javier González', '$2b$10$GC.hWE/pwi7etgEYGqXz7OB77XBJ5WixsvFh5weVqseFiyvD4daRe', '600123465', 'Captador', 'Comercial', 'Jesús Molina López'),
+('Jesús Molina López', '$2b$10$GC.hWE/pwi7etgEYGqXz7OB77XBJ5WixsvFh5weVqseFiyvD4daRe', '600123466', 'Coordinador', 'Comercial', null);
 
 SELECT * FROM trabajador;
 

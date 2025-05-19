@@ -53,3 +53,12 @@ export const obtenerTodos = async (_req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+export const obtenerCoordinadoresActivos = async (_req, res) => {
+    try {
+        const coordinadores = await trabajadorService.obtenerCoordinadoresActivos();
+        res.status(200).json(coordinadores);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
