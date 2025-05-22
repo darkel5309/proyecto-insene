@@ -18,7 +18,7 @@ export default function FormularioVenta() {
     const initialValues = useMemo(() => ({
         id_trabajador: '', id_cliente: '', fecha_firma: '', forma_pago: '',
         certificado_energetico: '', gestion_subvencion: '', gestion_legalizacion: '', fecha_legalizacion: '',
-        estado_venta: '',
+        estado_venta: 'Pendiente',
     }), []);
 
     const validationSchema = Yup.object({
@@ -33,7 +33,7 @@ export default function FormularioVenta() {
             is: "Si",
             then: schema => schema.required("Este campo es obligatorio")
         }),
-        estado_venta: Yup.string().oneOf(['Instalada', 'Caída']).required('Este campo es obligatorio'),
+        estado_venta: Yup.string().oneOf(['Instalada', 'Caída', 'Pendiente']).required('Este campo es obligatorio'),
     });
 
     const onSubmit = useCallback(async (values, { setSubmitting, resetForm }) => {
@@ -119,7 +119,7 @@ export default function FormularioVenta() {
                                 </CamposFormulario>
                             </Col>
                             <Col md={6}>
-                                <CamposFormulario label="Fecha de legalización *" name="fecha_legalizacion" type="date"
+                                <CamposFormulario label="Fecha de legalización" name="fecha_legalizacion" type="date"
                                     tooltip="Selecciona la fecha de legalización" errors={errors} touched={touched} />
                             </Col>
                         </Row>
@@ -129,6 +129,7 @@ export default function FormularioVenta() {
                                 <CamposFormulario label="Estado de la venta *" name="estado_venta" as="select"
                                     tooltip="Selecciona el estado de la venta" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
+                                    <option value="Pendiente">Pendiente</option>
                                     <option value="Instalada">Instalada</option>
                                     <option value="Caída">Caída</option>
                                 </CamposFormulario>

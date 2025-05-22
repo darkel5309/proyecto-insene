@@ -79,17 +79,16 @@ CREATE TABLE venta (
     id_venta INT PRIMARY KEY AUTO_INCREMENT,
     id_trabajador INT NOT NULL,
     id_cliente INT NOT NULL,
-    fecha_firma DATE NOT NULL,
-    forma_pago ENUM('Financiado', 'Transferencia', 'Efectivo') NOT NULL,
-    certificado_energetico ENUM('En_cuotas', 'Por_transferencia', 'No') ,
-    gestion_subvencion ENUM("Si", "No"),
-    gestion_legalizacion ENUM("Si", "No"),
+    fecha_firma DATE,
+    forma_pago ENUM('Financiado', 'Transferencia', 'Efectivo') NULL,
+    certificado_energetico ENUM('En_cuotas', 'Por_transferencia', 'No') NULL,
+    gestion_subvencion ENUM("Si", "No") NULL,
+    gestion_legalizacion ENUM("Si", "No") NULL,
     fecha_legalizacion DATE,
-    estado_venta ENUM('Instalada', 'Caída') NOT NULL,
+    estado_venta ENUM('Instalada', 'Caída', 'Pendiente') NOT NULL DEFAULT 'Pendiente',
     
     CONSTRAINT fk_venta_id_trabajador FOREIGN KEY (id_trabajador) REFERENCES trabajador(id_trabajador),
-    CONSTRAINT fk_venta_id_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
-    CHECK (gestion_legalizacion = "No" OR fecha_legalizacion IS NOT NULL)
+    CONSTRAINT fk_venta_id_cliente FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
 );
 
 CREATE TABLE instalacion (
@@ -117,7 +116,7 @@ CREATE TABLE visita (
 	id_visita INT PRIMARY KEY AUTO_INCREMENT,
 	fecha DATE NOT NULL,
     hora TIME NOT NULL,
-    resultado ENUM ("Visitado_pdte_contestación", "Visitado_no_hacen_nada", "Recitar", "No_visita", "Firmada_no_financiable", "Venta"),
+    resultado ENUM ("Visitado_pdte_contestacion", "Visitado_no_hacen_nada", "Recitar", "No_visita", "Firmada_no_financiable", "Venta"),
 	id_vivienda INT,
     id_trabajador INT,
     oferta VARCHAR(200),

@@ -16,7 +16,7 @@ export default function InformacionVentas() {
     const navigate = useNavigate();
 
     const formatFecha = useCallback(
-        (fecha) => fecha ? dayjs(fecha).format("DD/MM/YYYY HH:mm") : "-",
+        (fecha) => fecha ? dayjs(fecha).format("DD/MM/YYYY") : "-",
         []
     );
 
@@ -41,8 +41,8 @@ export default function InformacionVentas() {
 
     const columns = useMemo(() => [
         { accessorKey: "id_venta", header: "ID", size: 80 },
-        { accessorKey: "nombre_cliente", header: "CLIENTE", size: 200 },
         { accessorKey: "nombre_trabajador", header: "TRABAJADOR", size: 200 },
+        { accessorKey: "nombre_cliente", header: "CLIENTE", size: 200 },
         { accessorKey: "estado_venta", header: "ESTADO", size: 130 },
         { accessorKey: "fecha_firma", header: "F. FIRMA", size: 130, Cell: renderFecha },
         { accessorKey: "forma_pago", header: "FORMA PAGO", size: 150 },

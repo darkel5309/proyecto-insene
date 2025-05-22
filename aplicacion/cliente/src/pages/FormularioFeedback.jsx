@@ -46,6 +46,19 @@ export default function FormularioFeedback() {
 
 		try {
 			const { data } = await Axios.post("/feedbacks", datosNormalizados);
+			if (values.resultado === "Venta") {
+				await Axios.post("/ventas", {
+					id_cliente: values.idCliente,
+					id_trabajador: values.idTrabajador,
+					fecha_firma: null,
+					forma_pago: null,
+					certificado_energetico: null,
+					gestion_subvencion: null,
+					gestion_legalizacion: null,
+					fecha_legalizacion: null,
+					estado_venta: "Pendiente",
+				});
+			}
 			Swal.fire({
 				icon: "success",
 				title: `El código del feedback es: ${data.idVisita}`,
@@ -184,7 +197,7 @@ export default function FormularioFeedback() {
 							<Col xs={12} md={6}>
 								<CamposFormulario label="Resultado *" name="resultado" as="select" tooltip="Selecciona cuál ha sido el resultado del feedback" errors={errors} touched={touched} >
 									<option value="">Selecciona una opción</option>
-									<option value="Visitado_pdte_contestación">Visitado pendiente de contestación</option>
+									<option value="Visitado_pdte_contestacion">Visitado pendiente de contestación</option>
 									<option value="Visitado_no_hacen_nada">Visitado pero no hacen nada</option>
 									<option value="Recitar">Volver a citar</option>
 									<option value="No_visita">No ha habido visita</option>

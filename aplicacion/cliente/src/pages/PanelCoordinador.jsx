@@ -182,6 +182,11 @@ const PanelCoordinador = () => {
                         Información de Ventas
                     </Button>
                 </Col>
+                <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                    <Button as={Link} to="/coordinadores/metricas" variant="primary" className="boton-menu" aria-label="Ver información sobre las métricas">
+                        Información de Métricas
+                    </Button>
+                </Col>
             </Row>
 
             <Card className="shadow border-0 rounded-3">
