@@ -168,7 +168,7 @@ export default function InformacionClientes() {
                 <>
                     <Row className="mb-4">
                         <MRTTabla
-                            title="Lista de clientes"
+                            title="🗃️ Lista de clientes"
                             columns={columns}
                             data={data}
                             loading={false}

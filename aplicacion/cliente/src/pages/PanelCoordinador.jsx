@@ -172,8 +172,8 @@ export default function PanelCoordinador() {
         <>
             <Row className="g-3 justify-content-center">
                 {[
-                    { path: "/coordinadores/ventas", label: " Información de Ventas" },
-                    { path: "/coordinadores/metricas", label: "Información de Métricas" },
+                    { path: "/coordinadores/ventas", label: "Información de Ventas 💶" },
+                    { path: "/coordinadores/metricas", label: "Información de Métricas 📈" },
                 ]
                     .map(({ path, label }) => (
                         <Col key={path} xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
@@ -197,7 +197,7 @@ export default function PanelCoordinador() {
                         <Col>
                             <h4 className="mb-0 d-flex align-items-center">
                                 <i className="bi bi-calendar-week me-2 fs-3"></i>
-                                Agenda
+                                🗓️ Agenda
                             </h4>
                         </Col>
                         <Col xs="auto">
@@ -228,7 +228,7 @@ export default function PanelCoordinador() {
                                 value={filtroTrabajador}
                                 onChange={(e) => setFiltroTrabajador(e.target.value)}
                                 className="mb-2 mb-md-0">
-                                <option value="todos">Todos los comerciales</option>
+                                <option value="todos">Todos los comerciales </option>
                                 {trabajadores.filter(t => t.puesto === 'comercial').map(t => (
                                     <option key={t.id_trabajador} value={t.id_trabajador}>{t.nombre}</option>
                                 ))}

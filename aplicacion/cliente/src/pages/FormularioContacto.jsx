@@ -109,7 +109,7 @@ export default function FormularioCliente() {
 
                         <div className="d-flex justify-content-center">
                             <Button type="submit" className="mt-3" disabled={isSubmitting || !isValid} aria-label="Registrar datos de cliente" >
-                                {isSubmitting ? "Enviando..." : "Registrar Datos"}
+                                {isSubmitting ? "Enviando..." : "✅ Registrar"}
                             </Button>
                         </div>
                     </Form>

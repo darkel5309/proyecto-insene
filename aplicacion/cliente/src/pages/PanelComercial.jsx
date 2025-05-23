@@ -64,7 +64,7 @@ export default function PanelComercial() {
                 <>
                     {BotonesNavegacion}
                     <MRTTabla
-                        title="Lista de clientes"
+                        title="🗃️ Lista de clientes"
                         columns={columns}
                         data={data}
                         loading={loading}

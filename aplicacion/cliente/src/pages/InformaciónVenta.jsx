@@ -104,7 +104,7 @@ export default function InformacionVentas() {
                 <>
                     {BotonesNavegacion}
                     <MRTTabla
-                        title="Lista de ventas"
+                        title="🗃️ Lista de ventas"
                         columns={columns}
                         data={data}
                         loading={loading}

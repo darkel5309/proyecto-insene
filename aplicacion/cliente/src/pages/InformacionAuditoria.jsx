@@ -51,7 +51,7 @@ export default function InformacionAuditoria() {
             ) : (
                 <>
                     <MRTTabla
-                        title="Lista de auditoría"
+                        title="🗃️ Lista de auditoría"
                         columns={columns}
                         data={data}
                         loading={loading}

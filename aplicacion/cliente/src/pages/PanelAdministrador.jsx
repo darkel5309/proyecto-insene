@@ -115,7 +115,7 @@ export default function PanelAdministrador() {
                 <>
                     {BotonesNavegacion}
                     <MRTTabla
-                        title="Lista de trabajadores"
+                        title="🗃️ Lista de trabajadores"
                         columns={columns}
                         data={data}
                         loading={loading}

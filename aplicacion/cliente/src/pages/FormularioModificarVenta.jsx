@@ -186,14 +186,12 @@ export default function ModificarVenta() {
                             </Col>
                         </Row>
 
-                        <div className="text-center mt-4">
+                        <div className="d-flex justify-content-center gap-5 mt-4">
                             <Button type="submit" disabled={isSubmitting || !isValid}>
-                                {isSubmitting ? "Modificando..." : "Modificar venta"}
+                                {isSubmitting ? "Modificando..." : "⚠️ Modificar"}
                             </Button>
-                        </div>
-                        <div className="d-flex justify-content-center mt-3">
-                            <Button variant="danger" onClick={onDelete} className="mt-3">
-                                Eliminar venta
+                            <Button variant="danger" onClick={onDelete}>
+                                ❌ Eliminar
                             </Button>
                         </div>
                     </Form>

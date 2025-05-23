@@ -215,7 +215,7 @@ export default function FormularioFeedback() {
 
 						<div className="d-flex justify-content-center">
 							<Button type="submit" className="mt-3" disabled={isSubmitting || !isValid} aria-label="Registrar feedback" >
-								{isSubmitting ? "Enviando..." : "Registrar Feedback"}
+								{isSubmitting ? "Enviando..." : "✅ Registrar"}
 							</Button>
 						</div>
 					</Form>

@@ -131,7 +131,7 @@ export default function FormularioTrabajador() {
 
                         <div className="d-flex justify-content-center">
                             <Button type="submit" className="mt-3" disabled={isSubmitting || !isValid} aria-label="Registrar trabajador" >
-                                {isSubmitting ? "Enviando..." : "Registrar Trabajador"}
+                                {isSubmitting ? "Enviando..." : "✅ Registrar"}
                             </Button>
                         </div>
                     </Form>

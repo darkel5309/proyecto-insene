@@ -129,16 +129,16 @@ export default function FormularioVenta() {
                                 <CamposFormulario label="Estado de la venta *" name="estado_venta" as="select"
                                     tooltip="Selecciona el estado de la venta" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
-                                    <option value="pendiente">Pendiente</option>
-                                    <option value="instalada">Instalada</option>
                                     <option value="caida">Caída</option>
+                                    <option value="instalada">Instalada</option>
+                                    <option value="pendiente">Pendiente</option>
                                 </CamposFormulario>
                             </Col>
                         </Row>
 
                         <div className="d-flex justify-content-center">
                             <Button type="submit" className="mt-3" disabled={isSubmitting || !isValid}>
-                                {isSubmitting ? "Registrando..." : "Registrar Venta"}
+                                {isSubmitting ? "Registrando..." : "✅ Registrar"}
                             </Button>
                         </div>
                     </Form>

@@ -184,15 +184,12 @@ export default function ModificarTrabajador() {
                             </Col>
                         </Row>
 
-                        <div className="d-flex justify-content-center">
-                            <Button type="submit" className="mt-3" disabled={isSubmitting || !isValid}>
-                                {isSubmitting ? "Modificando..." : "Modificar trabajador"}
+                        <div className="d-flex justify-content-center gap-5 mt-4">
+                            <Button type="submit" disabled={isSubmitting || !isValid}>
+                                {isSubmitting ? "Modificando..." : "⚠️ Modificar"}
                             </Button>
-                        </div>
-
-                        <div className="d-flex justify-content-center mt-3">
-                            <Button variant="danger" onClick={onDelete} className="mt-3">
-                                Eliminar Trabajador
+                            <Button variant="danger" onClick={onDelete}>
+                                ❌ Eliminar
                             </Button>
                         </div>
                     </Form>
