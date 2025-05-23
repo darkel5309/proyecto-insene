@@ -24,7 +24,7 @@ export const useIdTrabajador = () => {
             icon: "error",
             title: "Error de sesión",
             text: "No se pudo recuperar la sesión del trabajador. Inicia sesión de nuevo",
-            confirmButtonText: "Entendido"
+            confirmButtonText: "OK"
           }).then(() => navigate('/'));
         }
       } finally {

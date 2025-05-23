@@ -18,7 +18,7 @@ export default function FormularioVenta() {
     const initialValues = useMemo(() => ({
         id_trabajador: '', id_cliente: '', fecha_firma: '', forma_pago: '',
         certificado_energetico: '', gestion_subvencion: '', gestion_legalizacion: '', fecha_legalizacion: '',
-        estado_venta: 'Pendiente',
+        estado_venta: 'pendiente',
     }), []);
 
     const validationSchema = Yup.object({
@@ -30,17 +30,17 @@ export default function FormularioVenta() {
         gestion_subvencion: Yup.string().required("Este campo es obligatorio"),
         gestion_legalizacion: Yup.string().required("Este campo es obligatorio"),
         fecha_legalizacion: Yup.date().when("gestion_legalizacion", {
-            is: "Si",
+            is: "si",
             then: schema => schema.required("Este campo es obligatorio")
         }),
-        estado_venta: Yup.string().oneOf(['Instalada', 'Caída', 'Pendiente']).required('Este campo es obligatorio'),
+        estado_venta: Yup.string().oneOf(['caida', 'instalada', 'pendiente']).required('Este campo es obligatorio'),
     });
 
     const onSubmit = useCallback(async (values, { setSubmitting, resetForm }) => {
         try {
             const datos = {
                 ...values,
-                fecha_legalizacion: values.gestion_legalizacion === 'Si' ? values.fecha_legalizacion : null
+                fecha_legalizacion: values.gestion_legalizacion === 'si' ? values.fecha_legalizacion : null
             };
             const response = await Axios.post("/ventas", datos);
             Swal.fire({
@@ -58,7 +58,7 @@ export default function FormularioVenta() {
 
     return (
         <Container fluid="md" className="venta">
-            <h1 className="text-center mb-4">Registrar Venta</h1>
+            <h1 className="text-center mb-4">Registro de Ventas</h1>
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize>
                 {({ errors, touched, isSubmitting, isValid }) => (
                     <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light" noValidate>
@@ -95,16 +95,16 @@ export default function FormularioVenta() {
                                     tooltip="Selecciona el certificado energético" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="En_cuotas">En cuotas</option>
+                                    <option value="no">No</option>
                                     <option value="Por_transferencia">Por transferencia</option>
-                                    <option value="No">No</option>
                                 </CamposFormulario>
                             </Col>
                             <Col xs={12} md={6}>
                                 <CamposFormulario label="Gestión de subvención *" name="gestion_subvencion" as="select"
                                     tooltip="Selecciona si existe gestión de subvención" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
-                                    <option value="Si">Sí</option>
-                                    <option value="No">No</option>
+                                    <option value="no">No</option>
+                                    <option value="si">Sí</option>
                                 </CamposFormulario>
                             </Col>
                         </Row>
@@ -114,8 +114,8 @@ export default function FormularioVenta() {
                                 <CamposFormulario label="Gestión de legalización *" name="gestion_legalizacion" as="select"
                                     tooltip="Selecciona si existe gestión de legalización" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
-                                    <option value="Si">Sí</option>
-                                    <option value="No">No</option>
+                                    <option value="no">No</option>
+                                    <option value="si">Sí</option>
                                 </CamposFormulario>
                             </Col>
                             <Col md={6}>
@@ -129,9 +129,9 @@ export default function FormularioVenta() {
                                 <CamposFormulario label="Estado de la venta *" name="estado_venta" as="select"
                                     tooltip="Selecciona el estado de la venta" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
-                                    <option value="Pendiente">Pendiente</option>
-                                    <option value="Instalada">Instalada</option>
-                                    <option value="Caída">Caída</option>
+                                    <option value="pendiente">Pendiente</option>
+                                    <option value="instalada">Instalada</option>
+                                    <option value="caida">Caída</option>
                                 </CamposFormulario>
                             </Col>
                         </Row>

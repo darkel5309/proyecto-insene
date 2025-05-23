@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/trabajadores", extraerIdTrabajador,
     registrarOperacion((req) => {
         const nombre = req.body.nombre;
-        return `Ha creado el trabajador: ${nombre}`;
+        return `Ha registrado el trabajador: ${nombre}`;
     }),
     validarDatosTrabajador, crear
 );

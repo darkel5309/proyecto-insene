@@ -24,7 +24,7 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
         descripcion: evento?.descripcion || '',
         start: evento?.start ? dayjs(evento.start).format('YYYY-MM-DDTHH:mm') : '',
         end: evento?.end ? dayjs(evento.end).format('YYYY-MM-DDTHH:mm') : '',
-        estado: evento?.estado || 'Pendiente',
+        estado: evento?.estado || 'pendiente',
         id_trabajador: evento?.id_trabajador || '',
         id_vivienda: evento?.id_vivienda || ''
     };
@@ -69,7 +69,7 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                                         <CamposFormulario label="Comercial a asignar *" name="id_trabajador" as="select" errors={errors} touched={touched}>
                                             <option value="">Selecciona a un comercial</option>
                                             {trabajadores
-                                                .filter(trabajador => trabajador.puesto === 'Comercial')
+                                                .filter(trabajador => trabajador.puesto === 'comercial')
                                                 .map(trabajador => (
                                                     <option key={trabajador.id_trabajador} value={trabajador.id_trabajador}>
                                                         {trabajador.nombre}
@@ -87,9 +87,9 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
 
                             <div className="mb-3">
                                 <CamposFormulario label="Estado *" name="estado" as="select" errors={errors} touched={touched}>
-                                    <option value="Pendiente">Pendiente</option>
-                                    <option value="Completada">Completada</option>
-                                    <option value="Cancelada">Cancelada</option>
+                                    <option value="cancelada">Cancelada</option>
+                                    <option value="completada">Completada</option>
+                                    <option value="pendiente">Pendiente</option>
                                 </CamposFormulario>
                             </div>
 

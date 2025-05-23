@@ -11,7 +11,7 @@ import { erroresSweetAlert2 } from '../utils/erroresSweetAlert2';
 import CamposFormulario from '../components/CamposFormulario';
 
 export default function FormularioTrabajador() {
-    useDocumentTitle("Formulario de Trabajador");
+    useDocumentTitle("Formulario de Trabajadores");
 
     const navigate = useNavigate();
 
@@ -63,7 +63,7 @@ export default function FormularioTrabajador() {
 
     return (
         <Container fluid="md" className="trabajador">
-            <h1 className="text-center mb-4">Registrar un Trabajador</h1>
+            <h1 className="text-center mb-4">Registro de Trabajadores</h1>
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} >
                 {({ errors, touched, isSubmitting, isValid }) => (
                     <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light">
@@ -87,18 +87,18 @@ export default function FormularioTrabajador() {
                                 <CamposFormulario label="Puesto del trabajador *" name="puesto" as="select"
                                     tooltip="Selecciona el puesto que tendrá el trabajador" errors={errors} touched={touched} >
                                     <option value="">Selecciona una opción</option>
-                                    <option value="Administrador">Administrador/a</option>
-                                    <option value="Administrativo">Administrativo/a</option>
-                                    <option value="Captador">Captador/a</option>
-                                    <option value="CEO">CEO</option>
-                                    <option value="Comercial">Comercial</option>
-                                    <option value="Coordinador">Coordinador/a</option>
-                                    <option value="Ingeniero">Ingeniero/a</option>
-                                    <option value="Instalador">Instalador/a</option>
-                                    <option value="Limpiador">Limpiador/a</option>
-                                    <option value="Mozo_almacen">Mozo/a de almacén</option>
-                                    <option value="RRHH">Recursos Humanos</option>
-                                    <option value="Tramitador">Tramitador/a</option>
+                                    <option value="administrador">Administrador/a</option>
+                                    <option value="administrativo">Administrativo/a</option>
+                                    <option value="captador">Captador/a</option>
+                                    <option value="ceo">CEO</option>
+                                    <option value="comercial">Comercial</option>
+                                    <option value="coordinador">Coordinador/a</option>
+                                    <option value="ingeniero">Ingeniero/a</option>
+                                    <option value="instalador">Instalador/a</option>
+                                    <option value="limpiador">Limpiador/a</option>
+                                    <option value="mozo_almacen">Mozo/a de almacén</option>
+                                    <option value="rrhh">Recursos Humanos</option>
+                                    <option value="tramitador">Tramitador/a</option>
                                 </CamposFormulario>
                             </Col>
                         </Row>
@@ -108,12 +108,12 @@ export default function FormularioTrabajador() {
                                 <CamposFormulario label="Departamento del trabajador *" name="departamento" as="select"
                                     tooltip="Selecciona el departamento al que pertenecerá el trabajador" errors={errors} touched={touched} >
                                     <option value="">Selecciona una opción</option>
-                                    <option value="Administracion">Administración</option>
-                                    <option value="Comercial">Comercial</option>
-                                    <option value="Gerencia">Gerencia</option>
-                                    <option value="Instalaciones">Instalaciones</option>
-                                    <option value="Limpieza">Limpieza</option>
-                                    <option value="RRHH">RRHH</option>
+                                    <option value="administracion">Administración</option>
+                                    <option value="comercial">Comercial</option>
+                                    <option value="gerencia">Gerencia</option>
+                                    <option value="instalaciones">Instalaciones</option>
+                                    <option value="limpieza">Limpieza</option>
+                                    <option value="rrhh">RRHH</option>
                                 </CamposFormulario>
                             </Col>
                             <Col xs={12} md={6}>

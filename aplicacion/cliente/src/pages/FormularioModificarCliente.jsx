@@ -13,7 +13,7 @@ import { useDatosCliente } from '../hooks/useDatosCliente';
 import dayjs from 'dayjs';
 
 export default function FormularioModificarCliente() {
-    useDocumentTitle("Modificación de Cliente");
+    useDocumentTitle("Modificación de Clientes");
 
     const { id } = useParams();
     const { cliente, cargando } = useDatosCliente(id);
@@ -91,7 +91,7 @@ export default function FormularioModificarCliente() {
 
     return (
         <Container fluid="md" className="cliente">
-            <h1 className="text-center mb-4">Modificar Cliente</h1>
+            <h1 className="text-center mb-4">Modificación de Clientes</h1>
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize >
                 {({ errors, touched, isSubmitting, isValid }) => (
                     <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light">

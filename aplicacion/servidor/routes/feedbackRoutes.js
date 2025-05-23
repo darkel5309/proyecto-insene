@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post("/feedbacks", extraerIdTrabajador,
     registrarOperacion(() => {
-        return `Ha creado una nueva visita`;
+        return `Ha registrado una nueva visita`;
     }),
     validarDatosFeedback, crear
 );

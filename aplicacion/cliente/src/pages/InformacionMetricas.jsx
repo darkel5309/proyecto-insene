@@ -7,7 +7,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { Container, Row, Col, Form, Button, Card, Alert } from 'react-bootstrap';
 
 export default function InformacionMetricas() {
-  useDocumentTitle("Información de métricas");
+  useDocumentTitle("Información de Métricas");
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -72,6 +72,7 @@ export default function InformacionMetricas() {
   const columns = useMemo(() => [
     { accessorKey: "id_trabajador", header: "ID", size: 80, ...fondoAzul },
     { accessorKey: "nombre", header: "TRABAJADOR", size: 200, ...fondoAzul },
+    { accessorKey: "equipo", header: "EQUIPO", size: 200, ...fondoAzul },
     { accessorKey: "feedbacks", header: "FEEDBACKS", size: 200, ...fondoMarron },
     { accessorKey: "visitado_pdte_contestacion", header: "PDTE CONTESTACIÓN", size: 180, ...fondoVerdeClaro },
     { accessorKey: "visitado_no_hacen_nada", header: "NO HACEN NADA", size: 180, ...fondoVerdeClaro },
@@ -133,7 +134,7 @@ export default function InformacionMetricas() {
 
   return (
     <Container fluid="md" className="metrica">
-      <h1 className="text-center mb-4">Métricas de Ventas</h1>
+      <h1 className="text-center mb-4">Información de Métricas</h1>
 
       <Card className="mb-4">
         <Card.Header>

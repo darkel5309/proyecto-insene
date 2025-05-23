@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/agenda", extraerIdTrabajador,
     registrarOperacion((req) => {
         const titulo = req.body.titulo;
-        return `Ha creado el evento: ${titulo}`;
+        return `Ha registrado el evento: ${titulo}`;
     }),
     validarDatosAgenda, crear
 );

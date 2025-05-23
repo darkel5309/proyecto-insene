@@ -5,7 +5,7 @@ import Logo from "../images/logo.png";
 
 function Header() {
     const { cerrarSesion, authData } = useContext(AuthContext);
-    const esAdministrador = authData?.tipoTrabajador === "Administrador";
+    const esAdministrador = authData?.tipoTrabajador === "administrador";
 
     return (
         <div className="cabecera d-flex align-items-center">

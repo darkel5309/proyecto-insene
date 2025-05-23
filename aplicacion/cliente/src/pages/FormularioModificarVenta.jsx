@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 import { erroresSweetAlert2 } from '../utils/erroresSweetAlert2';
 
 export default function ModificarVenta() {
-    useDocumentTitle("Modificar Venta");
+    useDocumentTitle("Modificación de Ventas");
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -54,7 +54,7 @@ export default function ModificarVenta() {
         gestion_subvencion: Yup.string().required("Este campo es obligatorio"),
         gestion_legalizacion: Yup.string(),
         fecha_legalizacion: Yup.date().when("gestion_legalizacion", {
-            is: "Si",
+            is: "si",
             then: schema => schema.required("Este campo es obligatorio")
         }),
         estado_venta: Yup.string().required("Este campo es obligatorio"),
@@ -64,7 +64,7 @@ export default function ModificarVenta() {
         try {
             const datos = {
                 ...values,
-                fecha_legalizacion: values.gestion_legalizacion === 'Si' ? values.fecha_legalizacion : null
+                fecha_legalizacion: values.gestion_legalizacion === 'si' ? values.fecha_legalizacion : null
             };
             await Axios.put(`/ventas/${id}`, datos);
             Swal.fire({ icon: "success", title: "Venta modificada correctamente" })
@@ -109,7 +109,7 @@ export default function ModificarVenta() {
 
     return (
         <Container className="venta">
-            <h1 className="text-center mb-4">Modificar Venta</h1>
+            <h1 className="text-center mb-4">Modificación de Ventas</h1>
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize>
                 {({ errors, touched, isSubmitting, isValid }) => (
                     <Form as={BootstrapForm} className="p-4 border rounded bg-light">
@@ -146,16 +146,16 @@ export default function ModificarVenta() {
                                     tooltip="Selecciona el nuevo certificado energético" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
                                     <option value="En_cuotas">En cuotas</option>
+                                    <option value="no">No</option>
                                     <option value="Por_transferencia">Por transferencia</option>
-                                    <option value="No">No</option>
                                 </CamposFormulario>
                             </Col>
                             <Col md={6}>
                                 <CamposFormulario label="¿Gestión de subvención? *" name="gestion_subvencion" as="select"
                                     tooltip="Selecciona si existe gestión de subvención" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
-                                    <option value="Si">Sí</option>
-                                    <option value="No">No</option>
+                                    <option value="no">No</option>
+                                    <option value="si">Sí</option>
                                 </CamposFormulario>
                             </Col>
                         </Row>
@@ -165,8 +165,8 @@ export default function ModificarVenta() {
                                 <CamposFormulario label="¿Gestión de legalización? *" name="gestion_legalizacion" as="select"
                                     tooltip="Selecciona si existe gestión de legalización" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
-                                    <option value="Si">Sí</option>
-                                    <option value="No">No</option>
+                                    <option value="no">No</option>
+                                    <option value="si">Sí</option>
                                 </CamposFormulario>
                             </Col>
                             <Col md={6}>
@@ -180,8 +180,8 @@ export default function ModificarVenta() {
                                 <CamposFormulario label="Nuevo estado de la venta *" name="estado_venta" as="select"
                                     tooltip="Selecciona el nuevo estado de la venta" errors={errors} touched={touched}>
                                     <option value="">Selecciona una opción</option>
-                                    <option value="Instalada">Instalada</option>
-                                    <option value="Caída">Caída</option>
+                                    <option value="instalada">Instalada</option>
+                                    <option value="caida">Caída</option>
                                 </CamposFormulario>
                             </Col>
                         </Row>

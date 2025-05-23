@@ -4,7 +4,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import useDocumentTitle from '../components/Titulo';
 
 export default function PanelCaptador() {
-    useDocumentTitle("Panel de Captador");
+    useDocumentTitle("Panel de Captadores");
 
     const BotonesNavegacion = () => (
         <Row className="g-3 justify-content-center">

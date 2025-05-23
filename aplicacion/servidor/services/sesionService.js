@@ -3,7 +3,11 @@ import jwt from "jsonwebtoken";
 import { query } from "../models/db.js";
 
 export const verificarTrabajadorYContrasena = async (idTrabajador, contrasena) => {
-    const trabajador = await query('SELECT * FROM trabajador WHERE id_trabajador = ?', [idTrabajador]);
+    const trabajador = await query(`
+        SELECT * 
+        FROM trabajador 
+        WHERE id_trabajador = ?
+    `, [idTrabajador]);
 
     if (trabajador.length === 0) {
         return null;

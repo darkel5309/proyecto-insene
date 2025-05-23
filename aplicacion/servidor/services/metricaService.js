@@ -3,7 +3,7 @@ import { query } from '../models/db.js';
 export const obtenerTodasComercial = async (fechaInicio = null, fechaFin = null) => {
   let filtroVentas = '';
   let filtroVisitas = "WHERE resultado != 'Venta'";
-  
+
   if (fechaInicio && fechaFin) {
     filtroVentas = `WHERE fecha_firma BETWEEN '${fechaInicio}' AND '${fechaFin}'`;
     filtroVisitas = `WHERE resultado != 'Venta' AND fecha BETWEEN '${fechaInicio}' AND '${fechaFin}'`;
@@ -19,6 +19,7 @@ export const obtenerTodasComercial = async (fechaInicio = null, fechaFin = null)
     SELECT 
       t.id_trabajador,
       t.nombre,
+      t.equipo,
 
       -- tabla venta
       COALESCE(v.venta_total, 0) AS venta,
@@ -101,8 +102,8 @@ export const obtenerTodasComercial = async (fechaInicio = null, fechaFin = null)
       SELECT 
         id_trabajador,
         COUNT(*) AS venta_total,
-        SUM(estado_venta = 'Instalada') AS ventas_instaladas,
-        SUM(estado_venta = 'Caída') AS ventas_caidas
+        SUM(estado_venta = 'instalada') AS ventas_instaladas,
+        SUM(estado_venta = 'caida') AS ventas_caidas
       FROM venta
       ${filtroVentas}
       GROUP BY id_trabajador
@@ -121,7 +122,7 @@ export const obtenerTodasComercial = async (fechaInicio = null, fechaFin = null)
       GROUP BY id_trabajador
     ) vi ON t.id_trabajador = vi.id_trabajador
 
-    WHERE t.puesto = 'Comercial'
+    WHERE t.puesto = 'comercial'
     ORDER BY 
     ROUND(
       100.0 * COALESCE(v.ventas_instaladas, 0) / (

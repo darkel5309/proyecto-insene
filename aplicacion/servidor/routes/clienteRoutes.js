@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/clientes", extraerIdTrabajador,
     registrarOperacion((req) => {
         const nombre = req.body.nombre || "Cliente desconocido";
-        return `Ha creado el cliente: ${nombre}`;
+        return `Ha registrado el cliente: ${nombre}`;
     }),
     validarDatosCliente, crear
 );

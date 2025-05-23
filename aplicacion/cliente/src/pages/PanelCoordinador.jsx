@@ -1,7 +1,8 @@
 import '../styles/Agenda.css';
 import '../styles/Formularios.css';
+import '../styles/Paneles.css';
 import { Card, Container, Row, Col, Badge, Button, Form } from 'react-bootstrap';
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -15,8 +16,8 @@ import useDocumentTitle from '../components/Titulo';
 import EventoModal from "../components/EventoModal";
 import dayjs from "dayjs";
 
-const PanelCoordinador = () => {
-    useDocumentTitle("Panel Rutas");
+export default function PanelCoordinador() {
+    useDocumentTitle("Panel de Rutas");
 
     const [eventos, setEventos] = useState([]);
     const [eventosFiltrados, setEventosFiltrados] = useState([]);
@@ -29,25 +30,20 @@ const PanelCoordinador = () => {
 
     const obtenerColoresPorEstado = (estado) => {
         switch (estado) {
-            case "Pendiente":
-                return {
-                    backgroundColor: "#facc15",
-                    borderColor: "#eab308"
-                };
-            case "Completada":
-                return {
-                    backgroundColor: "#4ade80",
-                    borderColor: "#22c55e"
-                };
-            case "Cancelada":
+            case "cancelada":
                 return {
                     backgroundColor: "#f87171",
                     borderColor: "#dc2626"
                 };
+            case "completada":
+                return {
+                    backgroundColor: "#4ade80",
+                    borderColor: "#22c55e"
+                };
             default:
                 return {
-                    backgroundColor: "#d1d5db",
-                    borderColor: "#9ca3af"
+                    backgroundColor: "#facc15",
+                    borderColor: "#eab308"
                 };
         }
     };
@@ -112,7 +108,7 @@ const PanelCoordinador = () => {
             descripcion: '',
             start: dayjs(info.dateStr).format('YYYY-MM-DDTHH:mm'),
             end: dayjs(info.dateStr).format('YYYY-MM-DDTHH:mm'),
-            estado: 'Pendiente',
+            estado: 'pendiente',
             id_trabajador: '',
             id_vivienda: '',
         };
@@ -172,24 +168,30 @@ const PanelCoordinador = () => {
         }
     };
 
+    const BotonesNavegacion = useMemo(() => (
+        <>
+            <Row className="g-3 justify-content-center">
+                {[
+                    { path: "/coordinadores/ventas", label: " Información de Ventas" },
+                    { path: "/coordinadores/metricas", label: "Información de Métricas" },
+                ]
+                    .map(({ path, label }) => (
+                        <Col key={path} xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
+                            <Button as={Link} to={path} variant="primary" className="boton-menu">
+                                {label}
+                            </Button>
+                        </Col>
+                    ))}
+            </Row>
+        </>
+    ), []);
+
     return (
         <Container fluid className="my-4 px-4">
-            <h1 className="text-center mb-4">Panel Ruta</h1>
+            <h1 className="text-center mb-4">Panel de Rutas</h1>
 
-            <Row className="g-3 justify-content-center mb-4">
-                <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                    <Button as={Link} to="/coordinadores/ventas" variant="primary" className="boton-menu" aria-label="Ver información sobre las ventas">
-                        Información de Ventas
-                    </Button>
-                </Col>
-                <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                    <Button as={Link} to="/coordinadores/metricas" variant="primary" className="boton-menu" aria-label="Ver información sobre las métricas">
-                        Información de Métricas
-                    </Button>
-                </Col>
-            </Row>
-
-            <Card className="shadow border-0 rounded-3">
+            {BotonesNavegacion}
+            <Card className="shadow border-0 rounded-3 mt-4">
                 <Card.Header className="bg-primary bg-gradient text-white py-3">
                     <Row className="align-items-center">
                         <Col>
@@ -205,7 +207,7 @@ const PanelCoordinador = () => {
                                     descripcion: '',
                                     start: dayjs().format('YYYY-MM-DD'),
                                     end: dayjs().format('YYYY-MM-DD'),
-                                    estado: 'Pendiente',
+                                    estado: 'pendiente',
                                     id_trabajador: '',
                                     id_vivienda: ''
                                 };
@@ -227,7 +229,7 @@ const PanelCoordinador = () => {
                                 onChange={(e) => setFiltroTrabajador(e.target.value)}
                                 className="mb-2 mb-md-0">
                                 <option value="todos">Todos los comerciales</option>
-                                {trabajadores.filter(t => t.puesto === 'Comercial').map(t => (
+                                {trabajadores.filter(t => t.puesto === 'comercial').map(t => (
                                     <option key={t.id_trabajador} value={t.id_trabajador}>{t.nombre}</option>
                                 ))}
                             </Form.Select>
@@ -294,9 +296,9 @@ const PanelCoordinador = () => {
                     <Row className="g-2 align-items-center">
                         <Col xs={12} md={true} className="mb-2 mb-md-0">
                             <small className="text-muted d-flex flex-wrap gap-1">
-                                <Badge bg="warning" className="me-1">Pendiente</Badge>
-                                <Badge bg="success" className="me-1">Completada</Badge>
                                 <Badge bg="danger" className="me-1">Cancelada</Badge>
+                                <Badge bg="success" className="me-1">Completada</Badge>
+                                <Badge bg="warning" className="me-1">Pendiente</Badge>
                                 <span>{eventosFiltrados.length} eventos</span>
                             </small>
                         </Col>
@@ -323,6 +325,4 @@ const PanelCoordinador = () => {
             />
         </Container>
     );
-};
-
-export default PanelCoordinador;
+}

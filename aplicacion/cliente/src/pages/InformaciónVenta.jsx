@@ -86,8 +86,8 @@ export default function InformacionVentas() {
         () => (row) => ({
             sx: {
                 backgroundColor: {
-                    "Instalada": "#e6ffec",
-                    "Caída": "#ffe6e6",
+                    "instalada": "#e6ffec",
+                    "caida": "#ffe6e6",
                 }[row.original.estado_venta] || "transparent",
             },
         }),

@@ -55,7 +55,7 @@ export default function FormularioCliente() {
 
     return (
         <Container fluid="md" className="contacto">
-            <h1 className="text-center mb-4">Formulario de Contactos</h1>
+            <h1 className="text-center mb-4">Registro de Contactos</h1>
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize >
                 {({ errors, touched, isSubmitting, isValid }) => (
                     <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light" noValidate>
@@ -93,10 +93,10 @@ export default function FormularioCliente() {
                             <Col xs={12} md={6}>
                                 <CamposFormulario label="Modo de captación *" name="modoCaptacion" as="select" tooltip="Selecciona la forma de captación del cliente" errors={errors} touched={touched} >
                                     <option value="">Selecciona una opción</option>
-                                    <option value="Captador">Captador</option>
-                                    <option value="Telemarketing">Telemarketing</option>
-                                    <option value="Referido">Referido</option>
-                                    <option value="Propia">Captación propia</option>
+                                    <option value="propia">Captación propia</option>
+                                    <option value="captador">Captador</option>
+                                    <option value="referido">Referido</option>
+                                    <option value="telemarketing">Telemarketing</option>
                                 </CamposFormulario>
                             </Col>
                         </Row>

@@ -14,7 +14,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import CamposFormulario from '../components/CamposFormulario';
 
 export default function FormularioFeedback() {
-	useDocumentTitle("Formulario de Feedback");
+	useDocumentTitle("Formulario de Feedbacks");
 
 	const navigate = useNavigate();
 	const { idTrabajador, isLoading } = useIdTrabajador();
@@ -22,8 +22,8 @@ export default function FormularioFeedback() {
 
 	const initialValues = useMemo(() => ({
 		idTrabajador: idTrabajador || '', idCliente: '', nombre: '', telefono: '', correo: '', direccion: '', localidad: '', provincia: '',
-		fecha: '', hora: '', numeroPersonas: '', numeroDecisores: '', tieneBombona: "Sin_datos", tieneGas: "Sin_datos", tieneTermo: "Sin_datos",
-		tienePlacas: "Sin_datos", importeLuz: '', importeGas: '', resultado: '', oferta: '', observaciones: '',
+		fecha: '', hora: '', numeroPersonas: '', numeroDecisores: '', tieneBombona: "sin_datos", tieneGas: "sin_datos", tieneTermo: "sin_datos",
+		tienePlacas: "sin_datos", importeLuz: '', importeGas: '', resultado: '', oferta: '', observaciones: '',
 	}), [idTrabajador]);
 
 	const validationSchema = Yup.object({
@@ -56,7 +56,7 @@ export default function FormularioFeedback() {
 					gestion_subvencion: null,
 					gestion_legalizacion: null,
 					fecha_legalizacion: null,
-					estado_venta: "Pendiente",
+					estado_venta: "pendiente",
 				});
 			}
 			Swal.fire({
@@ -79,7 +79,7 @@ export default function FormularioFeedback() {
 
 	return (
 		<Container fluid="md" className="feedback">
-			<h1 className="text-center mb-4">Feedback de la Visita</h1>
+			<h1 className="text-center mb-4">Registro de Feedbacks</h1>
 			<Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize>
 				{({ errors, touched, isSubmitting, setFieldValue, values, isValid }) => (
 					<Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light" noValidate>
@@ -149,16 +149,16 @@ export default function FormularioFeedback() {
 						<Row className="mb-3">
 							<Col xs={12} md={6}>
 								<CamposFormulario label="¿Tiene bombona?" name="tieneBombona" as="select" tooltip="Selecciona si el cliente tiene bombona" errors={errors} touched={touched} >
-									<option value="Sin_datos">Sin datos</option>
-									<option value="Si">Si</option>
-									<option value="No">No</option>
+									<option value="sin_datos">Sin datos</option>
+									<option value="no">No</option>
+									<option value="si">Si</option>
 								</CamposFormulario>
 							</Col>
 							<Col xs={12} md={6}>
 								<CamposFormulario label="¿Tiene gas?" name="tieneGas" as="select" tooltip="Selecciona si el cliente tiene gas" errors={errors} touched={touched} >
-									<option value="Sin_datos">Sin datos</option>
-									<option value="Si">Si</option>
-									<option value="No">No</option>
+									<option value="sin_datos">Sin datos</option>
+									<option value="no">No</option>
+									<option value="si">Si</option>
 								</CamposFormulario>
 							</Col>
 						</Row>
@@ -166,16 +166,16 @@ export default function FormularioFeedback() {
 						<Row className="mb-3">
 							<Col xs={12} md={6}>
 								<CamposFormulario label="¿Tiene termo?" name="tieneTermo" as="select" tooltip="Selecciona si el cliente tiene termo" errors={errors} touched={touched} >
-									<option value="Sin_datos">Sin datos</option>
-									<option value="Si">Si</option>
-									<option value="No">No</option>
+									<option value="sin_datos">Sin datos</option>
+									<option value="no">No</option>
+									<option value="si">Si</option>
 								</CamposFormulario>
 							</Col>
 							<Col xs={12} md={6}>
 								<CamposFormulario label="¿Tiene placas?" name="tienePlacas" as="select" tooltip="Selecciona si el cliente tiene placas" errors={errors} touched={touched} >
-									<option value="Sin_datos">Sin datos</option>
-									<option value="Si">Si</option>
-									<option value="No">No</option>
+									<option value="sin_datos">Sin datos</option>
+									<option value="no">No</option>
+									<option value="si">Si</option>
 								</CamposFormulario>
 							</Col>
 						</Row>

@@ -33,10 +33,10 @@ export default function Inicio() {
             resetForm();
 
             const rutas = {
-                Captador: "/captadores",
-                Comercial: "/comerciales",
-                Administrador: "/administradores",
-                Coordinador: "/coordinadores",
+                captador: "/captadores",
+                comercial: "/comerciales",
+                administrador: "/administradores",
+                coordinador: "/coordinadores",
             };
             navigate(rutas[data.tipoTrabajador] || "/");
         } catch (error) {

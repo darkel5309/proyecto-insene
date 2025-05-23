@@ -13,7 +13,7 @@ import { useDatosTrabajador } from '../hooks/useDatosTrabajador';
 import dayjs from 'dayjs';
 
 export default function ModificarTrabajador() {
-    useDocumentTitle("Modificación de Trabajador");
+    useDocumentTitle("Modificación de Trabajadores");
 
     const { id } = useParams();
     const { trabajador, cargando } = useDatosTrabajador(id);
@@ -48,7 +48,10 @@ export default function ModificarTrabajador() {
         departamento: Yup.string().required("Este campo es obligatorio"),
         equipo: Yup.string(),
         fechaAlta: Yup.date().required("Este campo es obligatorio"),
-        fechaBaja: Yup.date().optional()
+        fechaBaja: Yup.date().optional().test('is-after-start', 'La fecha de baja debe ser posterior a la de alta', function (value) {
+            const { fechaAlta } = this.parent;
+            return dayjs(value).isAfter(dayjs(fechaAlta));
+        }),
     });
 
     const onSubmit = useCallback(async (values, { setSubmitting }) => {
@@ -104,7 +107,7 @@ export default function ModificarTrabajador() {
 
     return (
         <Container fluid="md" className="trabajador">
-            <h1 className="text-center mb-4">Modificar Trabajador</h1>
+            <h1 className="text-center mb-4">Modificación de Trabajadores</h1>
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize >
                 {({ errors, touched, isSubmitting, isValid }) => (
                     <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light">
@@ -128,18 +131,18 @@ export default function ModificarTrabajador() {
                                 <CamposFormulario label="Nuevo puesto para el trabajador *" name="puesto" as="select"
                                     tooltip="Selecciona el nuevo puesto que tendrá el trabajador" errors={errors} touched={touched} >
                                     <option value="">Selecciona una opción</option>
-                                    <option value="Administrador">Administrador/a</option>
-                                    <option value="Administrativo">Administrativo/a</option>
-                                    <option value="Captador">Captador/a</option>
-                                    <option value="CEO">CEO</option>
-                                    <option value="Comercial">Comercial</option>
-                                    <option value="Coordinador">Coordinador/a</option>
-                                    <option value="Ingeniero">Ingeniero/a</option>
-                                    <option value="Instalador">Instalador/a</option>
-                                    <option value="Limpiador">Limpiador/a</option>
-                                    <option value="Mozo_almacen">Mozo/a de almacén</option>
-                                    <option value="RRHH">Recursos Humanos</option>
-                                    <option value="Tramitador">Tramitador/a</option>
+                                    <option value="administrador">Administrador/a</option>
+                                    <option value="administrativo">Administrativo/a</option>
+                                    <option value="captador">Captador/a</option>
+                                    <option value="ceo">CEO</option>
+                                    <option value="comercial">Comercial</option>
+                                    <option value="coordinador">Coordinador/a</option>
+                                    <option value="ingeniero">Ingeniero/a</option>
+                                    <option value="instalador">Instalador/a</option>
+                                    <option value="limpiador">Limpiador/a</option>
+                                    <option value="mozo_almacen">Mozo/a de almacén</option>
+                                    <option value="rrhh">Recursos Humanos</option>
+                                    <option value="tramitador">Tramitador/a</option>
                                 </CamposFormulario>
                             </Col>
                         </Row>
@@ -149,12 +152,12 @@ export default function ModificarTrabajador() {
                                 <CamposFormulario label="Nuevo departamento del trabajador *" name="departamento" as="select"
                                     tooltip="Selecciona el nuevo departamento al que pertenecerá el trabajador" errors={errors} touched={touched} >
                                     <option value="">Selecciona una opción</option>
-                                    <option value="Administracion">Administración</option>
-                                    <option value="Comercial">Comercial</option>
-                                    <option value="Gerencia">Gerencia</option>
-                                    <option value="Instalaciones">Instalaciones</option>
-                                    <option value="Limpieza">Limpieza</option>
-                                    <option value="RRHH">RRHH</option>
+                                    <option value="administracion">Administración</option>
+                                    <option value="comercial">Comercial</option>
+                                    <option value="gerencia">Gerencia</option>
+                                    <option value="instalaciones">Instalaciones</option>
+                                    <option value="limpieza">Limpieza</option>
+                                    <option value="rrhh">RRHH</option>
                                 </CamposFormulario>
                             </Col>
                             <Col xs={12} md={6}>

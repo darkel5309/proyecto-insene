@@ -20,82 +20,82 @@ const routes = [
   {
     path: "/administradores",
     element: <PanelAdministrador />,
-    roles: ["Administrador"],
+    roles: ["administrador"],
   },
   {
     path: "/administradores/RegistroTrabajador",
     element: <FormularioTrabajador />,
-    roles: ["Administrador"],
+    roles: ["administrador"],
   },
   {
     path: "/administradores/modificarTrabajador/:id",
     element: <FormularioModificarTrabajador />,
-    roles: ["Administrador"],
+    roles: ["administrador"],
   },
   {
     path: "/administradores/InformacionClientes",
     element: <InformacionClientes />,
-    roles: ["Administrador"],
+    roles: ["administrador"],
   },
   {
     path: "/administradores/modificarCliente/:id",
     element: <FormularioModificarCliente />,
-    roles: ["Administrador"],
+    roles: ["administrador"],
   },
   {
     path: "/administradores/auditoria",
     element: <InformacionAuditoria />,
-    roles: ["Administrador"],
+    roles: ["administrador"],
   },
   {
     path: "/coordinadores",
     element: <PanelCoordinador />,
-    roles: ["Coordinador", "Administrador"],
+    roles: ["coordinador", "administrador"],
   },
   {
     path: "/coordinadores/metricas",
     element: <InformacionMetricas />,
-    roles: ["Coordinador", "Administrador"],
+    roles: ["coordinador", "administrador"],
   },
   {
     path: "/coordinadores/ventas",
     element: <InformacionVentas />,
-    roles: ["Coordinador", "Administrador"],
+    roles: ["coordinador", "administrador"],
   },
   {
     path: "/coordinadores/registroVenta",
     element: <FormularioVenta />,
-    roles: ["Coordinador", "Administrador"],
+    roles: ["coordinador", "administrador"],
   },
   {
     path: "/coordinadores/modificarVenta/:id",
     element: <FormularioModificarVenta />,
-    roles: ["Coordinador", "Administrador"],
+    roles: ["coordinador", "administrador"],
   },
   {
     path: "/captadores",
     element: <PanelCaptador />,
-    roles: ["Captador", "Administrador"],
+    roles: ["captador", "administrador"],
   },
   {
     path: "/captadores/contacto",
     element: <FormularioContacto />,
-    roles: ["Captador", "Administrador"],
+    roles: ["captador", "administrador"],
   },
   {
     path: "/comerciales",
     element: <PanelComercial />,
-    roles: ["Comercial", "Administrador"],
+    roles: ["comercial", "administrador"],
   },
   {
     path: "/comerciales/contacto",
     element: <FormularioContacto />,
-    roles: ["Comercial", "Administrador"],
+    roles: ["comercial", "administrador"],
   },
   {
     path: "/comerciales/feedback",
     element: <FormularioFeedback />,
-    roles: ["Comercial", "Administrador"],
+    roles: ["comercial", "administrador"],
   },
 ];
 

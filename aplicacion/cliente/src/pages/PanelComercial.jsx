@@ -8,7 +8,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import MRTTabla from "../utils/MRTTabla";
 
 export default function PanelComercial() {
-    useDocumentTitle("Panel de Comercial");
+    useDocumentTitle("Panel de Comerciales");
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);

@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import MRTTabla from "../utils/MRTTabla";
 
 export default function PanelAdministrador() {
-    useDocumentTitle("Panel de Administrador");
+    useDocumentTitle("Panel de Administradores");
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -47,7 +47,7 @@ export default function PanelAdministrador() {
         { accessorKey: 'equipo', header: 'EQUIPO', size: 150 },
         { accessorKey: 'fecha_alta', header: 'F. ALTA', size: 150, Cell: renderFecha },
         { accessorKey: 'fecha_baja', header: 'F. BAJA', size: 150, Cell: renderFecha },
-        { id: 'modificar', header: '', size: 100, Cell: renderBotonModificar },
+        { id: 'modificar', header: '', size: 120, Cell: renderBotonModificar },
     ], [renderFecha, renderBotonModificar]);
 
     useEffect(() => {

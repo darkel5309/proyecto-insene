@@ -9,7 +9,7 @@ import dayjs from "dayjs";
 import MRTTabla from "../utils/MRTTabla";
 
 export default function InformacionClientes() {
-    useDocumentTitle("Información de clientes");
+    useDocumentTitle("Información de Clientes");
     const navigate = useNavigate();
 
     const [data, setData] = useState([]);
