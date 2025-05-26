@@ -30,21 +30,22 @@ body {
   max-width: 150px;
 }
 
-.sesion {
+.sesion, .home {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.home {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.cerrar-sesion {
-  padding: 3px !important;
+.boton-icono {
   background: linear-gradient(to right, #fae401, #fe8701);
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 4px;
+  color: #003059;
 }
 
 h1 {

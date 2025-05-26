@@ -11,10 +11,11 @@ function Header() {
         <div className="cabecera d-flex align-items-center">
             <div className="columna home">
                 {esAdministrador && (
-                    <Link to="/administradores" className="btn btn-warning btn-sm me-3" aria-label="Ir al panel de administradores">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" >
-                            <path d="M8 3.293l6 6V15a1 1 0 0 1-1 1h-4v-4H7v4H3a1 1 0 0 1-1-1v-5.707l6-6zM7.5 1.5l-7 7 1.415 1.414L8 3.914l6.085 6.086L15.5 8.5l-7-7z" />
+                    <Link to="/administradores" className="boton-icono" aria-label="Ir al panel de administradores">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" width="20" height="20">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 9.75L12 3l9 6.75M4.5 10.5V21h15v-10.5" />
                         </svg>
+
                     </Link>
                 )}
             </div>
@@ -25,9 +26,19 @@ function Header() {
 
             <div className="columna sesion ms-auto">
                 {authData && (
-                    <button className="btn btn-warning btn-sm cerrar-sesion" onClick={cerrarSesion} aria-label="Cerrar sesión" > Cerrar Sesión </button>
+                    <button
+                        className="boton-icono"
+                        onClick={cerrarSesion}
+                        aria-label="Cerrar sesión"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" width="20" height="20">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3H6.75A2.25 2.25 0 004.5 5.25v13.5A2.25 2.25 0 006.75 21h6.75a2.25 2.25 0 002.25-2.25V15M18 12H9m0 0l3-3m-3 3l3 3" />
+                        </svg>
+
+                    </button>
                 )}
             </div>
+
         </div>
     );
 }
