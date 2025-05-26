@@ -215,7 +215,7 @@ export default function PanelCoordinador() {
                                 setModoEdicion(false);
                                 setMostrarModal(true);
                             }}>
-                                <i className="bi bi-plus-circle me-1"></i> Nuevo Evento
+                                <i className="bi bi-plus-circle me-1"></i> Nuevo Evento 📝
                             </Button>
                         </Col>
                     </Row>
@@ -280,7 +280,7 @@ export default function PanelCoordinador() {
                                         whiteSpace: "normal",
                                         minHeight: "100%",
                                         textOverflow: "ellipsis",
-                                        fontSize: window.innerWidth < 768 ? '0.75rem' : '0.9rem'
+                                        fontSize: window.innerWidth < 768 ? '12px' : '15px'
                                     }}>
                                         <span className="event-title text-truncate">
                                             {dayjs(eventInfo.event.start).format('HH:mm')}-{eventInfo.event.title}

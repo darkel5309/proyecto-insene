@@ -197,12 +197,12 @@ export default function FormularioFeedback() {
 							<Col xs={12} md={6}>
 								<CamposFormulario label="Resultado *" name="resultado" as="select" tooltip="Selecciona cuál ha sido el resultado del feedback" errors={errors} touched={touched} >
 									<option value="">Selecciona una opción</option>
+									<option value="Firmada_no_financiable">Firmada y no financiable</option>
+									<option value="No_visita">No ha habido visita</option>
+									<option value="Venta">Venta</option>
 									<option value="Visitado_pdte_contestacion">Visitado pendiente de contestación</option>
 									<option value="Visitado_no_hacen_nada">Visitado pero no hacen nada</option>
 									<option value="Recitar">Volver a citar</option>
-									<option value="No_visita">No ha habido visita</option>
-									<option value="Firmada_no_financiable">Firmada y no financiable</option>
-									<option value="Venta">Venta</option>
 								</CamposFormulario>
 							</Col>
 						</Row>

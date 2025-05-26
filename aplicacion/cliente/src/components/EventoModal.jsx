@@ -36,17 +36,17 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
     return (
         <Modal show={show} onHide={onHide} size="lg" centered fullscreen="sm-down" >
             <Modal.Header closeButton className="bg-primary text-white">
-                <Modal.Title>{evento?.id ? 'Editar Evento' : 'Crear Evento'}</Modal.Title>
+                <Modal.Title>{evento?.id ? 'Editar Visita' : 'Crear Visita'}</Modal.Title>
             </Modal.Header>
             <Modal.Body className="px-3 py-4">
                 <Formik initialValues={initialValues} enableReinitialize={true} onSubmit={handleSubmit} validationSchema={validacionEvento}>
                     {({ errors, touched }) => (
                         <Form>
                             <div className="mb-3">
-                                <CamposFormulario label="Título *" name="title" placeholder="Título del evento" errors={errors} touched={touched} />
+                                <CamposFormulario label="Título *" name="title" placeholder="Título de la visita" errors={errors} touched={touched} />
                             </div>
                             <div className="mb-3">
-                                <CamposFormulario label="Descripción *" name="descripcion" placeholder="Descripción del evento" as="textarea"
+                                <CamposFormulario label="Descripción *" name="descripcion" placeholder="Descripción de la visita" as="textarea"
                                     rows="3" errors={errors} touched={touched} />
                             </div>
 
@@ -93,13 +93,13 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                                 </CamposFormulario>
                             </div>
 
-                            <div className="d-flex flex-column flex-md-row justify-content-between mt-4 gap-2">
-                                <Button variant="primary" type="submit" className="order-2 order-md-1" size="lg" >
-                                    {evento?.id ? 'Guardar Cambios' : 'Crear Evento'}
+                            <div className="d-flex justify-content-center gap-5 mt-4 mb-4">
+                                <Button variant="primary" type="submit">
+                                    {evento?.id ? '⚠️ Modificar' : '✅ Registrar'}
                                 </Button>
 
                                 {evento?.id && (
-                                    <Button variant="outline-danger" type="button" className="order-1 order-md-2" onClick={() => {
+                                    <Button variant="danger" type="button" onClick={() => {
                                         Swal.fire({
                                             title: '¿Estás seguro?',
                                             text: "¡Este evento será eliminado permanentemente!",
@@ -115,7 +115,7 @@ const EventoModal = ({ show, onHide, evento, onGuardar, onEliminar, trabajadores
                                         });
                                     }}
                                     >
-                                        <i className="bi bi-trash me-1"></i> Eliminar
+                                        <i className="bi bi-trash me-1"></i> ❌ Eliminar
                                     </Button>
                                 )}
                             </div>

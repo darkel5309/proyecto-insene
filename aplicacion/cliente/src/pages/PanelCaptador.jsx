@@ -9,7 +9,7 @@ export default function PanelCaptador() {
     const BotonesNavegacion = () => (
         <Row className="g-3 justify-content-center">
             <Col xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
-                <Button as={Link} to="/captadores/contacto" variant="primary" className="boton-menu" aria-label="Registrar un nuevo contacto" > Registrar Contacto </Button>
+                <Button as={Link} to="/captadores/cliente" variant="primary" className="boton-menu" aria-label="Registrar un nuevo cliente" > Registrar Cliente 📝</Button>
             </Col>
         </Row>
     );

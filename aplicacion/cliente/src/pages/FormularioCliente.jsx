@@ -13,7 +13,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import CamposFormulario from '../components/CamposFormulario';
 
 export default function FormularioCliente() {
-    useDocumentTitle("Formulario de Contactos");
+    useDocumentTitle("Formulario de Clientes");
 
     const navigate = useNavigate();
     const { idTrabajador, isLoading } = useIdTrabajador();
@@ -54,8 +54,8 @@ export default function FormularioCliente() {
     }
 
     return (
-        <Container fluid="md" className="contacto">
-            <h1 className="text-center mb-4">Registro de Contactos</h1>
+        <Container fluid="md" className="cliente">
+            <h1 className="text-center mb-4">Registro de Clientes</h1>
             <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit} enableReinitialize >
                 {({ errors, touched, isSubmitting, isValid }) => (
                     <Form as={BootstrapForm} className="p-4 border rounded shadow-sm bg-light" noValidate>

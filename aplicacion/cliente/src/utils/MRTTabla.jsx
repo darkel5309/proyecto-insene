@@ -17,7 +17,10 @@ const MRTTabla = memo(function MRTTabla({
     <div className="tabla border rounded shadow-sm p-3 bg-light mt-4 mb-4">
       {title && <h4 className="text-center">{title}</h4>}
       <MaterialReactTable
-        localization={MRT_Localization_ES}
+        localization={{
+          ...MRT_Localization_ES,
+          filterByColumn: 'Filtrar...'
+        }}
         columns={columns}
         data={data}
         state={{ ...(loading && { isLoading: true }) }}
@@ -37,6 +40,12 @@ const MRTTabla = memo(function MRTTabla({
         muiTableBodyCellProps={({ cell }) => ({
           title: String(cell.getValue()),
         })}
+        muiTableHeadCellProps={{
+          sx: {
+            fontSize: '15px',
+            fontFamily: '"Roboto Condensed", Arial, sans-serif',
+          }
+        }}
       />
     </div>
   );

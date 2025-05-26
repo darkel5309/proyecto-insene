@@ -20,7 +20,11 @@ export default function InformacionMetricas() {
       sx: { backgroundColor: '#e6ffec' },
     },
     muiTableHeadCellProps: {
-      sx: { backgroundColor: '#e6ffec' },
+      sx: {
+        fontSize: '15px',
+        fontFamily: '"Roboto Condensed", Arial, sans-serif',
+        backgroundColor: '#e6ffec'
+      },
     },
   };
 
@@ -29,7 +33,11 @@ export default function InformacionMetricas() {
       sx: { backgroundColor: '#84dcc6' },
     },
     muiTableHeadCellProps: {
-      sx: { backgroundColor: '#84dcc6' },
+      sx: {
+        fontSize: '15px',
+        fontFamily: '"Roboto Condensed", Arial, sans-serif',
+        backgroundColor: '#84dcc6'
+      },
     },
   };
 
@@ -38,7 +46,11 @@ export default function InformacionMetricas() {
       sx: { backgroundColor: '#fce1e4' },
     },
     muiTableHeadCellProps: {
-      sx: { backgroundColor: '#fce1e4' },
+      sx: {
+        fontSize: '15px',
+        fontFamily: '"Roboto Condensed", Arial, sans-serif',
+        backgroundColor: '#fce1e4'
+      },
     },
   };
 
@@ -47,45 +59,60 @@ export default function InformacionMetricas() {
       sx: { backgroundColor: '#ffa69e' },
     },
     muiTableHeadCellProps: {
-      sx: { backgroundColor: '#ffa69e' },
+      sx: {
+        fontSize: '15px',
+        fontFamily: '"Roboto Condensed", Arial, sans-serif',
+        backgroundColor: '#ffa69e'
+      },
     },
   };
 
   const fondoMarron = {
     muiTableBodyCellProps: {
       sx: { backgroundColor: '#dddab9' },
+      fontFamily: '"Roboto Condensed", Arial, sans-serif',
     },
     muiTableHeadCellProps: {
-      sx: { backgroundColor: '#dddab9' },
+      sx: {
+        fontSize: '15px',
+        fontFamily: '"Roboto Condensed", Arial, sans-serif',
+        backgroundColor: '#dddab9'
+      },
     },
   };
 
   const fondoAzul = {
     muiTableBodyCellProps: {
-      sx: { backgroundColor: '#d7e3fc' },
+      sx: {
+        backgroundColor: '#d7e3fc'
+      },
     },
     muiTableHeadCellProps: {
-      sx: { backgroundColor: '#d7e3fc' },
+      sx: {
+        fontSize: '15px',
+        fontFamily: '"Roboto Condensed", Arial, sans-serif',
+        backgroundColor: '#d7e3fc'
+      }
     },
   };
 
   const columns = useMemo(() => [
     { accessorKey: "id_trabajador", header: "ID", size: 80, ...fondoAzul },
-    { accessorKey: "nombre", header: "TRABAJADOR", size: 200, ...fondoAzul },
-    { accessorKey: "equipo", header: "EQUIPO", size: 200, ...fondoAzul },
-    { accessorKey: "feedbacks", header: "FEEDBACKS", size: 200, ...fondoMarron },
-    { accessorKey: "visitado_pdte_contestacion", header: "PDTE CONTESTACIÓN", size: 180, ...fondoVerdeClaro },
-    { accessorKey: "visitado_no_hacen_nada", header: "NO HACEN NADA", size: 180, ...fondoVerdeClaro },
-    { accessorKey: "firmada_no_financiable", header: "FIRM NO FINANCIABLE", size: 180, ...fondoVerdeClaro },
-    { accessorKey: "venta", header: "VENTA", size: 180, ...fondoVerdeClaro },
-    { accessorKey: "visitado_total", header: "VISITADO TOTAL", size: 180, ...fondoVerdeOscuro },
-    { accessorKey: "recitar", header: "RECITAR", size: 180, ...fondoRojoClaro },
-    { accessorKey: "no_visitado", header: "NO VISITADO", size: 180, ...fondoRojoClaro },
-    { accessorKey: "no_visitado_total", header: "NO VISITADO TOTAL", size: 180, ...fondoRojoOscuro },
-    { accessorKey: "ventas_instaladas", header: "INSTALADAS", size: 180, ...fondoVerdeClaro },
-    { accessorKey: "ventas_caidas", header: "CAÍDAS", size: 180, ...fondoRojoClaro },
-    { accessorKey: "rentabilidad_feedbacks", header: "RENTAB FEEDBACKS", size: 180, ...fondoAzul },
-    { accessorKey: "rentabilidad_visitados", header: "RENTAB VISITAS", size: 180, ...fondoAzul },
+    { accessorKey: "nombre", header: "TRABAJADOR", size: 220, ...fondoAzul },
+    { accessorKey: "equipo", header: "EQUIPO", size: 150, ...fondoAzul },
+    { accessorKey: "feedbacks", header: "FEEDBACKS (SUMA DE TODO)", size: 170, ...fondoMarron },
+    { accessorKey: "visitado_pdte_contestacion", header: "VISITADO PDTE CONTESTACIÓN", size: 170, ...fondoVerdeClaro },
+    { accessorKey: "visitado_no_hacen_nada", header: "VISITADO NO HACEN NADA", size: 170, ...fondoVerdeClaro },
+    { accessorKey: "firmada_no_financiable", header: "FIRMADA NO FINANCIABLE", size: 170, ...fondoVerdeClaro },
+    { accessorKey: "venta", header: "VENTA", size: 170, ...fondoVerdeClaro },
+    { accessorKey: "visitado_total", header: "VISITADO TOTAL", size: 170, ...fondoVerdeOscuro },
+    { accessorKey: "recitar", header: "VOLVER A CITAR", size: 170, ...fondoRojoClaro },
+    { accessorKey: "no_visitado", header: "NO VISITADO", size: 170, ...fondoRojoClaro },
+    { accessorKey: "no_visitado_total", header: "NO VISITADO TOTAL", size: 170, ...fondoRojoOscuro },
+    { accessorKey: "ventas_instaladas", header: "INSTALADAS", size: 170, ...fondoVerdeClaro },
+    { accessorKey: "ventas_caidas", header: "CAÍDAS", size: 170, ...fondoRojoClaro },
+    { accessorKey: "rentabilidad_feedbacks", header: "RENTABILIDAD DE FEEDBACKS", size: 170, ...fondoAzul },
+    { accessorKey: "rentabilidad_visitados", header: "RENTABILIDAD DE VISITAS", size: 170, ...fondoAzul },
   ], []);
 
   const cargarMetricaComerciales = async (inicio = null, fin = null) => {
@@ -142,7 +169,7 @@ export default function InformacionMetricas() {
         </Card.Header>
         <Card.Body>
           <Row>
-            <Col md={4}>
+            <Col md={4} className='mb-2'>
               <Form.Group>
                 <Form.Label><strong>Fecha inicio</strong></Form.Label>
                 <Form.Control
@@ -152,7 +179,7 @@ export default function InformacionMetricas() {
                 />
               </Form.Group>
             </Col>
-            <Col md={4}>
+            <Col md={4} className='mb-2'>
               <Form.Group>
                 <Form.Label><strong>Fecha fin</strong></Form.Label>
                 <Form.Control
@@ -163,7 +190,7 @@ export default function InformacionMetricas() {
               </Form.Group>
             </Col>
 
-            <Col md={4} className="d-flex align-items-end gap-2 mt-3 mt-md-0">
+            <Col md={4} className="d-flex align-items-end gap-2 mt-3 mt-md-0 mb-2">
               <Button variant="primary" onClick={handleFiltrar}>
                 🔍 Filtrar
               </Button>

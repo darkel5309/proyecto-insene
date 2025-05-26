@@ -33,7 +33,7 @@ export default function InformacionVentas() {
                 onClick={() => navigate(`/coordinadores/modificarVenta/${row.original.id_venta}`)}
                 aria-label={`Modificar venta ${row.original.id_venta}`}
             >
-                Modificar
+                ✏️ Modificar
             </Button>
         ),
         [navigate]
@@ -41,16 +41,16 @@ export default function InformacionVentas() {
 
     const columns = useMemo(() => [
         { accessorKey: "id_venta", header: "ID", size: 80 },
-        { accessorKey: "nombre_trabajador", header: "TRABAJADOR", size: 200 },
-        { accessorKey: "nombre_cliente", header: "CLIENTE", size: 200 },
+        { accessorKey: "nombre_trabajador", header: "TRABAJADOR", size: 220 },
+        { accessorKey: "nombre_cliente", header: "CLIENTE", size: 220 },
         { accessorKey: "estado_venta", header: "ESTADO", size: 130 },
-        { accessorKey: "fecha_firma", header: "F. FIRMA", size: 130, Cell: renderFecha },
+        { accessorKey: "fecha_firma", header: "FECHA FIRMA", size: 150, Cell: renderFecha },
         { accessorKey: "forma_pago", header: "FORMA PAGO", size: 150 },
-        { accessorKey: "certificado_energetico", header: "CERT. ENERGÉTICO", size: 180 },
+        { accessorKey: "certificado_energetico", header: "CERTIFICADO\nENERGÉTICO", size: 180 },
         { accessorKey: "gestion_subvencion", header: "SUBVENCIÓN", size: 150 },
-        { accessorKey: "gestion_legalizacion", header: "LEGALIZACIÓN", size: 150 },
-        { accessorKey: "fecha_legalizacion", header: "F. LEGALIZACIÓN", size: 160, Cell: renderFecha, },
-        { id: "modificar", header: "", size: 120, Cell: renderBotonModificar },
+        { accessorKey: "gestion_legalizacion", header: "LEGALIZACIÓN", size: 160 },
+        { accessorKey: "fecha_legalizacion", header: "FECHA DE\nLEGALIZACIÓN", size: 160, Cell: renderFecha, },
+        { id: "modificar", header: "", size: 140, Cell: renderBotonModificar },
     ], [renderFecha, renderBotonModificar]);
 
     useEffect(() => {
@@ -70,7 +70,7 @@ export default function InformacionVentas() {
         <>
             <Row className="g-3 justify-content-center">
                 {[
-                    { path: "/coordinadores/registroVenta", label: "Registrar Venta" },
+                    { path: "/coordinadores/registroVenta", label: "Registrar Venta 📝" },
                 ].map(({ path, label }) => (
                     <Col key={path} xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
                         <Button as={Link} to={path} variant="primary" className="boton-menu">

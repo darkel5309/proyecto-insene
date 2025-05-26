@@ -33,7 +33,7 @@ export default function PanelAdministrador() {
                 onClick={() => navigate(`/administradores/modificarTrabajador/${row.original.id_trabajador}`)}
                 aria-label={`Modificar trabajador ${row.original.nombre}`}
             >
-                Modificar
+                ✏️ Modificar 
             </Button>
         ),
         [navigate]
@@ -41,13 +41,13 @@ export default function PanelAdministrador() {
 
     const columns = useMemo(() => [
         { accessorKey: 'id_trabajador', header: 'ID', size: 80 },
-        { accessorKey: 'nombre', header: 'TRABAJADOR', size: 200 },
+        { accessorKey: 'nombre', header: 'TRABAJADOR', size: 210 },
         { accessorKey: 'puesto', header: 'PUESTO', size: 150 },
-        { accessorKey: 'departamento', header: 'DEPARTAMENTO', size: 160 },
+        { accessorKey: 'departamento', header: 'DEPARTAMENTO', size: 170 },
         { accessorKey: 'equipo', header: 'EQUIPO', size: 150 },
-        { accessorKey: 'fecha_alta', header: 'F. ALTA', size: 150, Cell: renderFecha },
-        { accessorKey: 'fecha_baja', header: 'F. BAJA', size: 150, Cell: renderFecha },
-        { id: 'modificar', header: '', size: 120, Cell: renderBotonModificar },
+        { accessorKey: 'fecha_alta', header: 'FECHA ALTA', size: 150, Cell: renderFecha },
+        { accessorKey: 'fecha_baja', header: 'FECHA BAJA', size: 150, Cell: renderFecha },
+        { id: 'modificar', header: '', size: 140, Cell: renderBotonModificar },
     ], [renderFecha, renderBotonModificar]);
 
     useEffect(() => {
@@ -67,10 +67,10 @@ export default function PanelAdministrador() {
         <>
             <Row className="g-3 justify-content-center">
                 {[
-                    { path: "/administradores/registroTrabajador", label: "Registrar Trabajador" },
-                    { path: "/captadores", label: "Panel de Captadores" },
-                    { path: "/comerciales", label: "Panel de Comerciales" },
-                    { path: "/coordinadores", label: "Panel Ruta" },
+                    { path: "/administradores/registroTrabajador", label: "Registrar Trabajador 📝" },
+                    { path: "/captadores", label: "Panel de Captadores 🕵️" },
+                    { path: "/comerciales", label: "Panel de Comerciales 🎯" },
+                    { path: "/coordinadores", label: "Panel Ruta 🗓️" },
                 ].map(({ path, label }) => (
                     <Col key={path} xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">
                         <Button as={Link} to={path} variant="primary" className="boton-menu">
@@ -82,8 +82,8 @@ export default function PanelAdministrador() {
 
             <Row className="g-3 justify-content-center mt-1">
                 {[
-                    { path: "/administradores/InformacionClientes", label: "Información de Clientes" },
-                    { path: "/administradores/auditoria", label: "Información de Auditoría" },
+                    { path: "/administradores/InformacionClientes", label: "Información de Clientes 👥" },
+                    { path: "/administradores/auditoria", label: "Información de Auditoría 🧾" },
                 ]
                     .map(({ path, label }) => (
                         <Col key={path} xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">

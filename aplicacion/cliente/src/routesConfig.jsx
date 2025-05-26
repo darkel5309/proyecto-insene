@@ -4,7 +4,7 @@ const PanelAdministrador = lazy(() => import("./pages/PanelAdministrador"));
 const PanelCaptador = lazy(() => import("./pages/PanelCaptador"));
 const PanelComercial = lazy(() => import("./pages/PanelComercial"));
 const FormularioTrabajador = lazy(() => import("./pages/FormularioTrabajador"));
-const FormularioContacto = lazy(() => import("./pages/FormularioContacto"));
+const FormularioCliente = lazy(() => import("./pages/FormularioCliente"));
 const FormularioFeedback = lazy(() => import("./pages/FormularioFeedback"));
 const InformacionClientes = lazy(() => import("./pages/InformacionClientes"));
 const FormularioModificarTrabajador = lazy(() => import("./pages/FormularioModificarTrabajador"));
@@ -78,8 +78,8 @@ const routes = [
     roles: ["captador", "administrador"],
   },
   {
-    path: "/captadores/contacto",
-    element: <FormularioContacto />,
+    path: "/captadores/cliente",
+    element: <FormularioCliente />,
     roles: ["captador", "administrador"],
   },
   {
@@ -88,8 +88,8 @@ const routes = [
     roles: ["comercial", "administrador"],
   },
   {
-    path: "/comerciales/contacto",
-    element: <FormularioContacto />,
+    path: "/comerciales/cliente",
+    element: <FormularioCliente />,
     roles: ["comercial", "administrador"],
   },
   {

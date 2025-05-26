@@ -15,7 +15,7 @@ export default function PanelComercial() {
 
     const columns = useMemo(() => [
         { accessorKey: "id_cliente", header: "ID", size: 80 },
-        { accessorKey: "nombre", header: "CLIENTE", size: 200 },
+        { accessorKey: "nombre", header: "CLIENTE", size: 210 },
         { accessorKey: "telefono", header: "TELÉFONO", size: 150 },
         { accessorKey: "correo", header: "CORREO", size: 200 },
         { accessorKey: "direccion", header: "DIRECCIÓN", size: 250 },
@@ -40,8 +40,8 @@ export default function PanelComercial() {
         <>
             <Row className="g-3 justify-content-center">
                 {[
-                    { path: "/comerciales/contacto", label: "Registrar Cliente" },
-                    { path: "/comerciales/feedback", label: "Registrar Feedback" },
+                    { path: "/comerciales/cliente", label: "Registrar Cliente 📝" },
+                    { path: "/comerciales/feedback", label: "Registrar Feedback 📝" },
                 ]
                     .map(({ path, label }) => (
                         <Col key={path} xs={12} sm={6} md={3} lg={3} className="d-flex justify-content-center">

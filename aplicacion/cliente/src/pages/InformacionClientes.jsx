@@ -38,7 +38,7 @@ export default function InformacionClientes() {
                 onClick={() => navigate(`/administradores/modificarCliente/${row.original.id_cliente}`)}
                 aria-label={`Modificar cliente ${row.original.nombre}`}
             >
-                Modificar
+                ✏️ Modificar
             </Button>
         ),
         [navigate]
@@ -46,18 +46,15 @@ export default function InformacionClientes() {
 
     const columns = useMemo(() => [
         { accessorKey: "id_cliente", header: "ID", size: 80 },
-        { accessorKey: "nombre", header: "CLIENTE", size: 200 },
+        { accessorKey: "nombre", header: "CLIENTE", size: 210 },
         { accessorKey: "telefono", header: "TELÉFONO", size: 150 },
         { accessorKey: "correo", header: "CORREO", size: 200 },
         { accessorKey: "dni", header: "DNI", size: 150 },
-        { accessorKey: "iban", header: "IBAN", size: 220 },
-        { accessorKey: "modo_captacion", header: "CAPTACIÓN", size: 150 },
-        { accessorKey: "observaciones_cliente", header: "OBSERVACIONES", size: 250 },
-        { accessorKey: "fecha_alta", header: "F. ALTA", size: 150, Cell: renderFecha },
+        { accessorKey: "fecha_alta", header: "FECHA ALTA", size: 150, Cell: renderFecha },
         { accessorKey: "direccion", header: "DIRECCIÓN", size: 250 },
         { accessorKey: "localidad", header: "LOCALIDAD", size: 200 },
         { accessorKey: "provincia", header: "PROVINCIA", size: 200 },
-        { id: "modificar", header: "", size: 120, Cell: renderBotonModificar },
+        { id: "modificar", header: "", size: 140, Cell: renderBotonModificar },
     ], [renderFecha, renderBotonModificar]);
 
     useEffect(() => {
@@ -137,7 +134,7 @@ export default function InformacionClientes() {
         ];
 
         return (
-            <Row className="mt-4">
+            <Row className="gy-1">
                 {secciones.map(({ titulo, campos }, idx) => (
                     <Col md={4} key={idx}>
                         <Card className="mb-3">
@@ -192,7 +189,7 @@ export default function InformacionClientes() {
                                         <span className="spinner-border spinner-border-sm me-1" role="status" />
                                         Buscando...
                                     </>
-                                ) : "Buscar Cliente"}
+                                ) : "🔍 Buscar"}
                             </Button>
                         </Form>
 
